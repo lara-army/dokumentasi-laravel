@@ -1,26 +1,26 @@
-# Encryption
+# Enkripsi
 
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-- [Using The Encrypter](#using-the-encrypter)
+- [Pengantar](#introduction)
+- [Konfigurasi](#configuration)
+- [Menggunakan Pengenkripsi](#using-the-encrypter)
 
 <a name="introduction"></a>
-## Introduction
+## Pengantar
 
-Laravel's encryption services provide a simple, convenient interface for encrypting and decrypting text via OpenSSL using AES-256 and AES-128 encryption. All of Laravel's encrypted values are signed using a message authentication code (MAC) so that their underlying value can not be modified or tampered with once encrypted.
+Layanan enkripsi Laravel menyediakan _interface_ yang sederhana dan mudah untuk mengenkripsi dan mendekripsi teks melalui OpenSSL menggunakan enkripsi AES-256 dan AES-128. Semua nilai yang ter-enkripsi pada Laravel ditandai menggunakan kode autentikasi pesan (_message authentication code_)(MAC) sehingga nilai dasarnya tidak dapat dimodifikasi atau dimanipulasi setelah ter-enkripsi.
 
 <a name="configuration"></a>
-## Configuration
+## Konfigurasi
 
-Before using Laravel's encrypter, you must set the `key` configuration option in your `config/app.php` configuration file. This configuration value is driven by the `APP_KEY` environment variable. You should use the `php artisan key:generate` command to generate this variable's value since the `key:generate` command will use PHP's secure random bytes generator to build a cryptographically secure key for your application. Typically, the value of the `APP_KEY` environment variable will be generated for you during [Laravel's installation](/docs/{{version}}/installation).
+Sebelum menggunakan pengenkripsi milik Laravel, Anda harus mengatur opsi konfigurasi key pada _file_ `config/app.php`. Nilai konfigurasi ini dikendalikan oleh `APP_KEY` pada _environment variable_. Anda harus menggunakan perintah `php artisan key:generate` untuk menghasilkan nilai variabel ini karena perintah `key:generate` akan menggunakan generator _byte_ aman milik PHP untuk membangun kunci yang aman secara kriptografis untuk aplikasi Anda. Biasanya, nilai `APP_KEY` akan dihasilkan untuk Anda pada saat [installasi Laravel](/docs/{{version}}/installation).
 
 <a name="using-the-encrypter"></a>
-## Using The Encrypter
+## Menggunakan Pengenkripsi
 
 <a name="encrypting-a-value"></a>
-#### Encrypting A Value
+#### Mengenkripsi Sebuah Nilai
 
-You may encrypt a value using the `encryptString` method provided by the `Crypt` facade. All encrypted values are encrypted using OpenSSL and the AES-256-CBC cipher. Furthermore, all encrypted values are signed with a message authentication code (MAC). The integrated message authentication code will prevent the decryption of any values that have been tampered with by malicious users:
+Anda dapat mengenkripsi nilai menggunakan _method_ `encryptString` yang disediakan oleh _facade_ `Crypt`. Semua nilai dienkripsi menggunakan OpenSSL dan _cipher_ AES-256-CBC. Selain itu, semua nilai ter-enkripsi ditandai dengan kode autentikasi pesan (MAC). Kode autentikasi pesan terintegrasi akan mencegah dekripsi nilai apapun yang telah dimanipulasi oleh pengguna yang tidak bertanggung jawab:
 
     <?php
 
@@ -34,7 +34,7 @@ You may encrypt a value using the `encryptString` method provided by the `Crypt`
     class DigitalOceanTokenController extends Controller
     {
         /**
-         * Store a DigitalOcean API token for the user.
+         * Menyimpan token API DigitalOcean untuk pengguna.
          *
          * @param  \Illuminate\Http\Request  $request
          * @return \Illuminate\Http\Response
@@ -48,9 +48,9 @@ You may encrypt a value using the `encryptString` method provided by the `Crypt`
     }
 
 <a name="decrypting-a-value"></a>
-#### Decrypting A Value
+#### Mendekripsi Sebuah Nilai
 
-You may decrypt values using the `decryptString` method provided by the `Crypt` facade. If the value can not be properly decrypted, such as when the message authentication code is invalid, an `Illuminate\Contracts\Encryption\DecryptException` will be thrown:
+Anda dapat mendekripsi nilai menggunakan _method_ `decryptString` yang disediakan oleh _facade_ `Crypt`. Jika nilai tidak dapat didekripsi dengan benar, seperti ketika kode autentikasi pesan tidak valid, sebuah `Illuminate\Contracts\Encryption\DecryptException` akan dilemparkan:
 
     use Illuminate\Contracts\Encryption\DecryptException;
     use Illuminate\Support\Facades\Crypt;
