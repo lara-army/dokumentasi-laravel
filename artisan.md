@@ -1,38 +1,38 @@
-# Artisan Console
+# _Console_ Artisan
 
-- [Introduction](#introduction)
-    - [Tinker (REPL)](#tinker)
-- [Writing Commands](#writing-commands)
-    - [Generating Commands](#generating-commands)
-    - [Command Structure](#command-structure)
-    - [Closure Commands](#closure-commands)
-    - [Isolatable Commands](#isolatable-commands)
-- [Defining Input Expectations](#defining-input-expectations)
-    - [Arguments](#arguments)
-    - [Options](#options)
-    - [Input Arrays](#input-arrays)
-    - [Input Descriptions](#input-descriptions)
-- [Command I/O](#command-io)
-    - [Retrieving Input](#retrieving-input)
-    - [Prompting For Input](#prompting-for-input)
-    - [Writing Output](#writing-output)
-- [Registering Commands](#registering-commands)
-- [Programmatically Executing Commands](#programmatically-executing-commands)
-    - [Calling Commands From Other Commands](#calling-commands-from-other-commands)
-- [Signal Handling](#signal-handling)
-- [Stub Customization](#stub-customization)
-- [Events](#events)
+- [Pengantar](#introduction)
+  - [Tinker (REPL)](#tinker)
+- [Menulis Perintah](#writing-commands)
+  - [Membuat Perintah](#generating-commands)
+  - [Struktur Perintah](#command-structure)
+  - [Perintah _Closure_](#closure-commands)
+  - [Perintah Terisolasi](#isolatable-commands)
+- [Menentukan _Input_ yang Diharapkan](#defining-input-expectations)
+  - [Argumen](#arguments)
+  - [Opsi](#options)
+  - [_Input_ dalam Bentuk _Array_](#input-arrays)
+  - [Deskripsi _Input_](#input-descriptions)
+- [I/O Perintah](#command-io)
+  - [Mengambil _Input_](#retrieving-input)
+  - [_Prompting_ untuk _Input_](#prompting-for-input)
+  - [Menulis _Output_](#writing-output)
+- [Mendaftarkan Perintah](#registering-commands)
+- [Mengeksekusi Perintah Secara Terprogram](#programmatically-executing-commands)
+  - [Memanggil Perintah di Dalam Perintah](#calling-commands-from-other-commands)
+- [Penanganan Sinyal](#signal-handling)
+- [Kostumisasi _Stub_](#stub-customization)
+- [_Event_](#events)
 
 <a name="introduction"></a>
-## Introduction
+## Pengantar
 
-Artisan is the command line interface included with Laravel. Artisan exists at the root of your application as the `artisan` script and provides a number of helpful commands that can assist you while you build your application. To view a list of all available Artisan commands, you may use the `list` command:
+Artisan merupakan command line interface—antarmuka dalam bentuk baris perintah— (CLI) yang terdapat pada Laravel. Artisan terdapat pada _root_ aplikasi Anda sebagai skrip `artisan` yang menyediakan beberapa perintah yang dapat membantu Anda untuk membangun aplikasi. Untuk melihat daftar perintah yang terdapat pada Artisan, Anda dapat menggunakan perintah `list`:
 
 ```shell
 php artisan list
 ```
 
-Every command also includes a "help" screen which displays and describes the command's available arguments and options. To view a help screen, precede the name of the command with `help`:
+Setiap perintah memiliki sebuah layar "help" (bantuan) yang menampilkan dan menjelaskan argumen dan opsi yang tersedia pada perintah tersebut. Untuk melihat layar bantuan, gunakan perintah `help` diikuti dengan nama perintah yang ingin dilihat:
 
 ```shell
 php artisan help migrate
@@ -41,7 +41,7 @@ php artisan help migrate
 <a name="laravel-sail"></a>
 #### Laravel Sail
 
-If you are using [Laravel Sail](/docs/{{version}}/sail) as your local development environment, remember to use the `sail` command line to invoke Artisan commands. Sail will execute your Artisan commands within your application's Docker containers:
+Jika Anda menggunakan [Laravel Sail](/docs/{{version}}/sail) sebagai lingkungan _development_ pada lokal, jangan lupa untuk menggunakan perintah `sail` untuk melakukan perintah Artisan. Sail akan mengeksekusi perintah Artisan Anda pada kontainer Docker:
 
 ```shell
 ./vendor/bin/sail artisan list
@@ -50,49 +50,49 @@ If you are using [Laravel Sail](/docs/{{version}}/sail) as your local developmen
 <a name="tinker"></a>
 ### Tinker (REPL)
 
-Laravel Tinker is a powerful REPL for the Laravel framework, powered by the [PsySH](https://github.com/bobthecow/psysh) package.
+Laravel Tinker merupakan sebuah REPL yang _powerful_ untuk _framework_ Laravel, ditenagai oleh _package_ [PsySH](https://github.com/bobthecow/psysh).
 
 <a name="installation"></a>
-#### Installation
+#### Instalasi
 
-All Laravel applications include Tinker by default. However, you may install Tinker using Composer if you have previously removed it from your application:
+Semua aplikasi Laravel secara _default_ telah memiliki Tinker. Namun, Anda dapat memasang Tinker menggunakan Composer jika Tinker telah terhapus dari aplikasi Anda.
 
 ```shell
 composer require laravel/tinker
 ```
 
-> **Note**  
-> Looking for a graphical UI for interacting with your Laravel application? Check out [Tinkerwell](https://tinkerwell.app)!
+> **Catatan**  
+> Mencari UI grafis untuk berinteraksi dengan aplikasi Laravel Anda? Lihatlah [Tinkerwell](https://tinkerwell.app)!
 
 <a name="usage"></a>
-#### Usage
+#### Penggunaan
 
-Tinker allows you to interact with your entire Laravel application on the command line, including your Eloquent models, jobs, events, and more. To enter the Tinker environment, run the `tinker` Artisan command:
+Tinker memungkinkan Anda untuk berinteraksi dengan aplikasi Anda secara keseluruhan menggunakan baris perintah, termasuk model Eloquent, _jobs_, _events_, dan lainnya. Untuk memasuki lingkungan Tinker, jalankan perintah Artisan `tinker`:
 
 ```shell
 php artisan tinker
 ```
 
-You can publish Tinker's configuration file using the `vendor:publish` command:
+Anda dapat menerbitkan _file_ konfigurasi Tinker menggunakan perintah `vendor:publish`:
 
 ```shell
 php artisan vendor:publish --provider="Laravel\Tinker\TinkerServiceProvider"
 ```
 
-> **Warning**  
-> The `dispatch` helper function and `dispatch` method on the `Dispatchable` class depends on garbage collection to place the job on the queue. Therefore, when using tinker, you should use `Bus::dispatch` or `Queue::push` to dispatch jobs.
+> **Peringatan**  
+> _Function_ `dispatch` pada _helper_ dan _method_ `dispatch` pada _class_ `Dispatchable` bergantung pada _garbage collection_ untuk menempatkan _job_ pada _queue_. Karena itu, ketika menggunakan Tinker, Anda harus menggunakan `Bus::dispatch` atau `Queue::push` untuk mengirimkan (_dispatch_) _job_.
 
 <a name="command-allow-list"></a>
-#### Command Allow List
+#### Daftar Perintah yang Diizinkan
 
-Tinker utilizes an "allow" list to determine which Artisan commands are allowed to be run within its shell. By default, you may run the `clear-compiled`, `down`, `env`, `inspire`, `migrate`, `optimize`, and `up` commands. If you would like to allow more commands you may add them to the `commands` array in your `tinker.php` configuration file:
+Tinker dilengkapi dengan sebuah daftar "allow" untuk menentukan perintah Artisan mana yang diizinkan untuk dijalankan pada _shell_. secara _default_, Anda dapat menjalankan perintah `clear-compiled`, `down`, `env`, `inspire`, `migrate`, `optimize`, dan `up`. Jika ingin menjalankan perintah-perintah lain, Anda bisa menambahkannya pada _array_ `commands` pada _file_ konfigurasi `tinker.php`:
 
     'commands' => [
         // App\Console\Commands\ExampleCommand::class,
     ],
 
 <a name="classes-that-should-not-be-aliased"></a>
-#### Classes That Should Not Be Aliased
+#### _Class_-_Class_ yang Seharusnya Tidak Diberi Alias
 
 Typically, Tinker automatically aliases classes as you interact with them in Tinker. However, you may wish to never alias some classes. You may accomplish this by listing the classes in the `dont_alias` array of your `tinker.php` configuration file:
 
@@ -101,25 +101,25 @@ Typically, Tinker automatically aliases classes as you interact with them in Tin
     ],
 
 <a name="writing-commands"></a>
-## Writing Commands
+## Menulis Perintah
 
-In addition to the commands provided with Artisan, you may build your own custom commands. Commands are typically stored in the `app/Console/Commands` directory; however, you are free to choose your own storage location as long as your commands can be loaded by Composer.
+Untuk menambah perintah yang disediakan oleh Artisan, Anda dapat membuat perintah kustom Anda ssendiri. Perintah-perintah tersebut biasanya disimpan pada direktori `app/Console/Commands`; bagaimanapun, Anda bebas untuk memilih lokasi penyimpanan perintah Anda selama dapat dimuat oleh Composer.
 
 <a name="generating-commands"></a>
-### Generating Commands
+### Membuat Perintah
 
-To create a new command, you may use the `make:command` Artisan command. This command will create a new command class in the `app/Console/Commands` directory. Don't worry if this directory does not exist in your application - it will be created the first time you run the `make:command` Artisan command:
+Untuk membuat perintah (_command_) baru, Anda dapat menggunakan perintah Artisan `make:command`. Perintah ini akan membuat _class command_ yang baru pada direktori `app/Console/Commands`. Jangan khawatir jika direktori ini belum ada pada aplikasi Anda - direktori secara otomatis akan muncul ketika menjalankan perintah Artisan `make:command` untuk pertama kali:
 
 ```shell
 php artisan make:command SendEmails
 ```
 
 <a name="command-structure"></a>
-### Command Structure
+### Struktur Perintah
 
-After generating your command, you should define appropriate values for the `signature` and `description` properties of the class. These properties will be used when displaying your command on the `list` screen. The `signature` property also allows you to define [your command's input expectations](#defining-input-expectations). The `handle` method will be called when your command is executed. You may place your command logic in this method.
+Setelah membuat perintah baru, Anda harus mendefinisikan nilai-nilai yang sesuai untuk properti `signature` dan `description` pada _class_ tersebut. properti-properti ini akan digunakan ketika perintah baru Anda ditampilkan pada daftar perintah (`list` _screen_). Properti `signature` juga memungkinkan Anda untuk mmendefinisikan [_input_ yang diharapkan perintah](#defining-input-expectations). _Tethod_ `handle` akan dipanggil ketika perintah Anda dieksekusi. Anda dapat menempatkan logika Anda pada _method_ ini.
 
-Let's take a look at an example command. Note that we are able to request any dependencies we need via the command's `handle` method. The Laravel [service container](/docs/{{version}}/container) will automatically inject all dependencies that are type-hinted in this method's signature:
+Mari kita lihat sebuah contoh perintah. Perlu diingat bahwa kita dapat memasukkan _dependencies_ apa saja yang dibutuhkan melalui _method_ `handle` milik _command_. [_service container_](/docs/{{version}}/container) milik Laravel akan melakukan _inject_ semua _dependencies_ secara otomatis yang telah di-_type hint_ di dalam _signature_ milik _method_:
 
     <?php
 
@@ -132,7 +132,7 @@ Let's take a look at an example command. Note that we are able to request any de
     class SendEmails extends Command
     {
         /**
-         * The name and signature of the console command.
+         * Nama dan signature dari perintah console.
          *
          * @var string
          */
@@ -146,7 +146,7 @@ Let's take a look at an example command. Note that we are able to request any de
         protected $description = 'Send a marketing email to a user';
 
         /**
-         * Execute the console command.
+         * Eksekusi perintah console.
          *
          * @param  \App\Support\DripEmailer  $drip
          * @return mixed
@@ -157,16 +157,16 @@ Let's take a look at an example command. Note that we are able to request any de
         }
     }
 
-> **Note**  
-> For greater code reuse, it is good practice to keep your console commands light and let them defer to application services to accomplish their tasks. In the example above, note that we inject a service class to do the "heavy lifting" of sending the e-mails.
+> **Catatan**  
+> Untuk penggunaan kembali kode (_reuse code_) yang lebih baik, praktik yang baik adalah menjaga perintah _console_ tetap ringan dan membiarkan _service_ aplikasi yang menyelesaikan tugas berat itu. Pada contoh diatas, perlu diingat kita memasukkan sebuah _class service_ untuk melakukan "angkat beban" dalam pengiriman e-mail.
 
 <a name="closure-commands"></a>
-### Closure Commands
+### Perintah _Closure_
 
-Closure based commands provide an alternative to defining console commands as classes. In the same way that route closures are an alternative to controllers, think of command closures as an alternative to command classes. Within the `commands` method of your `app/Console/Kernel.php` file, Laravel loads the `routes/console.php` file:
+Perintah berbasis _closure_ menyediakan sebuah alternatif untuk mendefinisikan perintah _console_ sebagai _class_. Hal ini mirip seperi _closure route_ sebagai alternatif untuk _controller_, bayangkan sebuah perintah _closure_ sebagai alternatif dari _class command_. Dengan _method_ `commands` pada _file_ `app/Console/Kernel.php` Anda, Laravel akan memuat _file_ `routes/console.php`:
 
     /**
-     * Register the closure based commands for the application.
+     * Mendaftarkan perintah berbasis closure untuk aplikasi.
      *
      * @return void
      */
@@ -175,18 +175,19 @@ Closure based commands provide an alternative to defining console commands as cl
         require base_path('routes/console.php');
     }
 
-Even though this file does not define HTTP routes, it defines console based entry points (routes) into your application. Within this file, you may define all of your closure based console commands using the `Artisan::command` method. The `command` method accepts two arguments: the [command signature](#defining-input-expectations) and a closure which receives the command's arguments and options:
+Even though _file_ ini tidak mendefinisikan _route_ HTTP, _file_ ini mendefinisikan _entry points (routes)_ berbasis _console_ ke dalam aplikasi
+Anda. Dengan _file_ ini, Anda dapat mendefinisikan semua perintah _console_ berbasis _closure_ menggunakan _method_ `Artisan::command`. _method_ `command` menerima dua argumen: [_signature_ perintah](#defining-input-expectations) dan sebuah _closure_ yang menerima argumen dan opsi dari pperintah:
 
     Artisan::command('mail:send {user}', function ($user) {
-        $this->info("Sending email to: {$user}!");
+        $this->info("Mengirim email ke: {$user}!");
     });
 
-The closure is bound to the underlying command instance, so you have full access to all of the helper methods you would typically be able to access on a full command class.
+_Closure_ terikat pada _instance_ perintah yang mendasarinya, sehingga Anda memiliki akses penuh ke semua _method_ helper yang biasanya dapat diakses pada _class_ perintah biasa.
 
 <a name="type-hinting-dependencies"></a>
-#### Type-Hinting Dependencies
+#### _Type-Hinting_ Dependensi
 
-In addition to receiving your command's arguments and options, command closures may also type-hint additional dependencies that you would like resolved out of the [service container](/docs/{{version}}/container):
+Selain menerima argumen dan opsi perintah Anda, perintah _closure_ juga dapat melakukan type-hint dependensi tambahan yang ingin Anda selesaikan [_service container_](/docs/{{version}}/container):
 
     use App\Models\User;
     use App\Support\DripEmailer;
@@ -196,21 +197,21 @@ In addition to receiving your command's arguments and options, command closures 
     });
 
 <a name="closure-command-descriptions"></a>
-#### Closure Command Descriptions
+#### Deskripsi Perintah _Closure_
 
-When defining a closure based command, you may use the `purpose` method to add a description to the command. This description will be displayed when you run the `php artisan list` or `php artisan help` commands:
+Saat menentukan perintah berbasis _closure_, Anda dapat menggunakan _method_ `purpose` untuk menambahkan deskripsi untuk perintah. Deskripsi ini akan ditampilkan saat Anda menjalankan perintah `php artisan list` atau `php artisan help`:
 
     Artisan::command('mail:send {user}', function ($user) {
         // ...
-    })->purpose('Send a marketing email to a user');
+    })->purpose('Mengirim email marketing ke pengguna');
 
 <a name="isolatable-commands"></a>
-### Isolatable Commands
+### Perintah Terisolasi
 
-> **Warning**
-> To utilize this feature, your application must be using the `memcached`, `redis`, `dynamodb`, `database`, `file`, or `array` cache driver as your application's default cache driver. In addition, all servers must be communicating with the same central cache server.
+> **Peringatan**
+> Untuk menggunakan fitur ini, aplikasi Anda harus menggunakan _driver cache_ `memcached`, `redis`, `dynamodb`, `database`, `file`, atau `array` sebagai _driver cache default_ aplikasi Anda. Selain itu, semua server harus berkomunikasi dengan _server cache_ pusat yang sama.
 
-Sometimes you may wish to ensure that only one instance of a command can run at a time. To accomplish this, you may implement the `Illuminate\Contracts\Console\Isolatable` interface on your command class:
+Terkadang Anda mungkin ingin memastikan bahwa hanya ada satu _instance_ perintah yang dapat dijalankan pada suatu waktu. Untuk mencapai hal tersebut, Anda dapat mengimplementasikan _interface_ `Illuminate\Contracts\console\Isolatable` pada _class_ perintah itu:
 
     <?php
 
@@ -224,26 +225,26 @@ Sometimes you may wish to ensure that only one instance of a command can run at 
         // ...
     }
 
-When a command is marked as `Isolatable`, Laravel will automatically add an `--isolated` option to the command. When the command is invoked with that option, Laravel will ensure that no other instances of that command are already running. Laravel accomplishes this by attempting to acquire an atomic lock using your application's default cache driver. If other instances of the command are running, the command will not execute; however, the command will still exit with a successful exit status code:
+Ketika perintah ditandai sebagai `Isolatable`, Laravel secara otomatis akan menambahkan opsi `--isolated` ke perintah tersebut. Ketika perintah dipanggil dengan opsi tersebut, Laravel akan memastikan bahwa tidak ada _instance_ lain dari perintah tersebut yang sedang berjalan. Laravel mewujudkan ini dengan mencoba untuk memperoleh _lock atomic_ mmenggunakan _driver cache default_ aplikasi Anda. Jika ada _instance_ lain dari perintah yang sedang berjalan, perintah tidak akan dieksekusi; namun, perintah akan tetap berhenti dengan kode status keluar yang sukses:
 
 ```shell
 php artisan mail:send 1 --isolated
 ```
 
-If you would like to specify the exit status code that the command should return if it is not able to execute, you may provide the desired status code via the `isolated` option:
+Jika Anda ingin menentukan kode status keluar yang harus dikembalikan oleh perintah jika tidak dapat dieksekusi, Anda dapat memberikan kode status yang diinginkan melalui opsi `isolated`:
 
 ```shell
 php artisan mail:send 1 --isolated=12
 ```
 
 <a name="lock-expiration-time"></a>
-#### Lock Expiration Time
+#### Waktu Kunci Kadaluarsa
 
-By default, isolation locks expire after the command is finished. Or, if the command is interrupted and unable to finish, the lock will expire after one hour. However, you may adjust the lock expiration time by defining a `isolationLockExpiresAt` method on your command:
+Secara _default_, penguncian isolasi akan kadaluarsa setelah perintah selesai. Atau, jika perintah diinterupsi atau tidak dapat terselesaikan, penguncian akan kadaluarsa setelah satu jam. However, Anda dapat menyesuaikan waktu kadaluarsa untuk penguncian dengan mendefinisikan sebuah _method_ `isolationLockExpiresAt` pada perintah Anda:
 
 ```php
 /**
- * Determine when an isolation lock expires for the command.
+ * menentukan kapan kunci isolasi kadaluarsa pada perintah.
  *
  * @return \DateTimeInterface|\DateInterval
  */
@@ -254,120 +255,121 @@ public function isolationLockExpiresAt()
 ```
 
 <a name="defining-input-expectations"></a>
-## Defining Input Expectations
+## Menentukan _Input_ yang Diharapkan
 
-When writing console commands, it is common to gather input from the user through arguments or options. Laravel makes it very convenient to define the input you expect from the user using the `signature` property on your commands. The `signature` property allows you to define the name, arguments, and options for the command in a single, expressive, route-like syntax.
+Saat menulis perintah _console_, umumnya Anda mengumpulkan _input_ dari pengguna melalui argumen atau opsi. Laravel memudahkan dalam menentukan _input_ yang diharapkan dari pengguna menggunakan properti `signature` pada perintah Anda. Properti `signature` memungkinkan Anda untuk menentukan nama, argumen, dan opsi untuk perintah dalam satu sintaks yang ekspresif, seperti _route_.
 
 <a name="arguments"></a>
-### Arguments
+### Argumen
 
-All user supplied arguments and options are wrapped in curly braces. In the following example, the command defines one required argument: `user`:
+Semua argumen dan opsi yang disediakan pengguna dibungkus dalam tanda kurung kurawal. Dalam contoh berikut, suatu perintah didefinisikan dengan satu argumen yang diperlukan: `user`:
 
     /**
-     * The name and signature of the console command.
+     * Nama dan signature dari perintah console.
      *
      * @var string
      */
     protected $signature = 'mail:send {user}';
 
-You may also make arguments optional or define default values for arguments:
+Anda juga dapat membuat argumen tersebut menjadi opsional atau menentukan nilai _default_-nya:
 
-    // Optional argument...
+    // Argumen opsional...
     'mail:send {user?}'
 
-    // Optional argument with default value...
+    // Argumen opsional dengan nilai default...
     'mail:send {user=foo}'
 
 <a name="options"></a>
-### Options
 
-Options, like arguments, are another form of user input. Options are prefixed by two hyphens (`--`) when they are provided via the command line. There are two types of options: those that receive a value and those that don't. Options that don't receive a value serve as a boolean "switch". Let's take a look at an example of this type of option:
+### Opsi
+
+Opsi seperti argumen, merupakan bentuk lain dari _input_ pengguna. Opsi diawali dengan dua tanda hubung (`--`) saat dituliskan dalam baris perintah. Ada dua jenis opsi: yang menerima nilai dan yang tidak. Opsi yang tidak menerima nilai berfungsi sebagai "_switch_" _boolean_. Mari kita lihat contoh opsi jenis ini:
 
     /**
-     * The name and signature of the console command.
+     * Nama dan signature dari perintah console.
      *
      * @var string
      */
     protected $signature = 'mail:send {user} {--queue}';
 
-In this example, the `--queue` switch may be specified when calling the Artisan command. If the `--queue` switch is passed, the value of the option will be `true`. Otherwise, the value will be `false`:
+Pada contoh ini, _switch_ `--queue` dapat ditambahkan saat memanggil perintah Artisan. Jika _switch_ `--queue` diberikan, nilai opsi akan menjadi `true`. Jika tidak, nilai akan menjadi `false`:
 
 ```shell
 php artisan mail:send 1 --queue
 ```
 
 <a name="options-with-values"></a>
-#### Options With Values
+#### Opsi dengan Nilai
 
-Next, let's take a look at an option that expects a value. If the user must specify a value for an option, you should suffix the option name with a `=` sign:
+Selanjutnya, marilah kita lihat opsi yang dapat diisi nilai. Jika pengguna harus memasukkan nilai untuk opsi, Anda harus menambahkan tanda `=` pada nama opsi:
 
     /**
-     * The name and signature of the console command.
+     * Nama dan signature dari perintah console.
      *
      * @var string
      */
     protected $signature = 'mail:send {user} {--queue=}';
 
-In this example, the user may pass a value for the option like so. If the option is not specified when invoking the command, its value will be `null`:
+Dalam contoh ini, pengguna dapat mengirimkan nilai untuk opsi seperti ini. Jika opsi tidak ditentukan saat menjalankan perintah, nilainya akan menjadi `null`:
 
 ```shell
 php artisan mail:send 1 --queue=default
 ```
 
-You may assign default values to options by specifying the default value after the option name. If no option value is passed by the user, the default value will be used:
+Anda dapat memberikan nilai _default_ ke opsi dengan menentukan nilai _default_ setelah nama opsi. Jika tidak ada nilai opsi yang diberikan oleh pengguna, nilai _default_ akan digunakan:
 
     'mail:send {user} {--queue=default}'
 
 <a name="option-shortcuts"></a>
-#### Option Shortcuts
+#### _Shortcut_ Opsi
 
-To assign a shortcut when defining an option, you may specify it before the option name and use the `|` character as a delimiter to separate the shortcut from the full option name:
+Untuk memberikan _shortcut_ saat menentukan opsi, Anda dapat menentukannya sebelum nama opsi dan menggunakan karakter `|` sebagai pembatas untuk memisahkan antara _shortcut_ dan nama lengkap untuk opsi:
 
     'mail:send {user} {--Q|queue}'
 
-When invoking the command on your terminal, option shortcuts should be prefixed with a single hyphen:
+Saat menjalankan perintah di terminal Anda, _shortcut_ opsi harus diawali dengan tanda hubung tunggal:
 
 ```shell
 php artisan mail:send 1 -Q
 ```
 
 <a name="input-arrays"></a>
-### Input Arrays
+### _Input_ dalam Bentuk _Array_
 
-If you would like to define arguments or options to expect multiple input values, you may use the `*` character. First, let's take a look at an example that specifies such an argument:
+Jika Anda ingin menentukan argumen atau opsi yang mengharapkan beberapa nilai input, Anda dapat menggunakan karakter `*`. Mari kita lihat contohnya:
 
     'mail:send {user*}'
 
-When calling this method, the `user` arguments may be passed in order to the command line. For example, the following command will set the value of `user` to an array with `1` and `2` as its values:
+Saat memanggil _method_ ini, argumen `user` dapat diberikan ke baris perintah. Misalnya, perintah berikut akan mengatur nilai `user` menjadi sebuah _array_ dengan nilai `1` dan `2`:
 
 ```shell
 php artisan mail:send 1 2
 ```
 
-This `*` character can be combined with an optional argument definition to allow zero or more instances of an argument:
+Karakter `*` ini dapat digabungkan dengan definisi argumen opsional untuk mengijinkan _instance_ argumen menjadi nol atau lebih:
 
     'mail:send {user?*}'
 
 <a name="option-arrays"></a>
-#### Option Arrays
+#### _Array_ Opsi
 
-When defining an option that expects multiple input values, each option value passed to the command should be prefixed with the option name:
+Saat menentukan opsi yang mengharapkan beberapa nilai _input_, setiap nilai opsi yang diberikan ke perintah harus diawali dengan nama opsi:
 
     'mail:send {--id=*}'
 
-Such a command may be invoked by passing multiple `--id` arguments:
+Perintah seperti itu dapat dijalankan dengan mengirimkan beberapa argumen `--id`:
 
 ```shell
 php artisan mail:send --id=1 --id=2
 ```
 
 <a name="input-descriptions"></a>
-### Input Descriptions
+### Deskripsi _Input_
 
-You may assign descriptions to input arguments and options by separating the argument name from the description using a colon. If you need a little extra room to define your command, feel free to spread the definition across multiple lines:
+Anda dapat memberikan deskripsi ke argumen dan opsi dengan memisahkan nama argumen dari deskripsi menggunakan tanda titik dua. Jika Anda membutuhkan baris tambahan untuk mendefinisikan perintah, Anda dapat menulisnya dalam beberapa baris:
 
     /**
-     * The name and signature of the console command.
+     * Nama dan signature dari perintah console.
      *
      * @var string
      */
@@ -376,15 +378,15 @@ You may assign descriptions to input arguments and options by separating the arg
                             {--queue : Whether the job should be queued}';
 
 <a name="command-io"></a>
-## Command I/O
+## I/O Perintah
 
 <a name="retrieving-input"></a>
-### Retrieving Input
+### Mengambil _Input_
 
-While your command is executing, you will likely need to access the values for the arguments and options accepted by your command. To do so, you may use the `argument` and `option` methods. If an argument or option does not exist, `null` will be returned:
+Saat perintah Anda sedang dieksekusi, Anda mungkin akan perlu mengakses nilai untuk argumen dan opsi yang diterima oleh perintah tersebut. Untuk melakukannya, Anda dapat menggunakan _method_ `argument` dan `option`. Jika argumen atau opsi tidak ada, maka _method_ tersebut akan mengembalikan nilai `null`:
 
     /**
-     * Execute the console command.
+     * Eksekusi perintah console.
      *
      * @return int
      */
@@ -395,80 +397,80 @@ While your command is executing, you will likely need to access the values for t
         //
     }
 
-If you need to retrieve all of the arguments as an `array`, call the `arguments` method:
+Jika Anda perlu mengambil semua argumen sebagai `array`, gunakan _method_ `arguments`:
 
     $arguments = $this->arguments();
 
-Options may be retrieved just as easily as arguments using the `option` method. To retrieve all of the options as an array, call the `options` method:
+Opsi dapat dengan mudah diperoleh seperti argumen menggunakan _method_ `option`. Untuk mengambil semua opsi sebagai _array_, panggil _method_ `options`:
 
-    // Retrieve a specific option...
+    // Peroleh sebuah opsi...
     $queueName = $this->option('queue');
 
-    // Retrieve all options as an array...
+    // Peroleh semua opsi...
     $options = $this->options();
 
 <a name="prompting-for-input"></a>
-### Prompting For Input
+### _Prompting_ untuk _Input_
 
-In addition to displaying output, you may also ask the user to provide input during the execution of your command. The `ask` method will prompt the user with the given question, accept their input, and then return the user's input back to your command:
+Selain menampilkan output, Anda juga dapat meminta pengguna untuk memberikan input selama eksekusi perintah Anda. _Method_ `ask` akan meminta jawaban pengguna dengan pertanyaan yang diberikan, kemudian mengembalikan _input_ tersebut ke perintah Anda:
 
     /**
-     * Execute the console command.
+     * Eksekusi perintah console.
      *
      * @return mixed
      */
     public function handle()
     {
-        $name = $this->ask('What is your name?');
+        $name = $this->ask('Siapa nama Anda?');
     }
 
-The `secret` method is similar to `ask`, but the user's input will not be visible to them as they type in the console. This method is useful when asking for sensitive information such as passwords:
+_Method_ `secret` mirip dengan _method_ `ask`, namun _input_ dari pengguna tidak akan terlihat ketika diketikan pada _console_. _Method_ ini sangat berguna ketika memasukkan informasi yang sensitif seperti kata sandi:
 
-    $password = $this->secret('What is the password?');
+    $password = $this->secret('Apa kata sandi Anda?');
 
 <a name="asking-for-confirmation"></a>
-#### Asking For Confirmation
+#### Meminta Konfirmasi
 
-If you need to ask the user for a simple "yes or no" confirmation, you may use the `confirm` method. By default, this method will return `false`. However, if the user enters `y` or `yes` in response to the prompt, the method will return `true`.
+Jika Anda membutuhkan konfirmasi sederhana "ya atau tidak" dari pengguna, Anda dapat menggunakan _method_ `confirm`. Secara _default_, _method_ ini akan mengembalikan nilai `false`. Namun, jika pengguna menjawab `y` atau `yes` maka _method_ akan mengembalikan nilai `true`:
 
-    if ($this->confirm('Do you wish to continue?')) {
+    if ($this->confirm('Apa Anda ingin melanjutkan?')) {
         //
     }
 
-If necessary, you may specify that the confirmation prompt should return `true` by default by passing `true` as the second argument to the `confirm` method:
+ika diperlukan, Anda dapat menentukan bahwa _prompt_ konfirmasi harus mengembalikan `true` secara `default` dengan mengirimkan `true` sebagai argumen kedua pada _method_ `confirm`:
 
-    if ($this->confirm('Do you wish to continue?', true)) {
+    if ($this->confirm('Apakah Anda ingin melanjutkan?', true)) {
         //
     }
 
 <a name="auto-completion"></a>
-#### Auto-Completion
+#### _Auto-Completion_
 
-The `anticipate` method can be used to provide auto-completion for possible choices. The user can still provide any answer, regardless of the auto-completion hints:
+_Method_ `anticipate` dapat digunakan untuk memberikan _auto-completion_ pada pilihan yang ada. Pengguna masih dapat memasukkan jawabannya sendiri tanpa memperdulikan pilihan dari _auto-completion_:
 
-    $name = $this->anticipate('What is your name?', ['Taylor', 'Dayle']);
+    $name = $this->anticipate('Siapa nama Anda?', ['Taylor', 'Dayle']);
 
-Alternatively, you may pass a closure as the second argument to the `anticipate` method. The closure will be called each time the user types an input character. The closure should accept a string parameter containing the user's input so far, and return an array of options for auto-completion:
+Atau, Anda dapat mengirimkan _closure_ sebagai argumen kedua ke _method_ `anticipate`. _Closure_ akan dipanggil setiap kali pengguna mengetik karakter _input_. _Closure_ harus menerima parameter _string_ yang berisi _input_ pengguna sampai saat ini, dan mengembalikan _array_ opsi untuk _auto-completion_:
 
-    $name = $this->anticipate('What is your address?', function ($input) {
-        // Return auto-completion options...
+    $name = $this->anticipate('Di mana alamat Anda?', function ($input) {
+        // Mengembalikan opsi untuk auto-completion...
     });
 
 <a name="multiple-choice-questions"></a>
-#### Multiple Choice Questions
+#### Pertanyaan dengan Pilihan Ganda
 
-If you need to give the user a predefined set of choices when asking a question, you may use the `choice` method. You may set the array index of the default value to be returned if no option is chosen by passing the index as the third argument to the method:
+Jika Anda perlu memberikan pilihan yang telah ditentukan kepada pengguna saat bertanya, Anda dapat menggunakan _method_ `choice`. Anda dapat menentukan indeks `array` dari nilai `default` yang akan dikembalikan jika tidak ada opsi yang dipilih dengan mengirimkan indeks sebagai argumen ketiga ke _method_:
 
     $name = $this->choice(
-        'What is your name?',
+        'Siapa nama Anda?',
         ['Taylor', 'Dayle'],
         $defaultIndex
     );
 
-In addition, the `choice` method accepts optional fourth and fifth arguments for determining the maximum number of attempts to select a valid response and whether multiple selections are permitted:
+Selain itu, _method_ `choice` menerima argumen keempat dan kelima yang opsional untuk menentukan jumlah maksimum percobaan untuk memilih tanggapan yang valid dan apakah pemilihan bersama diizinkan:
 
     $name = $this->choice(
-        'What is your name?',
+        'Siapa nama Anda?',
         ['Taylor', 'Dayle'],
         $defaultIndex,
         $maxAttempts = null,
@@ -476,12 +478,12 @@ In addition, the `choice` method accepts optional fourth and fifth arguments for
     );
 
 <a name="writing-output"></a>
-### Writing Output
+### Menulis _Output_
 
-To send output to the console, you may use the `line`, `info`, `comment`, `question`, `warn`, and `error` methods. Each of these methods will use appropriate ANSI colors for their purpose. For example, let's display some general information to the user. Typically, the `info` method will display in the console as green colored text:
+Untuk mengirim _output_ ke _console_, Anda dapat menggunakan _method_ `line`, `info`, `comment`, `question`, `warn`, dan `error`. Setiap _method_ ini akan menggunakan warna ANSI yang sesuai untuk tujuannya. Sebagai contoh, mari kita tampilkan beberapa informasi umum kepada pengguna. Biasanya, _method_ `info` akan ditampilkan di _console_ sebagai teks berwarna hijau:
 
     /**
-     * Execute the console command.
+     * Eksekusi perintah console.
      *
      * @return mixed
      */
@@ -489,30 +491,29 @@ To send output to the console, you may use the `line`, `info`, `comment`, `quest
     {
         // ...
 
-        $this->info('The command was successful!');
+        $this->info('Perintah berjalan sukses!');
     }
 
-To display an error message, use the `error` method. Error message text is typically displayed in red:
+Untuk menampilkan pesan eror, gunakan _method_ `error`. Pesan eror biasanya ditampilkan dalam warna merah:
 
-    $this->error('Something went wrong!');
+    $this->error('Terjadi kesalahan!');
 
-You may use the `line` method to display plain, uncolored text:
+Anda dapat menggunakan _method_ `line` untuk menampilkan teks tanpa warna:
 
-    $this->line('Display this on the screen');
+    $this->line('Tampilkan ini di layar');
 
-You may use the `newLine` method to display a blank line:
+Anda dapat menggunakan _method_ `newLine` untuk menampilkan baris kosong:
 
-    // Write a single blank line...
+    // Menampilkan satu baris kosong...
     $this->newLine();
 
-    // Write three blank lines...
+    // Menampilkan tiga baris kosong...
     $this->newLine(3);
 
 <a name="tables"></a>
-#### Tables
+#### Tabel
 
-The `table` method makes it easy to correctly format multiple rows / columns of data. All you need to do is provide the column names and the data for the table and Laravel will
-automatically calculate the appropriate width and height of the table for you:
+_Method_ `table` memudahkan pengaturan format yang benar untuk beberapa baris / kolom data. Yang perlu Anda lakukan hanyalah memberikan nama kolom dan data untuk tabel, dan Laravel akan secara otomatis menghitung lebar dan tinggi tabel yang sesuai untuk Anda:
 
     use App\Models\User;
 
@@ -522,9 +523,9 @@ automatically calculate the appropriate width and height of the table for you:
     );
 
 <a name="progress-bars"></a>
-#### Progress Bars
+#### _Progress Bar_
 
-For long running tasks, it can be helpful to show a progress bar that informs users how complete the task is. Using the `withProgressBar` method, Laravel will display a progress bar and advance its progress for each iteration over a given iterable value:
+Untuk tugas yang berlangsung lama, Anda dapat menampilkan _progress bar_ yang memberi tahu pengguna seberapa jauh tugas telah dilaksanakan. Dengan menggunakan _method_ `withProgressBar`, Laravel akan menampilkan _progress bar_ dan menambah nilai progresnya untuk setiap iterasi atas nilai _iterable_ yang diberikan:
 
     use App\Models\User;
 
@@ -532,7 +533,7 @@ For long running tasks, it can be helpful to show a progress bar that informs us
         $this->performTask($user);
     });
 
-Sometimes, you may need more manual control over how a progress bar is advanced. First, define the total number of steps the process will iterate through. Then, advance the progress bar after processing each item:
+Kadang-kadang, Anda mungkin membutuhkan kontrol yang lebih manual untuk mengendalikan _progress bar_. Pertama, tentukan jumlah langkah yang akan dilalui proses. Kemudian, tingkatkan _progress bar_ setelah memproses masing-masing _item_:
 
     $users = App\Models\User::all();
 
@@ -548,16 +549,16 @@ Sometimes, you may need more manual control over how a progress bar is advanced.
 
     $bar->finish();
 
-> **Note**  
-> For more advanced options, check out the [Symfony Progress Bar component documentation](https://symfony.com/doc/current/components/console/helpers/progressbar.html).
+> **Catatan**  
+> Untuk opsi tingkat lanjut, sila periksa [Symfony Progress Bar component documentation](https://symfony.com/doc/current/components/console/helpers/progressbar.html).
 
 <a name="registering-commands"></a>
-## Registering Commands
+## Mendaftarkan Perintah
 
-All of your console commands are registered within your application's `App\Console\Kernel` class, which is your application's "console kernel". Within the `commands` method of this class, you will see a call to the kernel's `load` method. The `load` method will scan the `app/Console/Commands` directory and automatically register each command it contains with Artisan. You are even free to make additional calls to the `load` method to scan other directories for Artisan commands:
+Semua perintah _console_ Anda terdaftar dalam _class_ `App\console\Kernel`, yang merupakan "console kernel" aplikasi Anda. Di dalam _method_ `commands`, Anda akan melihat sebuah pemanggilan ke _method_ `load` milik _kernel_. _Method_ `load` akan memindai direktori `app/console/Commands` dan secara otomatis mendaftarkan setiap perintah yang ditemukan ke Artisan. Anda bahkan bebas membuat panggilan tambahan ke _method_ `load` untuk memindai direktori lain untuk perintah Artisan:
 
     /**
-     * Register the commands for the application.
+     * Mendaftarkan perintah untuk aplikasi.
      *
      * @return void
      */
@@ -569,16 +570,16 @@ All of your console commands are registered within your application's `App\Conso
         // ...
     }
 
-If necessary, you may manually register commands by adding the command's class name to a `$commands` property within your `App\Console\Kernel` class. If this property is not already defined on your kernel, you should define it manually. When Artisan boots, all the commands listed in this property will be resolved by the [service container](/docs/{{version}}/container) and registered with Artisan:
+Jika perlu, Anda dapat mendaftarkan perintah secara manual dengan menambahkan nama _class_ dari perintah ke properti `$commands` di dalam _class_ `App\console\Kernel` Anda. Jika properti ini belum didefinisikan pada _kernel_ Anda, Anda harus mendefinisikannya secara manual. Saat Artisan melakukan _boot_, semua perintah yang terdaftar dalam properti ini akan diselesaikan oleh [_service container_](/docs/{{version}}/container) dan didaftarkan dengan Artisan:
 
     protected $commands = [
         Commands\SendEmails::class
     ];
 
 <a name="programmatically-executing-commands"></a>
-## Programmatically Executing Commands
+## Mengeksekusi Perintah Secara Terprogram
 
-Sometimes you may wish to execute an Artisan command outside of the CLI. For example, you may wish to execute an Artisan command from a route or controller. You may use the `call` method on the `Artisan` facade to accomplish this. The `call` method accepts either the command's signature name or class name as its first argument, and an array of command parameters as the second argument. The exit code will be returned:
+Terkadang Anda mungkin ingin mengeksekusi perintah Artisan di luar CLI. Sebagai contoh, Anda mungkin ingin mengeksekusi perintah Artisan dari _route_ atau _controller_. Anda dapat menggunakan _method_ `call` pada _facade_ Artisan untuk mencapainya. _Method_ `call` menerima nama _signature_ atau nama _class_ sebagai argumen pertamanya, dan sebuah _array_ berisi parameter perintah sebagai argumen kedua. Kode keluar akan dikembalikan:
 
     use Illuminate\Support\Facades\Artisan;
 
@@ -590,14 +591,14 @@ Sometimes you may wish to execute an Artisan command outside of the CLI. For exa
         //
     });
 
-Alternatively, you may pass the entire Artisan command to the `call` method as a string:
+Atau, Anda dapat mengirimkan perintah Artisan seluruhnya ke _method_ `call` dalam bentuk _string_:
 
     Artisan::call('mail:send 1 --queue=default');
 
 <a name="passing-array-values"></a>
-#### Passing Array Values
+#### Melewatkan Nilai _Array_
 
-If your command defines an option that accepts an array, you may pass an array of values to that option:
+Jika perintah Anda mendefinisikan sebuah opsi yang menerima _array_, Anda dapat mengirimkan sebuah _array_ ke opsi tersebut:
 
     use Illuminate\Support\Facades\Artisan;
 
@@ -608,18 +609,18 @@ If your command defines an option that accepts an array, you may pass an array o
     });
 
 <a name="passing-boolean-values"></a>
-#### Passing Boolean Values
+#### Melewatkan Nilai _Boolean_
 
-If you need to specify the value of an option that does not accept string values, such as the `--force` flag on the `migrate:refresh` command, you should pass `true` or `false` as the value of the option:
+Jika Anda perlu menentukan nilai dari sebuah opsi yang tidak menerima nilai _string_, seperti (_flag_) `--force` pada perintah `migrate:refresh`, Anda harus mengirimkan `true` atau `false` sebagai nilai opsi tersebut:
 
     $exitCode = Artisan::call('migrate:refresh', [
         '--force' => true,
     ]);
 
 <a name="queueing-artisan-commands"></a>
-#### Queueing Artisan Commands
+#### Membuat Antrian Perintah Artisan
 
-Using the `queue` method on the `Artisan` facade, you may even queue Artisan commands so they are processed in the background by your [queue workers](/docs/{{version}}/queues). Before using this method, make sure you have configured your queue and are running a queue listener:
+Dengan menggunakan _method_ `queue` pada _facade_ `Artisan`, Anda bahkan dapat mengelola perintah Artisan sehingga dapat diproses di latar belakang oleh [_queue workers_](/docs/{{version}}/queues). Sebelum menggunakan _method_ ini, pastikan Anda telah mengkonfigurasi antrian dan menjalankan _queue listener_:
 
     use Illuminate\Support\Facades\Artisan;
 
@@ -631,19 +632,19 @@ Using the `queue` method on the `Artisan` facade, you may even queue Artisan com
         //
     });
 
-Using the `onConnection` and `onQueue` methods, you may specify the connection or queue the Artisan command should be dispatched to:
+Dengan menggunakan _method_ `onConnection` dan `onQueue`, Anda dapat menentukan koneksi atau antrian perintah Artisan yang harus dikirimkan:
 
     Artisan::queue('mail:send', [
         'user' => 1, '--queue' => 'default'
     ])->onConnection('redis')->onQueue('commands');
 
 <a name="calling-commands-from-other-commands"></a>
-### Calling Commands From Other Commands
+### Memanggil Perintah di Dalam Perintah
 
-Sometimes you may wish to call other commands from an existing Artisan command. You may do so using the `call` method. This `call` method accepts the command name and an array of command arguments / options:
+Terkadang Anda mungkin ingin memanggil perintah lain dari perintah Artisan yang ada. Anda dapat melakukannya dengan menggunakan _method_ `call`. _Method_ `call` ini menerima nama perintah dan sebuah _array_ untuk argumen / opsi:
 
     /**
-     * Execute the console command.
+     * Eksekusi perintah console.
      *
      * @return mixed
      */
@@ -656,19 +657,19 @@ Sometimes you may wish to call other commands from an existing Artisan command. 
         //
     }
 
-If you would like to call another console command and suppress all of its output, you may use the `callSilently` method. The `callSilently` method has the same signature as the `call` method:
+Jika Anda ingin memanggil perintah _console_ lain dan tidak ingin menampilkan _output_ dari perintah tersebut, Anda dapat menggunakan _method_ `callSilently`. _Method_ `callSilently` memiliki _signature_ yang sama dengan _method_ `call`:
 
     $this->callSilently('mail:send', [
         'user' => 1, '--queue' => 'default'
     ]);
 
 <a name="signal-handling"></a>
-## Signal Handling
+## Penanganan Sinyal
 
-As you may know, operating systems allow signals to be sent to running processes. For example, the `SIGTERM` signal is how operating systems ask a program to terminate. If you wish to listen for signals in your Artisan console commands and execute code when they occur, you may use the `trap` method:
+Seperti yang Anda tahu, sistem operasi memungkinkan sinyal dikirim ke proses yang sedang berjalan. Misalnya, sinyal `SIGTERM` adalah bagaimana sistem operasi meminta sebuah program untuk dihentikan. Jika Anda ingin mendengarkan sinyal dalam perintah _console_ Artisan Anda dan menjalankan kode saat sinyal terjadi, Anda dapat menggunakan _method_ `trap`:
 
     /**
-     * Execute the console command.
+     * Eksekusi perintah console.
      *
      * @return mixed
      */
@@ -681,7 +682,7 @@ As you may know, operating systems allow signals to be sent to running processes
         }
     }
 
-To listen for multiple signals at once, you may provide an array of signals to the `trap` method:
+Untuk mendengarkan beberapa sinyal sekaligus, Anda dapat menggunakan _array_ berisi sinyal-sinyal ke dalam _method_ `trap`:
 
     $this->trap([SIGTERM, SIGQUIT], function ($signal) {
         $this->shouldKeepRunning = false;
@@ -690,17 +691,17 @@ To listen for multiple signals at once, you may provide an array of signals to t
     });
 
 <a name="stub-customization"></a>
-## Stub Customization
+## Kostumisasi _Stub_
 
-The Artisan console's `make` commands are used to create a variety of classes, such as controllers, jobs, migrations, and tests. These classes are generated using "stub" files that are populated with values based on your input. However, you may want to make small changes to files generated by Artisan. To accomplish this, you may use the `stub:publish` command to publish the most common stubs to your application so that you can customize them:
+Perintah `make` pada _console_ Artisan digunakan untuk membuat berbagai macam _class_, seperti _controller_, _job_, _migrations_, dan _tests_. Kelas-kelas ini dibuat menggunakan _file_ "stub" yang diisi berdasarkan nilai-nilai yang di-_input_-kan. Namun, Anda mungkin ingin membuat perubahan kecil pada _file_ yang dihasilkan oleh Artisan. Untuk mencapai ini, Anda dapat menggunakan perintah `stub:publish` untuk mempublikasikan _stub_ ke aplikasi Anda sehingga Anda dapat mengubahnya untuk disesuikan:
 
 ```shell
 php artisan stub:publish
 ```
 
-The published stubs will be located within a `stubs` directory in the root of your application. Any changes you make to these stubs will be reflected when you generate their corresponding classes using Artisan's `make` commands.
+Stub yang dipublis akan terletak di dalam direktori `stubs` pada _root_ aplikasi Anda. Segala perubahan yang Anda lakukan pada _stub_ tersebut akan langsung tercermin saat Anda menghasilkan _class_ menggunakan perintah `make` milik Artisan.
 
 <a name="events"></a>
-## Events
+## _Event_
 
-Artisan dispatches three events when running commands: `Illuminate\Console\Events\ArtisanStarting`, `Illuminate\Console\Events\CommandStarting`, and `Illuminate\Console\Events\CommandFinished`. The `ArtisanStarting` event is dispatched immediately when Artisan starts running. Next, the `CommandStarting` event is dispatched immediately before a command runs. Finally, the `CommandFinished` event is dispatched once a command finishes executing.
+Artisan mengirimkan tiga _event_ saat menjalankan perintah: `Illuminate\console\Events\ArtisanStarting`, `Illuminate\console\Events\CommandStarting`, dan `Illuminate\console\Events\CommandFinished`. _Event_ `ArtisanStarting` dikirimkan segera saat Artisan mulai berjalan. Kemudian, _event_ `CommandStarting` dikirimkan segera sebelum sebuah perintah dijalankan. Terakhir, _event_ `CommandFinished` dikirimkan setelah sebuah perintah selesai dieksekusi.
