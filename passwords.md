@@ -1,50 +1,54 @@
-# Resetting Passwords
+# Melakukan Reset Kata Sandi
 
-- [Introduction](#introduction)
-    - [Model Preparation](#model-preparation)
-    - [Database Preparation](#database-preparation)
-    - [Configuring Trusted Hosts](#configuring-trusted-hosts)
-- [Routing](#routing)
-    - [Requesting The Password Reset Link](#requesting-the-password-reset-link)
-    - [Resetting The Password](#resetting-the-password)
-- [Deleting Expired Tokens](#deleting-expired-tokens)
-- [Customization](#password-customization)
+- [Pengantar](#introduction)
+    - [Menyiapkan Model](#model-preparation)
+    - [Menyiapkan Basis Data](#database-preparation)
+    - [Melakukan Konfigurasi _Host_ Terpercaya](#configuring-trusted-hosts)
+- [Melakukan _Route_](#routing)
+    - [Meminta Pranala Reset Kata Sandi](#requesting-the-password-reset-link)
+    - [Mengatur Ulang Kata Sandi](#resetting-the-password)
+- [Menghapus Token yang Kadaluarsa](#deleting-expired-tokens)
+- [Kostumisasi](#password-customization)
 
 <a name="introduction"></a>
-## Introduction
+## Pengantar
 
-Most web applications provide a way for users to reset their forgotten passwords. Rather than forcing you to re-implement this by hand for every application you create, Laravel provides convenient services for sending password reset links and secure resetting passwords.
+Aplikasi web pada umumnya menyediakan sebuah cara unt
 
-> **Note**  
-> Want to get started fast? Install a Laravel [application starter kit](/docs/{{version}}/starter-kits) in a fresh Laravel application. Laravel's starter kits will take care of scaffolding your entire authentication system, including resetting forgotten passwords.
+Kebanyakan aplikasi web menyediakan sebuah cara bagi pengguna untuk mengatur ulang kata sandi yang terlupakan. Daripada memaksamu untuk mengimplementasikan ini secara manual, Laravel menyediakan layanan yang nyaman untuk mengirim pranala reset kata sandi dan reset kata sandi yang aman.
+
+> **Catatan**  
+> Ingin persiapan yang lebih mudah? _Install_ [perlengkapan pemula Laravel](/docs/{{version}}/starter-kits) pada aplikasi Laravel yang baru. Perlengkapan pemula Laravel akan mengurus _scaffolding_ seluruh sistem autentikasi Anda, termasuk pengaturan ulang kata sandi yang terlupa.
 
 <a name="model-preparation"></a>
-### Model Preparation
+### Menyiapkan Model
 
-Before using the password reset features of Laravel, your application's `App\Models\User` model must use the `Illuminate\Notifications\Notifiable` trait. Typically, this trait is already included on the default `App\Models\User` model that is created with new Laravel applications.
+Sebelum menggunakan fitur reset kata sandi milik Laravel, model `App\Models\User` pada aplikasi Anda harus menggunakan _trait_ `Illuminate\Notifications\Notifiable`. Biasanya, _trait_ ini sudah terdapat pada model `App\Models\User` secara _default_ yang dibuat pada aplikasi Laravel yang baru.
 
-Next, verify that your `App\Models\User` model implements the `Illuminate\Contracts\Auth\CanResetPassword` contract. The `App\Models\User` model included with the framework already implements this interface, and uses the `Illuminate\Auth\Passwords\CanResetPassword` trait to include the methods needed to implement the interface.
+Selanjutnya, pastikan bahwa model `App\Models\User` telah mengimplementasikan kontrak `Illuminate\Contracts\Auth\CanResetPassword`. Model `App\Models\User` yang disertakan dalam _framework_ sudah mengimplementasikan _interface_ ini, dan menggunakan _trait_ `Illuminate\Auth\Passwords\CanResetPassword` untuk menyertakan metode yang dibutuhkan untuk mengimplementasikan _interface_ tersebut.
 
 <a name="database-preparation"></a>
-### Database Preparation
+### Menyiapkan Basis Data
 
-A table must be created to store your application's password reset tokens. The migration for this table is included in the default Laravel application, so you only need to migrate your database to create this table:
+Sebuah tabel harus dibuat untuk menyimpan token reset password aplikasi Anda. _Migration_ untuk tabel ini telah disertakan juga dalam aplikasi Laravel yang _default_, sehingga Anda hanya perlu melakukan migrasi basis data Anda untuk membuat tabel ini:
 
 ```shell
 php artisan migrate
 ```
 
 <a name="configuring-trusted-hosts"></a>
-### Configuring Trusted Hosts
+### Konfigurasi _Host_ Terpercaya
 
-By default, Laravel will respond to all requests it receives regardless of the content of the HTTP request's `Host` header. In addition, the `Host` header's value will be used when generating absolute URLs to your application during a web request.
+Secara default, Laravel akan merespons semua permintaan yang diterimanya tanpa memperhatikan konten _header_ `Host` pada permintaan HTTP. Selain itu, nilai _header_ `Host` akan digunakan saat menghasilkan URL absolut ke aplikasi Anda selama permintaan web.
 
-Typically, you should configure your web server, such as Nginx or Apache, to only send requests to your application that match a given host name. However, if you do not have the ability to customize your web server directly and need to instruct Laravel to only respond to certain host names, you may do so by enabling the `App\Http\Middleware\TrustHosts` middleware for your application. This is particularly important when your application offers password reset functionality.
+Biasanya, Anda harus mengkonfigurasi web server Anda, seperti Nginx atau Apache, untuk mengirim permintaan ke aplikasi yang cocok dengan nama _host_ yang diberikan. Namun, jika Anda tidak memiliki kemampuan untuk melakukan konfigurasi web server Anda secara langsung dan perlu memberi instruksi kepada Laravel untuk hanya merespon nama _host_ tertentu, Anda dapat melakukannya dengan mengaktifkan _middleware_ `App\Http\Middleware\TrustHosts` untuk aplikasi Anda. Hal ini sangat penting ketika aplikasi Anda menawarkan fitur reset kata sandi.
 
-To learn more about this middleware, please consult the [`TrustHosts` middleware documentation](/docs/{{version}}/requests#configuring-trusted-hosts).
+Untuk mempelajari lebih lanjut tentang _middleware_ ini, sila baca [dokumentasi middleware `TrustHosts`](/docs/{{version}}/requests#configuring-trusted-hosts).
 
 <a name="routing"></a>
-## Routing
+## MMelakukan _Route_
+
+Untuk mengimplementasikan dukungan secara tepat yang mengizinkan pengguna untuk mengatur ulang kata sandi mereka, kita perlu menentukan beberapa _route_. Pertama, kita perlu sepasang _route_ untuk menangani perizinan pengguna untuk meminta pranala reset kata sandi melalui alamat email mereka. Kedua, kita perlu sepasang _route_ untuk menangani pengaturan ulang kata sandi yang diakses pengguna dengan cara mengunjungi tautan reset kata sandi yang dikirimkan kepada mereka melalui email dan menyelesaikan formulir reset kata sandi.
 
 To properly implement support for allowing users to reset their passwords, we will need to define several routes. First, we will need a pair of routes to handle allowing the user to request a password reset link via their email address. Second, we will need a pair of routes to handle actually resetting the password once the user visits the password reset link that is emailed to them and completes the password reset form.
 
@@ -52,20 +56,20 @@ To properly implement support for allowing users to reset their passwords, we wi
 ### Requesting The Password Reset Link
 
 <a name="the-password-reset-link-request-form"></a>
-#### The Password Reset Link Request Form
+#### Formulir Permintaan Pranala Reset Kata Sandi
 
-First, we will define the routes that are needed to request password reset links. To get started, we will define a route that returns a view with the password reset link request form:
+Pertama, kita akan mendefinisikan _route_ yang dibutuhkan untuk meminta tautan reset kata sandi. Untuk memulai, kita akan mendefinisikan _route_ yang mengembalikan _view_ formulir permintaan pranala untuk reset kata sandi:
 
     Route::get('/forgot-password', function () {
         return view('auth.forgot-password');
     })->middleware('guest')->name('password.request');
 
-The view that is returned by this route should have a form containing an `email` field, which will allow the user to request a password reset link for a given email address.
+Tampilan yang dikembalikan oleh _route_ ini harus memiliki formulir yang berisi _field_ `email`, yang akan memungkinkan pengguna untuk meminta pranala reset kata sandi untuk alamat email yang diberikan.
 
 <a name="password-reset-link-handling-the-form-submission"></a>
-#### Handling The Form Submission
+#### Penanganan Formulir yang Dikirim
 
-Next, we will define a route that handles the form submission request from the "forgot password" view. This route will be responsible for validating the email address and sending the password reset request to the corresponding user:
+Selanjutnya, kita akan mendefinisikan _route_ yang menangani formulir yang dikirimkan dari tampilan "lupa kata sandi". _Route_ ini akan bertanggung jawab untuk memvalidasi alamat email dan mengirimkan pranala reset kata sandi ke alamat email yang dikirimkan:
 
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Password;
@@ -82,33 +86,33 @@ Next, we will define a route that handles the form submission request from the "
                     : back()->withErrors(['email' => __($status)]);
     })->middleware('guest')->name('password.email');
 
-Before moving on, let's examine this route in more detail. First, the request's `email` attribute is validated. Next, we will use Laravel's built-in "password broker" (via the `Password` facade) to send a password reset link to the user. The password broker will take care of retrieving the user by the given field (in this case, the email address) and sending the user a password reset link via Laravel's built-in [notification system](/docs/{{version}}/notifications).
+Sebelum lanjut, mari kita perhatikan _route_ ini lebih detail. Pertama, atribut `email` milik _request_ divalidasi. Selanjutnya, kita akan menggunakan "password broker" bawaan Laravel (melalui _facade_ `Password`) untuk mengirim pranala reset kata sandi ke pengguna. _Password broker_ akan menangani pencarian pengguna dengan _field_ yang sudah ditetapkan (dalam hal ini, alamat email) dan mengirimkan tautan reset kata sandi ke pengguna melalui [sistem notifikasi](/docs/{{version}}/notifications) bawaan Laravel.
 
-The `sendResetLink` method returns a "status" slug. This status may be translated using Laravel's [localization](/docs/{{version}}/localization) helpers in order to display a user-friendly message to the user regarding the status of their request. The translation of the password reset status is determined by your application's `lang/{lang}/passwords.php` language file. An entry for each possible value of the status slug is located within the `passwords` language file.
+_Method_ `sendResetLink` mengembalikan _slug,_ "status". Status ini dapat diterjemahkan menggunakan bantuan [lokalisasi](/docs/{{version}}/localization) Laravel untuk menampilkan pesan yang ramah pengguna tentang status permintaan mereka. Terjemahan status reset kata sandi ditentukan oleh _file_ bahasa `lang/{lang}/passwords.php` aplikasi Anda. Entri untuk setiap kemungkinan nilai untuk _slug_ status terletak di dalam _file_ bahasa `passwords`.
 
-You may be wondering how Laravel knows how to retrieve the user record from your application's database when calling the `Password` facade's `sendResetLink` method. The Laravel password broker utilizes your authentication system's "user providers" to retrieve database records. The user provider used by the password broker is configured within the `passwords` configuration array of your `config/auth.php` configuration file. To learn more about writing custom user providers, consult the [authentication documentation](/docs/{{version}}/authentication#adding-custom-user-providers).
+Anda mungkin bertanya-tanya bagaimana Laravel tahu bagaimana mengambil _record_ pengguna dari basis data aplikasi Anda saat memanggil metode `sendResetLink` milik _facade_ `Password`. _Password broker_ Laravel menggunakan "_user provider_" milik sistem autentikasi untuk mengambil _record_ di dalam basis data. _User provider_ yang digunakan oleh _password broker_ dikonfigurasi dalam _array_ konfigurasi `passwords` pada _file_ `config/auth.php`. Untuk mempelajari lebih lanjut tentang menulis _user providers_ yang kustom, sila mengunjungi [dokumentasi autentikasi](/docs/{{version}}/authentication#adding-custom-user-providers).
 
-> **Note**  
-> When manually implementing password resets, you are required to define the contents of the views and routes yourself. If you would like scaffolding that includes all necessary authentication and verification logic, check out the [Laravel application starter kits](/docs/{{version}}/starter-kits).
+> **Catatan**  
+> Saat mengimplementasikan reset kata sandi secara manual, Anda harus mendefinisikan isi tampilan dan rute sendiri. Jika Anda ingin scaffolding yang mencakup semua logika autentikasi dan verifikasi yang dibutuhkan, periksalah [perlengkapan pemula](/docs/{{version}}/starter-kits) aplikasi Laravel.
 
 <a name="resetting-the-password"></a>
-### Resetting The Password
+### Melakukan Reset Kata Sandi
 
 <a name="the-password-reset-form"></a>
-#### The Password Reset Form
+#### Formulir Reset Kata Sandi
 
-Next, we will define the routes necessary to actually reset the password once the user clicks on the password reset link that has been emailed to them and provides a new password. First, let's define the route that will display the reset password form that is displayed when the user clicks the reset password link. This route will receive a `token` parameter that we will use later to verify the password reset request:
+Selanjutnya, kita akan mendefinisikan _route_ yang dibutuhkan untuk mereset kata sandi yang diakses pengguna melalui pranala reset kata sandi yang telah dikirimkan kepada mereka melalui email dan memberikan kata sandi baru. Pertama, mari kita definisikan _route_ yang akan menampilkan formulir reset kata sandi yang ditampilkan saat pengguna mengklik tautan reset kata sandi. Rute ini akan menerima parameter `token` yang akan kita gunakan nanti untuk memverifikasi permintaan reset kata sandi:
 
     Route::get('/reset-password/{token}', function ($token) {
         return view('auth.reset-password', ['token' => $token]);
     })->middleware('guest')->name('password.reset');
 
-The view that is returned by this route should display a form containing an `email` field, a `password` field, a `password_confirmation` field, and a hidden `token` field, which should contain the value of the secret `$token` received by our route.
+Tampilan yang dikembalikan oleh rute ini harus menampilkan formulir yang berisi field `email`, `password`, `password_confirmation`, dan _field_ `token` yang tersembunyi, yang harus berisi nilai `$token` rahasia yang diterima oleh _route_ kita.
 
 <a name="password-reset-handling-the-form-submission"></a>
-#### Handling The Form Submission
+#### Penanganan Formulir yang Dikirim
 
-Of course, we need to define a route to actually handle the password reset form submission. This route will be responsible for validating the incoming request and updating the user's password in the database:
+Tentu saja, kita perlu mendefinisikan _route_ untuk menangani _submit_ formulir reset kata sandi. _Route_ ini akan bertanggung jawab untuk memvalidasi permintaan yang masuk dan memperbarui kata sandi pengguna di basis data:
 
     use Illuminate\Auth\Events\PasswordReset;
     use Illuminate\Http\Request;
@@ -141,39 +145,39 @@ Of course, we need to define a route to actually handle the password reset form 
                     : back()->withErrors(['email' => [__($status)]]);
     })->middleware('guest')->name('password.update');
 
-Before moving on, let's examine this route in more detail. First, the request's `token`, `email`, and `password` attributes are validated. Next, we will use Laravel's built-in "password broker" (via the `Password` facade) to validate the password reset request credentials.
+Sebelum melanjutkan, mari kita perhatikan _route_ ini lebih detail. Pertama, aatribu `token`, `email`, dan `password` milik _request_ divalidasi. Selanjutnya, kita akan menggunakan "_password broker_" bawaan Laravel (melalui _facade_ `Password`) untuk memvalidasi _credential_ dari permintaan reset kata sandi.
 
-If the token, email address, and password given to the password broker are valid, the closure passed to the `reset` method will be invoked. Within this closure, which receives the user instance and the plain-text password provided to the password reset form, we may update the user's password in the database.
+Jika token, alamat email, dan kata sandi yang diberikan kepada _password broker_ adalah valid, _closure_ yang diberikan ke _method_ `reset` akan dijalankan. _Closure_ ini menerima _instance_ pengguna dan kata sandi mentah yang dikirimkan melalui formulir reset kata sandi, kita dapat memperbarui kata sandi pengguna di basis data.
 
-The `reset` method returns a "status" slug. This status may be translated using Laravel's [localization](/docs/{{version}}/localization) helpers in order to display a user-friendly message to the user regarding the status of their request. The translation of the password reset status is determined by your application's `lang/{lang}/passwords.php` language file. An entry for each possible value of the status slug is located within the `passwords` language file.
+_Method_ `reset` mengembalikan _slug_ "status". Status ini dapat diterjemahkan menggunakan bantuan [lokalisasi](/docs/{{version}}/localization) Laravel untuk menampilkan pesan yang ramah pengguna tentang status permintaan mereka. Terjemahan status reset kata sandi ditentukan oleh _file_ bahasa `lang/{lang}/passwords.php` pada aplikasi Anda. Entri untuk setiap kemungkinan nilai dari _slug_ status terletak di dalam file bahasa `passwords`.
 
-Before moving on, you may be wondering how Laravel knows how to retrieve the user record from your application's database when calling the `Password` facade's `reset` method. The Laravel password broker utilizes your authentication system's "user providers" to retrieve database records. The user provider used by the password broker is configured within the `passwords` configuration array of your `config/auth.php` configuration file. To learn more about writing custom user providers, consult the [authentication documentation](/docs/{{version}}/authentication#adding-custom-user-providers).
+Sebelum lanjut, Anda mungkin bertanya-tanya bagaimana Laravel tahu bagaimana mengambil _record_ pengguna dari basos data saat memanggil _method_ `reset` pada _facade_ `Password`. _Password broker_ milik Laravel menggunakan "_user provider_" milik sistem autentikasi yang mengambil _record_ di basis data. _User provider_ yang digunakan oleh _password broker_ dikonfigurasi dalam array `passwords` pada file konfigurasi `config/auth.php`. Untuk mempelajari lebih lanjut tentang menulis _user provider_ yang kustom, sila mengunjungi [dokumentasi autentikasi](docs/{{version}}/authentication#adding-custom-user-providers).
 
 <a name="deleting-expired-tokens"></a>
-## Deleting Expired Tokens
+## Menghapus Token yang Kadaluarsa
 
-Password reset tokens that have expired will still be present within your database. However, you may easily delete these records using the `auth:clear-resets` Artisan command:
+Token reset kata sandi yang telah kadaluwarsa akan tetap ada di basis data Anda. Namun, Anda dapat dengan mudah menghapus _record_ ini dengan menggunakan perintah Artisan `auth:clear-resets`:
 
 ```shell
 php artisan auth:clear-resets
 ```
 
-If you would like to automate this process, consider adding the command to your application's [scheduler](/docs/{{version}}/scheduling):
+Jika Anda ingin mengotomatiskan proses ini, pertimbangkan menambahkan perintah ke [_scheduler_](/docs/{{version}}/scheduling) pada aplikasi Anda:
 
     $schedule->command('auth:clear-resets')->everyFifteenMinutes();
 
 <a name="password-customization"></a>
-## Customization
+## Kostumisasi
 
 <a name="reset-link-customization"></a>
-#### Reset Link Customization
+#### Kostumosasi Pranala Reset
 
-You may customize the password reset link URL using the `createUrlUsing` method provided by the `ResetPassword` notification class. This method accepts a closure which receives the user instance that is receiving the notification as well as the password reset link token. Typically, you should call this method from your `App\Providers\AuthServiceProvider` service provider's `boot` method:
+Anda dapat menyesuaikan URL pranala reset kata sandi menggunakan _method_ `createUrlUsing` yang disediakan oleh _class_ notifikasi `ResetPassword`. Metode ini menerima _closure_ yang menerima _instance class_ pengguna yang menerima notifikasi serta token pranala reset kata sandi. Biasanya, Anda harus memanggil _method_ ini dari _method_ `boot` milik _service provider_ `App\Providers\AuthServiceProvider`:
 
     use Illuminate\Auth\Notifications\ResetPassword;
 
     /**
-     * Register any authentication / authorization services.
+     * Mendaftarkan layanan autentikasi / autorisasi.
      *
      * @return void
      */
@@ -187,14 +191,14 @@ You may customize the password reset link URL using the `createUrlUsing` method 
     }
 
 <a name="reset-email-customization"></a>
-#### Reset Email Customization
+#### Kostumosasi Email Reset
 
-You may easily modify the notification class used to send the password reset link to the user. To get started, override the `sendPasswordResetNotification` method on your `App\Models\User` model. Within this method, you may send the notification using any [notification class](/docs/{{version}}/notifications) of your own creation. The password reset `$token` is the first argument received by the method. You may use this `$token` to build the password reset URL of your choice and send your notification to the user:
+Anda dapat dengan mudah memodifikasi kelas notifikasi yang digunakan untuk mengirim tautan reset kata sandi ke pengguna. Untuk memulai, tambahkan _method_ `sendPasswordResetNotification` pada mmodel`App\Models\User`. Dalam _method_ ini, Anda dapat mengirim notifikasi menggunakan [_class notification_](/docs/{{version}}/notifications) apapun yang Anda buat sendiri. Token reset kata sandi `$token` adalah argumen pertama yang diterima oleh _method_ tersebut. Anda dapat menggunakan `$token` ini untuk membangun URL reset kata sandi pilihan Anda dan mengirim notifikasi ke pengguna:
 
     use App\Notifications\ResetPasswordNotification;
 
     /**
-     * Send a password reset notification to the user.
+     * Mengirim notifikasi reset kata sandi ke pengguna.
      *
      * @param  string  $token
      * @return void
