@@ -1,32 +1,32 @@
 # Perutean
 
 - [Dasar Perutean](#basic-routing)
-    - [_Route Redirect_](#redirect-routes)
-    - [_Route View_](#view-routes)
-    - [_Daftar Route_](#the-route-list)
-- [Parameter _Route_](#route-parameters)
-    - [_Parameter Wajib_](#required-parameters)
-    - [_Parameter Opsional_](#parameters-optional-parameters)
+    - [Rute _Redirect_](#redirect-routes)
+    - [Rute _View_](#view-routes)
+    - [Daftar _Rute_](#the-route-list)
+- [Parameter Rute](#route-parameters)
+    - [Parameter Wajib](#required-parameters)
+    - [Parameter Opsional](#parameters-optional-parameters)
     - [Pembatasan dengan _Regular Expression_](#parameters-regular-expression-constraints)
-- [_Route_ Bernama](#named-routes)
-- [Kelompok _Route_](#route-groups)
+- [Penamaan Rute](#named-routes)
+- [Grup Rute](#route-groups)
     - [_Middleware_](#route-group-middleware)
     - [_Controller_](#route-group-controllers)
-    - [Melakukan _Route Subdomain_](#route-group-subdomain-routing)
-    - [Prefix _Route_](#route-group-prefixes)
-    - [Prefix Nama _Route_](#route-group-name-prefixes)
-- [_Route_ Model Terpadu](#route-model-binding)
-    - [_Binding Implicit_](#implicit-binding)
-    - [_Binding Enum Implicit_](#implicit-enum-binding)
-    - [_Binding Explicit_](#explicit-binding)
-- [_Route Fallback_](#fallback-routes)
-- [Pembatasan _Rate_](#rate-limiting)
-    - [Mendefinisikan Pembatas _Rate_](#defining-rate-limiters)
-    - [Melekatkan Pembatas _Rate_ pada _Routes_](#attaching-rate-limiters-to-routes)
+    - [Perutean Subdomain](#route-group-subdomain-routing)
+    - [Prefiks Rute](#route-group-prefixes)
+    - [Prefiks Nama Rute](#route-group-name-prefixes)
+- [Pengikatan Rute dan Model](#route-model-binding)
+    - [Pengikatan Implisit](#implicit-binding)
+    - [Pengikatan Enum Implisit](#implicit-enum-binding)
+    - [Pengikatan Eksplisit](#explicit-binding)
+- [Rute _Fallback_](#fallback-routes)
+- [Pembatasan Laju](#rate-limiting)
+    - [Mendefinisikan Pembatas Laju](#defining-rate-limiters)
+    - [Melekatkan Pembatas Laju pada Rute](#attaching-rate-limiters-to-routes)
 - [Pemalsuan _Method Form_](#form-method-spoofing)
-- [Mengakses _Route_ Saat Ini](#accessing-the-current-route)
+- [Mengakses Rute Saat Ini](#accessing-the-current-route)
 - [_Cross-Origin Resource Sharing_ (CORS)](#cors)
-- [_Route Caching_](#route-caching)
+- [Melakukan _Cache_ untuk Rute](#route-caching)
 
 <a name="basic-routing"></a>
 ## Dasar Perutean
@@ -284,52 +284,39 @@ Komponen routing Laravel memperbolehkan semua karakter kecuali `/` untuk hadir d
 <a name="named-routes"></a>
 ## Rute Bernama
 
-Rute yang diberi nama memungkinkan pembuatan URL atau redirect yang nyaman untuk rute tertentu. Anda dapat menentukan nama untuk rute dengan menyambungkan metode name pada definisi rute:
-
-Rute dengan nama memungkinkan pembuatan URL atau pengalihan yang mudah untuk rute tertentu. Anda dapat menspesifikasikan nama untuk sebuah rute dengan merantai metode `nama` ke dalam definisi rute:
-
-Named routes allow the convenient generation of URLs or redirects for specific routes. You may specify a name for a route by chaining the `name` method onto the route definition:
+Rute yang diberi nama memungkinkan pembuatan URL atau _redirect_ yang nyaman untuk rute tertentu. Anda dapat menentukan nama untuk rute dengan menyambungkan metode `name` pada pendefinisian rute:
 
     Route::get('/user/profile', function () {
         //
     })->name('profile');
 
-Anda juga dapat menentukan nama rute untuk tindakan kontroller:
-
-You may also specify route names for controller actions:
+Anda juga dapat menentukan nama rute untuk aksi _controller_:
 
     Route::get(
         '/user/profile',
         [UserProfileController::class, 'show']
     )->name('profile');
 
-> **Warning**  
-
-Nama rute sebaiknya selalu unik.
-
-> Route names should always be unique.
+> **Perhatian**  
+> Nama rute sebaiknya selalu unik.
 
 <a name="generating-urls-to-named-routes"></a>
 
 Menghasilkan URL ke Rute yang Diberi Nama.
 
-#### Generating URLs To Named Routes
+#### _Generate_ URL Berdasarkan Nama Rute
 
-Setelah Anda memberikan nama ke rute tertentu, Anda dapat menggunakan nama rute tersebut saat menghasilkan URL atau redirect melalui fungsi helper route dan redirect Laravel:
+Setelah Anda memberikan nama ke rute tertentu, Anda dapat menggunakan nama rute tersebut saat menghasilkan URL atau _redirect_ melalui fungsi helper `route` dan `redirect`:
 
-Once you have assigned a name to a given route, you may use the route's name when generating URLs or redirects via Laravel's `route` and `redirect` helper functions:
-
-    // Generating URLs...
+    // Menghasilkan URL...
     $url = route('profile');
 
-    // Generating Redirects...
+    // Menghasilkan Redirect...
     return redirect()->route('profile');
 
     return to_route('profile');
 
-Jika rute yang diberi nama mendefinisikan parameter, Anda dapat mengirimkan parameter sebagai argumen kedua ke fungsi route. Parameter yang diberikan akan otomatis dimasukkan ke dalam URL yang dihasilkan pada posisi yang tepat:
-
-If the named route defines parameters, you may pass the parameters as the second argument to the `route` function. The given parameters will automatically be inserted into the generated URL in their correct positions:
+Jika terdapat paramete pada rute yang diberi nama, Anda dapat mengirimkan parameter sebagai argumen kedua pada fungsi `route`. Parameter yang diberikan akan otomatis dimasukkan ke dalam URL yang dihasilkan pada posisi yang tepat:
 
     Route::get('/user/{id}/profile', function ($id) {
         //
@@ -337,9 +324,7 @@ If the named route defines parameters, you may pass the parameters as the second
 
     $url = route('profile', ['id' => 1]);
 
-Jika Anda mengirimkan parameter tambahan dalam array, pasangan kunci / nilai tersebut akan otomatis ditambahkan ke query string URL yang dihasilkan:
-
-If you pass additional parameters in the array, those key / value pairs will automatically be added to the generated URL's query string:
+Jika Anda mengirimkan parameter tambahan dalam _array_, pasangan kunci dan nilai tersebut akan otomatis ditambahkan ke _query string_ URL yang dihasilkan:
 
     Route::get('/user/{id}/profile', function ($id) {
         //
@@ -349,21 +334,19 @@ If you pass additional parameters in the array, those key / value pairs will aut
 
     // /user/1/profile?photos=yes
 
-> **Note**  
+> **Catatan**  
 
-Terkadang, Anda mungkin ingin menentukan nilai default secara luas permintaan untuk parameter URL, seperti locale saat ini. Untuk mencapai ini, Anda dapat menggunakan metode URL::defaults
-
-> Sometimes, you may wish to specify request-wide default values for URL parameters, such as the current locale. To accomplish this, you may use the [`URL::defaults` method](/docs/{{version}}/urls#default-values).
+> Terkadang, Anda mungkin ingin menentukan nilai _default_ untuk parameter URL, seperti _locale_ saat ini. Untuk mencapai ini, Anda dapat menggunakan metode [`URL::defaults` method](/docs/{{version}}/urls#default-values).
 
 <a name="inspecting-the-current-route"></a>
-#### Inspecting The Current Route
+#### Inspeksi Rute Saat Ini
 
-Jika Anda ingin menentukan apakah permintaan saat ini diarahkan ke rute yang diberi nama tertentu, Anda dapat menggunakan metode named pada sebuah instance Rute. Sebagai contoh, Anda dapat memeriksa nama rute saat ini dari middleware rute:
+Jika Anda ingin menentukan apakah _request_ saat ini diarahkan ke nama rute yang sudah ditentukan, Anda dapat menggunakan metode `named` pada _instance_ Route. Sebagai contoh, Anda dapat memeriksa nama rute saat ini dari _middleware_ rute:
 
 If you would like to determine if the current request was routed to a given named route, you may use the `named` method on a Route instance. For example, you may check the current route name from a route middleware:
 
     /**
-     * Handle an incoming request.
+     * Menangani request yang dikirimkan.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -379,39 +362,31 @@ If you would like to determine if the current request was routed to a given name
     }
 
 <a name="route-groups"></a>
-## Route Groups
+## Grup Rute
 
-Kelompok rute memungkinkan Anda untuk membagikan atribut rute, seperti middleware, di sejumlah besar rute tanpa perlu mendefinisikan atribut-atribut tersebut pada setiap rute individu.
+Grup rute memungkinkan Anda untuk membagikan atribut-atribut rute, seperti middleware, untuk beberapa rute tanpa perlu mendefinisikan atribut-atribut tersebut pada setiap rute satu-persatu.
 
-Route groups allow you to share route attributes, such as middleware, across a large number of routes without needing to define those attributes on each individual route.
-
-Kelompok bersarang mencoba "mengabungkan" secara cerdas atribut dengan kelompok induknya. Middleware dan kondisi where digabungkan sementara nama dan prefiks ditambahkan. Pengahapus namespace dan garis miring di prefiks URI secara otomatis ditambahkan di tempat yang tepat.
-
-Nested groups attempt to intelligently "merge" attributes with their parent group. Middleware and `where` conditions are merged while names and prefixes are appended. Namespace delimiters and slashes in URI prefixes are automatically added where appropriate.
+Grup di dalam grup digunakan untuk "mengabungkan" atribut secara cerdas dengan kelompok induknya. _Middleware_ dan kondisi `where` dapat digabungkan saat nama dan prefiks ditambahkan. Pemisah _namespace_ dan garis miring di prefiks URI secara otomatis ditambahkan di tempat yang tepat.
 
 <a name="route-group-middleware"></a>
-### Middleware
+### _Middleware_
 
-Untuk menetapkan middleware pada semua rute dalam sebuah kelompok, Anda dapat menggunakan metode middleware sebelum mendefinisikan kelompok. Middleware dieksekusi dalam urutan yang tercantum dalam array:
+Untuk menetapkan [_middleware_](/docs/{{version}}/middleware pada semua rute dalam sebuah grup, Anda dapat menggunakan metode `middleware` sebelum mendefinisikan grup. _Middleware_ dieksekusi dalam urutan yang tercantum dalam _array_:
 
-To assign [middleware](/docs/{{version}}/middleware) to all routes within a group, you may use the `middleware` method before defining the group. Middleware are executed in the order they are listed in the array:
-
-    Route::middleware(['first', 'second'])->group(function () {
+    Route::middleware(['pertama', 'kedua'])->group(function () {
         Route::get('/', function () {
-            // Uses first & second middleware...
+            // Menggunakan middleware pertama & kedua...
         });
 
         Route::get('/user/profile', function () {
-            // Uses first & second middleware...
+            // Menggunakan middleware pertama & kedua...
         });
     });
 
 <a name="route-group-controllers"></a>
-### Controllers
+### _Controller_
 
-Jika sekumpulan rute semua menggunakan kontroller yang sama, Anda dapat menggunakan metode controller untuk menentukan kontroller umum untuk semua rute dalam kelompok. Kemudian, saat mendefinisikan rute, Anda hanya perlu memberikan metode kontroller yang mereka panggil:
-
-If a group of routes all utilize the same [controller](/docs/{{version}}/controllers), you may use the `controller` method to define the common controller for all of the routes within the group. Then, when defining the routes, you only need to provide the controller method that they invoke:
+Jika sekumpulan rute menggunakan [_controller_](/docs/{{version}}/controllers) yang sama, Anda dapat menggunakan metode `controller` untuk menentukan _controller_ untuk semua rute dalam kelompok. Kemudian, saat mendefinisikan rute, Anda hanya perlu memberikan metode _controller_ yang ingin dipanggil:
 
     use App\Http\Controllers\OrderController;
 
@@ -421,11 +396,9 @@ If a group of routes all utilize the same [controller](/docs/{{version}}/control
     });
 
 <a name="route-group-subdomain-routing"></a>
-### Subdomain Routing
+### Perutean _Subdomain_
 
-Kelompok rute juga dapat digunakan untuk menangani routing subdomain. Subdomain dapat ditetapkan parameter rute seperti URI rute, sehingga Anda dapat menangkap sebagian dari subdomain untuk digunakan dalam rute atau kontroller Anda. Subdomain dapat ditentukan dengan memanggil metode domain sebelum mendefinisikan kelompok:
-
-Route groups may also be used to handle subdomain routing. Subdomains may be assigned route parameters just like route URIs, allowing you to capture a portion of the subdomain for usage in your route or controller. The subdomain may be specified by calling the `domain` method before defining the group:
+Kelompok rute juga dapat digunakan untuk menangani perutean _subdomain_. _Subdomain_ dapat ditetapkan parameter rute seperti URI rute, sehingga Anda dapat menangkap bagian dari _subdomain_ untuk digunakan dalam rute atau _controller_ Anda. _Subdomain_ dapat ditentukan dengan memanggil metode `domain` sebelum mendefinisikan grup:
 
     Route::domain('{account}.example.com')->group(function () {
         Route::get('user/{id}', function ($account, $id) {
@@ -433,47 +406,40 @@ Route groups may also be used to handle subdomain routing. Subdomains may be ass
         });
     });
 
-> **Warning**  
-
-Untuk memastikan rute subdomain Anda dapat dijangkau, Anda sebaiknya mendaftarkan rute subdomain sebelum mendaftarkan rute domain root. Ini akan mencegah rute domain root menimpa rute subdomain yang memiliki jalur URI yang sama.
-
-> In order to ensure your subdomain routes are reachable, you should register subdomain routes before registering root domain routes. This will prevent root domain routes from overwriting subdomain routes which have the same URI path.
+> **Perhatian**  
+> Untuk memastikan rute subdomain Anda dapat dijangkau, Anda sebaiknya mendaftarkan rute subdomain sebelum rute domain _root_/utama. Ini akan mencegah rute domain _root_ menimpa rute subdomain yang memiliki jalur URI yang sama.
 
 <a name="route-group-prefixes"></a>
-### Route Prefixes
+### Prefiks Rute
 
-Metode prefix dapat digunakan untuk memberikan prefiks pada setiap rute dalam kelompok dengan URI tertentu. Sebagai contoh, Anda mungkin ingin memberikan prefiks pada semua URI rute dalam kelompok dengan admin:
-
-The `prefix` method may be used to prefix each route in the group with a given URI. For example, you may want to prefix all route URIs within the group with `admin`:
+Metode `prefix` dapat digunakan untuk memberikan prefiks pada setiap rute dalam grup dengan URI tertentu. Sebagai contoh, Anda mungkin ingin memberikan prefiks pada semua URI rute dalam grup dengan `admin`:
 
     Route::prefix('admin')->group(function () {
         Route::get('/users', function () {
-            // Matches The "/admin/users" URL
+            // URL akan menjadi "/admin/users"
         });
     });
 
 <a name="route-group-name-prefixes"></a>
-### Route Name Prefixes
+### Prefiks Nama Rute
 
-Metode name dapat digunakan untuk memberikan prefiks pada setiap nama rute dalam kelompok dengan string tertentu. Sebagai contoh, Anda mungkin ingin memberikan prefiks pada semua nama rute kelompok dengan admin. String yang diberikan ditambahkan ke nama rute tepat seperti yang ditentukan, jadi kami akan pastikan untuk memberikan karakter . akhir pada prefiks:
-
-The `name` method may be used to prefix each route name in the group with a given string. For example, you may want to prefix all of the grouped route's names with `admin`. The given string is prefixed to the route name exactly as it is specified, so we will be sure to provide the trailing `.` character in the prefix:
+Metode `name` dapat digunakan untuk memberikan prefiks pada setiap nama rute di dalam grup dengan _string_ tertentu. Sebagai contoh, Anda mungkin ingin memberikan prefiks pada semua nama rute di dalam grup dengan nama `admin`. _String_ tersebut ditambahkan ke nama rute seperti yang sudah ditentukan, jadi kami akan pastikan untuk memberikan karakter `.` pada akhir prefiks:
 
     Route::name('admin.')->group(function () {
         Route::get('/users', function () {
-            // Route assigned name "admin.users"...
+            // Nama rute akan menjadi: "admin.users"...
         })->name('users');
     });
 
 <a name="route-model-binding"></a>
-## Route Model Binding
+## Pengikatan Rute dan Model
 
-Saat menginjeksi ID model ke rute atau _action_ dari _controller_, Anda akan sering melakukan kueri basis data untuk mengambil model yang sesuai dengan ID tersebut. Untuk pengikatan (_Binding_) rute-model, Laravel menyediakan cara yang mudah untuk secara otomatis menginjeksi _instance_ model langsung ke rute Anda. Misalnya, alih-alih menginjeksi ID pengguna, Anda dapat menginjeksi seluruh _instance_ model `User` yang cocok dengan ID yang diberikan.
+Saat menginjeksi ID model ke rute atau _action_ dari _controller_, Anda akan sering melakukan kueri basis data untuk mengambil model yang sesuai dengan ID tersebut. Untuk pengikatan (_Binding_) rute-model, Laravel menyediakan cara yang mudah untuk menginjeksi _instance_ model langsung ke rute Anda secara otomatis. Misalnya, alih-alih menginjeksi ID pengguna, Anda dapat menginjeksi seluruh _instance_ model `User` yang sesuai dengan ID yang diberikan.
 
 <a name="implicit-binding"></a>
 ### Pengikatan Implisit
 
-Laravel secara otomatis memberikan model Eloquent yang didefinisikan dalam rute atau _action_ milik _controller_ yang nama variabel _type-hint_-nya sama dengan nama segmen rute. Sebagai contoh:
+Laravel secara otomatis memberikan model Eloquent yang didefinisikan dalam rute atau _action_ milik _controller_ yang nama variabel dan _type-hint_-nya serupa dengan nama segmen rute. Sebagai contoh:
 
     use App\Models\User;
 
@@ -483,26 +449,24 @@ Laravel secara otomatis memberikan model Eloquent yang didefinisikan dalam rute 
 
 Karena variabel `$user` diisyaratkan sebagai model Eloquent `App\Models\User` dan nama variabel cocok dengan segmen URI `{user}`, Laravel akan secara otomatis menginjeksikan _instance_ model yang memiliki ID yang cocok dengan nilai yang sesuai dari _request_ URI. Jika _instance_ model tidak ditemukan pada basis data, respons HTTP 404 akan secara otomatis dihasilkan.
 
-Tentu saja, pengikatan implisit juga dimungkinkan ketika menggunakan metode dalam _controller_. Sekali lagi, perhatikan segmen URI `{user}` sesuai dengan variabel `$user` di controller yang berisi _type-hint_ `App\Models\User`:
+Tentu saja, pengikatan implisit juga dimungkinkan ketika menggunakan metode di dalam _controller_. Sekali lagi, perhatikan segmen URI `{user}` sesuai dengan variabel `$user` di controller yang berisi _type-hint_ `App\Models\User`:
 
     use App\Http\Controllers\UserController;
     use App\Models\User;
 
-    // Route definition...
+    // Pendefinisian rute...
     Route::get('/users/{user}', [UserController::class, 'show']);
 
-    // Controller method definition...
+    // Pendefinisian metode pada controller...
     public function show(User $user)
     {
         return view('user.profile', ['user' => $user]);
     }
 
 <a name="implicit-soft-deleted-models"></a>
-#### Soft Deleted Models
+#### Model yang Telah Soft Delete
 
-Biasanya, binding model implicit tidak akan mengambil model yang telah dihapus secara soft. Namun, Anda dapat menyuruh binding implicit untuk mengambil model-model ini dengan memanggil method withTrashed pada definisi rute Anda:
-
-Typically, implicit model binding will not retrieve models that have been [soft deleted](/docs/{{version}}/eloquent#soft-deleting). However, you may instruct the implicit binding to retrieve these models by chaining the `withTrashed` method onto your route's definition:
+Biasanya, _binding_ model implisit tidak akan mengambil model yang telah dihapus secara [soft](/docs/{{version}}/eloquent#soft-deleting). Namun, Anda dapat menyuruh _binding_ implisit untuk mengambil model-model ini dengan merantai _method_ `withTrashed` pada definisi rute Anda:
 
     use App\Models\User;
 
@@ -537,9 +501,7 @@ Jika Anda ingin model yang terikat selalu menggunakan kolom _database_ selain `i
 <a name="implicit-model-binding-scoping"></a>
 #### Custom Keys & Scoping
 
-Saat secara implisit binding beberapa model Eloquent dalam satu definisi rute, Anda mungkin ingin membatasi model Eloquent kedua sehingga harus menjadi anak dari model Eloquent sebelumnya. Sebagai contoh, pertimbangkan definisi rute berikut yang mengambil posting blog dengan slug untuk pengguna tertentu:
-
-When implicitly binding multiple Eloquent models in a single route definition, you may wish to scope the second Eloquent model such that it must be a child of the previous Eloquent model. For example, consider this route definition that retrieves a blog post by slug for a specific user:
+Saat melakukan _binding_ beberapa model Eloquent dalam satu definisi rute secara implisit, Anda mungkin ingin membatasi model Eloquent kedua sehingga harus menjadi anak dari model Eloquent sebelumnya. Sebagai contoh, pertimbangkan definisi rute berikut yang mengambil _posting_-an blog dengan _slug_ untuk pengguna tertentu:
 
     use App\Models\Post;
     use App\Models\User;
@@ -548,13 +510,9 @@ When implicitly binding multiple Eloquent models in a single route definition, y
         return $post;
     });
 
-Ketika menggunakan binding implisit kustom yang ditandai sebagai parameter rute bersarang, Laravel secara otomatis akan membatasi query untuk mengambil model bersarang dengan parent menggunakan konvensi untuk menebak nama hubungan pada parent. Dalam hal ini, akan diasumsikan bahwa model User memiliki hubungan yang diberi nama posts (bentuk jamak dari nama parameter rute) yang dapat digunakan untuk mengambil model Post.
+Ketika menggunakan _binding_ implisit kustom yang ditandai sebagai parameter rute bersarang, Laravel secara otomatis akan membatasi _query_ untuk mengambil model bersarang dengan _parent_ menggunakan konvensi untuk menebak nama hubungan pada parent. Dalam hal ini, akan diasumsikan bahwa model `User` memiliki hubungan yang diberi nama `posts` (bentuk jamak dari nama parameter rute) yang dapat digunakan untuk mengambil model `Post`.
 
-When using a custom keyed implicit binding as a nested route parameter, Laravel will automatically scope the query to retrieve the nested model by its parent using conventions to guess the relationship name on the parent. In this case, it will be assumed that the `User` model has a relationship named `posts` (the plural form of the route parameter name) which can be used to retrieve the `Post` model.
-
-Jika Anda ingin agar Laravel mengikat "anak" secara terbatas bahkan tanpa kunci khusus, Anda dapat memanggil metode scopeBindings saat mendefinisikan rute Anda:
-
-If you wish, you may instruct Laravel to scope "child" bindings even when a custom key is not provided. To do so, you may invoke the `scopeBindings` method when defining your route:
+Jika Anda ingin agar Laravel mengikat "anak" secara terbatas bahkan tanpa kunci khusus, Anda dapat memanggil metode `scopeBindings` saat mendefinisikan rute Anda:
 
     use App\Models\Post;
     use App\Models\User;
@@ -563,9 +521,7 @@ If you wish, you may instruct Laravel to scope "child" bindings even when a cust
         return $post;
     })->scopeBindings();
 
-Atau, Anda dapat memberitahu seluruh kelompok definisi rute untuk menggunakan binding yang terbatas:
-
-Or, you may instruct an entire group of route definitions to use scoped bindings:
+Atau, Anda dapat memberitahu seluruh definisi rute pada grup untuk menggunakan _binding_ yang terbatas:
 
     Route::scopeBindings()->group(function () {
         Route::get('/users/{user}/posts/{post}', function (User $user, Post $post) {
@@ -573,18 +529,16 @@ Or, you may instruct an entire group of route definitions to use scoped bindings
         });
     });
 
-Similarly, you may explicitly instruct Laravel to not scope bindings by invoking the `withoutScopedBindings` method:
+Anda juga dapat secara eksplisit menyuruh Laravel untuk tidak melakukan pembatasan dengan menggunakan _method_ `withoutScopedBindings`:
 
     Route::get('/users/{user}/posts/{post:slug}', function (User $user, Post $post) {
         return $post;
     })->withoutScopedBindings();
 
 <a name="customizing-missing-model-behavior"></a>
-#### Menyesuaikan Perilaku Model yang Hilang
+#### Menyesuaikan Perilaku Model yang Tidak Ada
 
-Biasanya, respons HTTP 404 akan dihasilkan jika model yang terikat secara implisit tidak ditemukan. Namun, Anda dapat menyesuaikan perilaku ini dengan memanggil metode `missing` ketika mendefinisikan rute Anda. Metode `missing` menerima closure yang akan dipanggil jika model yang terikat secara implisit tidak dapat ditemukan:
-
-Typically, a 404 HTTP response will be generated if an implicitly bound model is not found. However, you may customize this behavior by calling the `missing` method when defining your route. The `missing` method accepts a closure that will be invoked if an implicitly bound model can not be found:
+Biasanya, respons HTTP 404 akan dihasilkan jika model yang terikat secara implisit tidak ditemukan. Namun, Anda dapat menyesuaikan perilaku ini dengan memanggil metode `missing` ketika mendefinisikan rute Anda. Metode `missing` menerima _closure_ yang akan dipanggil jika model yang terikat secara implisit tidak dapat ditemukan:
 
     use App\Http\Controllers\LocationsController;
     use Illuminate\Http\Request;
@@ -597,11 +551,9 @@ Typically, a 404 HTTP response will be generated if an implicitly bound model is
             });
 
 <a name="implicit-enum-binding"></a>
-### Implicit Enum Binding
+### Enum _Binding_ Implisit
 
-PHP 8.1 memperkenalkan dukungan untuk [Enum](https://www.php.net/manual/en/language.enumerations.backed.php). Untuk melengkapi fitur ini, Laravel memungkinkan Anda untuk mengetikkan petunjuk [string-backed Enum](https://www.php.net/manual/en/language.enumerations.backed.php) pada definisi rute Anda dan Laravel hanya akan memanggil rute jika segmen rute tersebut sesuai dengan nilai Enum yang valid. Jika tidak, respons HTTP 404 akan dikembalikan secara otomatis. Sebagai contoh, diberikan Enum berikut:
-
-PHP 8.1 introduced support for [Enums](https://www.php.net/manual/en/language.enumerations.backed.php). To compliment this feature, Laravel allows you to type-hint a [string-backed Enum](https://www.php.net/manual/en/language.enumerations.backed.php) on your route definition and Laravel will only invoke the route if that route segment corresponds to a valid Enum value. Otherwise, a 404 HTTP response will be returned automatically. For example, given the following Enum:
+PHP 8.1 memperkenalkan dukungan untuk [Enum](https://www.php.net/manual/en/language.enumerations.backed.php). Untuk melengkapi fitur ini, Laravel memungkinkan Anda untuk _type-hint_ [string-backed Enum](https://www.php.net/manual/en/language.enumerations.backed.php) pada definisi rute Anda dan Laravel hanya akan memanggil rute jika segmen rute tersebut sesuai dengan nilai Enum yang valid. Jika tidak, respons HTTP 404 akan dikembalikan secara otomatis. Sebagai contoh, diberikan Enum sebagai berikut:
 
 ```php
 <?php
@@ -615,9 +567,7 @@ enum Category: string
 }
 ```
 
-Anda dapat mendefinisikan rute yang hanya akan dipanggil jika segmen rute `{kategori}` adalah `buah` atau `orang`. Jika tidak, Laravel akan mengembalikan respons HTTP 404:
-
-You may define a route that will only be invoked if the `{category}` route segment is `fruits` or `people`. Otherwise, Laravel will return a 404 HTTP response:
+Anda dapat mendefinisikan rute yang hanya akan dipanggil jika segmen rute `{category}` adalah `fruits` atau `people`. Jika tidak, Laravel akan mengembalikan respons HTTP 404:
 
 ```php
 use App\Enums\Category;
@@ -631,9 +581,7 @@ Route::get('/categories/{category}', function (Category $category) {
 <a name="explicit-binding"></a>
 ### Pengikatan Eksplisit
 
-Anda tidak diharuskan menggunakan resolusi model implisit berbasis konvensi Laravel untuk menggunakan model binding. Anda juga dapat secara eksplisit mendefinisikan bagaimana parameter rute sesuai dengan model. Untuk mendaftarkan pengikatan eksplisit, gunakan metode `model` router untuk menentukan kelas untuk parameter yang diberikan. Anda harus mendefinisikan binding model eksplisit Anda di awal metode `boot` dari kelas `RouteServiceProvider` Anda:
-
-You are not required to use Laravel's implicit, convention based model resolution in order to use model binding. You can also explicitly define how route parameters correspond to models. To register an explicit binding, use the router's `model` method to specify the class for a given parameter. You should define your explicit model bindings at the beginning of the `boot` method of your `RouteServiceProvider` class:
+Anda tidak diharuskan menggunakan resolusi model implisit berbasis konvensi Laravel untuk menggunakan model _binding_. Anda juga dapat secara eksplisit mendefinisikan bagaimana parameter rute dapat koresponden dengan model. Untuk mendaftarkan pengikatan eksplisit, gunakan metode `model` router untuk menentukan kelas untuk parameter yang diberikan. Anda harus mendefinisikan binding model eksplisit Anda di awal metode `boot` dari kelas `RouteServiceProvider` Anda:
 
     use App\Models\User;
     use Illuminate\Support\Facades\Route;
@@ -650,7 +598,7 @@ You are not required to use Laravel's implicit, convention based model resolutio
         // ...
     }
 
-Next, define a route that contains a `{user}` parameter:
+Selanjutnya, definisikan sebuah rute yang memiliki parameter `{user}`:
 
     use App\Models\User;
 
@@ -660,14 +608,12 @@ Next, define a route that contains a `{user}` parameter:
 
 Karena kita telah mengikat semua parameter `{user}` ke model `App\Models\User`, sebuah instance dari kelas tersebut akan diinjeksi ke dalam rute. Jadi, misalnya, permintaan ke `users/1` akan menginjeksi instance `User` dari database yang memiliki ID `1`.
 
-Jika _instance_ model yang cocok tidak ditemukan dalam database, respons HTTP 404 akan dihasilkan secara otomatis.
+Jika _instance_ model yang cocok tidak ditemukan dalam _database_, respons HTTP 404 akan dihasilkan secara otomatis.
 
 <a name="customizing-the-resolution-logic"></a>
 #### Menyesuaikan Logika Resolusi
 
-Jika Anda ingin mendefinisikan logika resolusi pengikatan model Anda sendiri, Anda dapat menggunakan metode `Rute::bind`. _Closure_ yang Anda berikan ke metode `bind` akan menerima nilai segmen URI dan harus mengembalikan instance dari kelas yang harus diinjeksikan ke dalam rute. Sekali lagi, kustomisasi ini harus dilakukan dalam metode `boot` dari `RouteServiceProvider` aplikasi Anda:
-
-If you wish to define your own model binding resolution logic, you may use the `Route::bind` method. The closure you pass to the `bind` method will receive the value of the URI segment and should return the instance of the class that should be injected into the route. Again, this customization should take place in the `boot` method of your application's `RouteServiceProvider`:
+Jika Anda ingin mendefinisikan logika resolusi pengikatan model Anda sendiri, Anda dapat menggunakan metode `Rute::bind`. _Closure_ yang Anda berikan ke metode `bind` akan menerima nilai segmen URI dan harus mengembalikan instance dari kelas yang harus diinjeksikan ke dalam rute. Sekali lagi, kustomisasi ini harus dilakukan dalam metode `boot` pada `RouteServiceProvider` aplikasi Anda:
 
     use App\Models\User;
     use Illuminate\Support\Facades\Route;
@@ -686,12 +632,10 @@ If you wish to define your own model binding resolution logic, you may use the `
         // ...
     }
 
-Sebagai alternatif, Anda dapat meng-override metode `resolveRouteBinding` pada model Eloquent Anda. Metode ini akan menerima nilai segmen URI dan harus mengembalikan instance dari kelas yang harus diinjeksikan ke dalam rute:
-
-Alternatively, you may override the `resolveRouteBinding` method on your Eloquent model. This method will receive the value of the URI segment and should return the instance of the class that should be injected into the route:
+Sebagai alternatif, Anda dapat meng-_override_ metode `resolveRouteBinding` pada model Eloquent Anda. Metode ini akan menerima nilai segmen URI dan harus mengembalikan instance dari kelas yang harus diinjeksikan ke dalam rute:
 
     /**
-     * Retrieve the model for a bound value.
+     * Mengambil model berdasarkan nilai yang diberikan.
      *
      * @param  mixed  $value
      * @param  string|null  $field
@@ -702,12 +646,10 @@ Alternatively, you may override the `resolveRouteBinding` method on your Eloquen
         return $this->where('name', $value)->firstOrFail();
     }
 
-Jika sebuah rute menggunakan [implicit binding scoping](#implicit-model-binding-scoping), metode `resolveChildRouteBinding` akan digunakan untuk menyelesaikan pengikatan anak dari model induk:
-
-If a route is utilizing [implicit binding scoping](#implicit-model-binding-scoping), the `resolveChildRouteBinding` method will be used to resolve the child binding of the parent model:
+Jika sebuah rute menggunakan [_implicit binding scoping_](#implicit-model-binding-scoping), metode `resolveChildRouteBinding` akan digunakan untuk menyelesaikan pengikatan anak dari model induk:
 
     /**
-     * Retrieve the child model for a bound value.
+     * Mengambil model anak berdasarkan nilai yang diberikan.
      *
      * @param  string  $childType
      * @param  mixed  $value
@@ -722,9 +664,7 @@ If a route is utilizing [implicit binding scoping](#implicit-model-binding-scopi
 <a name="fallback-routes"></a>
 ## _Route Fallback_
 
-Dengan menggunakan metode `Route::fallback`, Anda dapat mendefinisikan rute yang akan dieksekusi ketika tidak ada rute lain yang cocok dengan permintaan yang masuk. Biasanya, permintaan yang tidak tertangani akan secara otomatis me-render halaman "404" melalui exception handler aplikasi Anda. Namun, karena Anda biasanya akan mendefinisikan rute `fallback` di dalam file `routes/web.php` Anda, semua middleware di grup middleware `web` akan berlaku untuk rute tersebut. Anda bebas menambahkan middleware tambahan ke rute ini sesuai kebutuhan:
-
-Using the `Route::fallback` method, you may define a route that will be executed when no other route matches the incoming request. Typically, unhandled requests will automatically render a "404" page via your application's exception handler. However, since you would typically define the `fallback` route within your `routes/web.php` file, all middleware in the `web` middleware group will apply to the route. You are free to add additional middleware to this route as needed:
+Dengan menggunakan metode `Route::fallback`, Anda dapat mendefinisikan rute yang akan dieksekusi ketika tidak ada rute lain yang cocok dengan permintaan yang masuk. Biasanya, permintaan yang tidak tertangani akan secara otomatis me-_render_ halaman "404" melalui _exception handler_ pada aplikasi Anda. Namun, karena Anda biasanya akan mendefinisikan rute `fallback` di dalam _file_ `routes/web.php` Anda, semua _middleware_ pada grup _middleware_ `web` akan menerapkan hal tersebut. Anda bebas menambahkan _middleware_ tambahan ke rute ini sesuai kebutuhan:
 
     Route::fallback(function () {
         //
@@ -734,25 +674,21 @@ Using the `Route::fallback` method, you may define a route that will be executed
 > Rute fallback harus selalu merupakan rute terakhir yang didaftarkan pada aplikasi Anda.
 
 <a name="rate-limiting"></a>
-## Rate Limiting
+## Pembatasan _Rate_
 
 <a name="defining-rate-limiters"></a>
 ### Defining Rate Limiters
 
-Laravel menyertakan layanan pembatasan tarif yang kuat dan dapat disesuaikan yang dapat Anda manfaatkan untuk membatasi jumlah lalu lintas untuk rute atau grup rute tertentu. Untuk memulai, Anda harus menentukan konfigurasi pembatas tarif yang memenuhi kebutuhan aplikasi Anda. Biasanya, ini harus dilakukan dalam metode `configureRateLimiting` dari kelas `App\Providers\RouteServiceProvider` aplikasi Anda.
+Laravel menyertakan layanan pembatasan _rate_ (laju) yang kuat dan dapat disesuaikan dan dapat Anda manfaatkan untuk membatasi jumlah lalu lintas untuk rute atau grup rute tertentu. Untuk memulai, Anda harus melakukan konfigurasi pembatas _rate_ yang memenuhi kebutuhan aplikasi Anda. Biasanya, ini harus dilakukan dalam metode `configureRateLimiting` dari kelas `App\Providers\RouteServiceProvider` aplikasi Anda.
 
-Pembatas tarif didefinisikan menggunakan metode `for` facade `RateLimiter`. Metode `for` menerima nama pembatas laju dan closure yang mengembalikan konfigurasi batas yang harus diterapkan ke rute yang ditugaskan ke pembatas laju. Konfigurasi limit adalah instance dari kelas `Illuminate\Cache\RateLimiting\Limit`. Kelas ini berisi metode-metode "builder" yang berguna sehingga Anda dapat dengan cepat mendefinisikan limit Anda. Nama rate limiter dapat berupa string apa pun yang Anda inginkan:
-
-Laravel includes powerful and customizable rate limiting services that you may utilize to restrict the amount of traffic for a given route or group of routes. To get started, you should define rate limiter configurations that meet your application's needs. Typically, this should be done within the `configureRateLimiting` method of your application's `App\Providers\RouteServiceProvider` class.
-
-Rate limiters are defined using the `RateLimiter` facade's `for` method. The `for` method accepts a rate limiter name and a closure that returns the limit configuration that should apply to routes that are assigned to the rate limiter. Limit configuration are instances of the `Illuminate\Cache\RateLimiting\Limit` class. This class contains helpful "builder" methods so that you can quickly define your limit. The rate limiter name may be any string you wish:
+Pembatas _rate_ didefinisikan menggunakan metode `for` facade `RateLimiter`. Metode `for` menerima nama pembatas laju dan _closure_ yang mengembalikan konfigurasi batas yang harus diterapkan ke rute yang ditugaskan ke pembatas laju. Konfigurasi _limit_ adalah _instance_ dari kelas `Illuminate\Cache\RateLimiting\Limit`. Kelas ini berisi metode-metode "builder" yang berguna sehingga Anda dapat dengan cepat mendefinisikan limit Anda. Nama pembatas _rate_ dapat berupa _string_ apa pun yang Anda inginkan:
 
     use Illuminate\Cache\RateLimiting\Limit;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\RateLimiter;
 
     /**
-     * Configure the rate limiters for the application.
+     * Konfigurasi pembatas laju untuk aplikasi.
      *
      * @return void
      */
@@ -763,19 +699,15 @@ Rate limiters are defined using the `RateLimiter` facade's `for` method. The `fo
         });
     }
 
-Jika permintaan yang masuk melebihi batas tarif yang ditentukan, respons dengan kode status HTTP 429 akan secara otomatis dikembalikan oleh Laravel. Jika Anda ingin menentukan respons Anda sendiri yang harus dikembalikan oleh batas tarif, Anda dapat menggunakan metode `response`:
-
-If the incoming request exceeds the specified rate limit, a response with a 429 HTTP status code will automatically be returned by Laravel. If you would like to define your own response that should be returned by a rate limit, you may use the `response` method:
+Jika permintaan yang masuk melebihi batas laju yang ditentukan, respons dengan kode status HTTP 429 akan secara otomatis dikembalikan oleh Laravel. Jika Anda ingin menentukan respons Anda sendiri yang harus dikembalikan oleh pembatas laju, Anda dapat menggunakan metode `response`:
 
     RateLimiter::for('global', function (Request $request) {
         return Limit::perMinute(1000)->response(function (Request $request, array $headers) {
-            return response('Custom response...', 429, $headers);
+            return response('Respojlns kustom...', 429, $headers);
         });
     });
 
-Karena callback pembatas laju menerima instance permintaan HTTP yang masuk, Anda dapat membuat batas laju yang sesuai secara dinamis berdasarkan permintaan yang masuk atau pengguna yang diautentikasi:
-
-Since rate limiter callbacks receive the incoming HTTP request instance, you may build the appropriate rate limit dynamically based on the incoming request or authenticated user:
+Karena _callback_ dari pembatas laju menerima _instance_ permintaan HTTP yang masuk, Anda dapat membuat batas laju yang dinamis berdasarkan permintaan yang masuk atau pengguna yang diautentikasi:
 
     RateLimiter::for('uploads', function (Request $request) {
         return $request->user()->vipCustomer()
@@ -784,11 +716,9 @@ Since rate limiter callbacks receive the incoming HTTP request instance, you may
     });
 
 <a name="segmenting-rate-limits"></a>
-#### Segmenting Rate Limits
+#### Segmen Batas Kecepatan
 
-Kadang-kadang, Anda mungkin ingin membagi batas kecepatan dengan beberapa nilai yang sewenang-wenang. Misalnya, anda mungkin ingin mengizinkan pengguna untuk mengakses rute tertentu 100 kali per menit per alamat IP. Untuk mencapai hal ini, anda dapat menggunakan metode `by` ketika membangun rate limit anda:
-
-Sometimes you may wish to segment rate limits by some arbitrary value. For example, you may wish to allow users to access a given route 100 times per minute per IP address. To accomplish this, you may use the `by` method when building your rate limit:
+Kadang-kadang, Anda mungkin ingin membagi batas kecepatan dengan beberapa nilai yang sewenang-wenang. Misalnya, anda mungkin ingin mengizinkan pengguna untuk mengakses rute tertentu 100 kali per menit per alamat IP. Untuk mencapai hal ini, anda dapat menggunakan metode `by` ketika membangun _rate limit_ anda:
 
     RateLimiter::for('uploads', function (Request $request) {
         return $request->user()->vipCustomer()
@@ -798,8 +728,6 @@ Sometimes you may wish to segment rate limits by some arbitrary value. For examp
 
 Untuk mengilustrasikan fitur ini dengan menggunakan contoh lain, kita bisa membatasi akses ke rute hingga 100 kali per menit per ID pengguna yang diautentikasi atau 10 kali per menit per alamat IP untuk tamu:
 
-To illustrate this feature using another example, we can limit access to the route to 100 times per minute per authenticated user ID or 10 times per minute per IP address for guests:
-
     RateLimiter::for('uploads', function (Request $request) {
         return $request->user()
                     ? Limit::perMinute(100)->by($request->user()->id)
@@ -807,11 +735,9 @@ To illustrate this feature using another example, we can limit access to the rou
     });
 
 <a name="multiple-rate-limits"></a>
-#### Multiple Rate Limits
+#### Batas Kecepatan Berganda
 
-Jika diperlukan, Anda dapat mengembalikan larik batas tarif untuk konfigurasi pembatas tarif yang diberikan. Setiap rate limit akan dievaluasi untuk rute berdasarkan urutan penempatannya dalam array:
-
-If needed, you may return an array of rate limits for a given rate limiter configuration. Each rate limit will be evaluated for the route based on the order they are placed within the array:
+Jika diperlukan, Anda dapat mengembalikan _array_ batas laju untuk konfigurasi pembatas tarif yang diberikan. Setiap _rate limit_ akan dievaluasi untuk rute berdasarkan urutan penempatannya dalam _array_:
 
     RateLimiter::for('login', function (Request $request) {
         return [
@@ -821,11 +747,9 @@ If needed, you may return an array of rate limits for a given rate limiter confi
     });
 
 <a name="attaching-rate-limiters-to-routes"></a>
-### Attaching Rate Limiters To Routes
+### Melekatkan Pembatas Laju pada Rute
 
-Pembatas laju dapat dilampirkan ke rute atau grup rute menggunakan `throttle` [middleware] (/docs/{{version}}/middleware). Middleware throttle menerima nama pembatas laju yang ingin Anda tetapkan ke rute:
-
-Rate limiters may be attached to routes or route groups using the `throttle` [middleware](/docs/{{version}}/middleware). The throttle middleware accepts the name of the rate limiter you wish to assign to the route:
+Pembatas laju dapat dilampirkan ke rute atau grup rute menggunakan [_middleware_](/docs/{{version}}/mmiddleware) `throttle`. _Middleware throttle_ menerima nama pembatas laju yang ingin Anda tetapkan ke rute:
 
     Route::middleware(['throttle:uploads'])->group(function () {
         Route::post('/audio', function () {
@@ -838,29 +762,23 @@ Rate limiters may be attached to routes or route groups using the `throttle` [mi
     });
 
 <a name="throttling-with-redis"></a>
-#### Throttling With Redis
+#### Perlambatan Menggunakan Redis
 
-Biasanya, middleware `throttle` dipetakan ke kelas `Illuminate\Routing\Middleware\ThrottleRequests`. Pemetaan ini didefinisikan dalam kernel HTTP aplikasi Anda (`App\Http\Kernel`). Namun, jika Anda menggunakan Redis sebagai driver cache aplikasi Anda, Anda mungkin ingin mengubah pemetaan ini untuk menggunakan kelas `Illuminate\Routing\Middleware\ThrottleRequestsWithRedis`. Kelas ini lebih efisien dalam mengelola pembatasan laju menggunakan Redis:
-
-Typically, the `throttle` middleware is mapped to the `Illuminate\Routing\Middleware\ThrottleRequests` class. This mapping is defined in your application's HTTP kernel (`App\Http\Kernel`). However, if you are using Redis as your application's cache driver, you may wish to change this mapping to use the `Illuminate\Routing\Middleware\ThrottleRequestsWithRedis` class. This class is more efficient at managing rate limiting using Redis:
+Biasanya, middleware `throttle` dipetakan ke kelas `Illuminate\Routing\Middleware\ThrottleRequests`. Pemetaan ini didefinisikan dalam kernel HTTP aplikasi Anda (`App\Http\Kernel`). Namun, jika Anda menggunakan Redis sebagai _driver cache_ aplikasi Anda, Anda mungkin ingin mengubah pemetaan ini untuk menggunakan kelas `Illuminate\Routing\Middleware\ThrottleRequestsWithRedis`. Kelas ini lebih efisien dalam mengelola pembatasan laju menggunakan Redis:
 
     'throttle' => \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
 
 <a name="form-method-spoofing"></a>
-## Form Method Spoofing
+## _Form Method_ Imitasi
 
-Formulir HTML tidak mendukung aksi `PUT`, `PATCH`, atau `DELETE`. Jadi, ketika mendefinisikan rute `PUT`, `PATCH`, atau `DELETE` yang dipanggil dari form HTML, Anda perlu menambahkan field `_method` yang tersembunyi ke form. Nilai yang dikirim dengan field `_method` akan digunakan sebagai metode permintaan HTTP:
-
-HTML forms do not support `PUT`, `PATCH`, or `DELETE` actions. So, when defining `PUT`, `PATCH`, or `DELETE` routes that are called from an HTML form, you will need to add a hidden `_method` field to the form. The value sent with the `_method` field will be used as the HTTP request method:
+Formulir HTML tidak mendukung aksi `PUT`, `PATCH`, atau `DELETE`. Jadi, ketika mendefinisikan rute `PUT`, `PATCH`, atau `DELETE` yang dipanggil dari _form_ HTML, Anda perlu menambahkan field `_method` yang tersembunyi pada _form_. Nilai yang dikirim dengan field `_method` akan digunakan sebagai metode permintaan HTTP:
 
     <form action="/example" method="POST">
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
     </form>
 
-Untuk kenyamanan, anda dapat menggunakan `@method` [Blade directive] (/docs/{{version}}/blade) untuk menghasilkan kolom input `_method`:
-
-For convenience, you may use the `@method` [Blade directive](/docs/{{version}}/blade) to generate the `_method` input field:
+Untuk kenyamanan, anda dapat menggunakan [Blade directive](/docs/{{version}}/blade) `@method` untuk menghasilkan kolom _input_ `_method`:
 
     <form action="/example" method="POST">
         @method('PUT')
@@ -868,11 +786,9 @@ For convenience, you may use the `@method` [Blade directive](/docs/{{version}}/b
     </form>
 
 <a name="accessing-the-current-route"></a>
-## Accessing The Current Route
+## Mengakses Rute Saat Ini
 
 Anda dapat menggunakan metode `current`, `currentRouteName`, dan `currentRouteAction` pada facade `Route` untuk mengakses informasi tentang rute yang menangani permintaan yang masuk:
-
-You may use the `current`, `currentRouteName`, and `currentRouteAction` methods on the `Route` facade to access information about the route handling the incoming request:
 
     use Illuminate\Support\Facades\Route;
 
@@ -880,29 +796,21 @@ You may use the `current`, `currentRouteName`, and `currentRouteAction` methods 
     $name = Route::currentRouteName(); // string
     $action = Route::currentRouteAction(); // string
 
-Anda dapat merujuk ke dokumentasi API untuk [kelas yang mendasari fasad Route](https://laravel.com/api/{{{version}}/Illuminate/Routing/Router.html) dan [Route instance](https://laravel.com/api/{{{version}}/Illuminate/Routing/Route.html) untuk meninjau semua metode yang tersedia pada kelas router dan route.
-
-You may refer to the API documentation for both the [underlying class of the Route facade](https://laravel.com/api/{{version}}/Illuminate/Routing/Router.html) and [Route instance](https://laravel.com/api/{{version}}/Illuminate/Routing/Route.html) to review all of the methods that are available on the router and route classes.
+Anda dapat merujuk ke dokumentasi API untuk [kelas yang mendasari _facade_ _Route_](https://laravel.com/api/{{{version}}/Illuminate/Routing/Router.html) dan [_instance Route_](https://laravel.com/api/{{{version}}/Illuminate/Routing/Route.html) untuk meninjau semua metode yang tersedia pada kelas Router dan Route.
 
 <a name="cors"></a>
 ## Cross-Origin Resource Sharing (CORS)
 
-Laravel dapat secara otomatis merespons permintaan HTTP CORS `OPTIONS` dengan nilai-nilai yang Anda konfigurasikan. Semua pengaturan CORS dapat dikonfigurasi dalam file konfigurasi `config/cors.php` aplikasi Anda. Permintaan `OPTIONS` secara otomatis akan ditangani oleh `HandleCors` [middleware] (/docs/{{version}}/middleware) yang disertakan secara default dalam tumpukan middleware global Anda. Tumpukan middleware global Anda terletak di kernel HTTP aplikasi Anda (`App\Http\Kernel`).
-
-Laravel can automatically respond to CORS `OPTIONS` HTTP requests with values that you configure. All CORS settings may be configured in your application's `config/cors.php` configuration file. The `OPTIONS` requests will automatically be handled by the `HandleCors` [middleware](/docs/{{version}}/middleware) that is included by default in your global middleware stack. Your global middleware stack is located in your application's HTTP kernel (`App\Http\Kernel`).
+Laravel dapat secara otomatis merespons permintaan HTTP CORS `OPTIONS` dengan nilai-nilai yang Anda konfigurasikan. Semua pengaturan CORS dapat dikonfigurasi dalam file konfigurasi `config/cors.php` aplikasi Anda. Permintaan `OPTIONS` secara otomatis akan ditangani oleh `HandleCors` [_middleware_](/docs/{{version}}/middleware) yang disertakan secara _default_ dalam tumpukan _middleware_ global Anda. Tumpukan _middleware_ global Anda terletak pada kernel HTTP aplikasi Anda (`App\Http\Kernel`).
 
 > **Catatan**  
 
-Untuk informasi lebih lanjut tentang CORS dan header CORS, silakan berkonsultasi dengan [dokumentasi web MDN tentang CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#The_HTTP_response_headers).
-
-> For more information on CORS and CORS headers, please consult the [MDN web documentation on CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#The_HTTP_response_headers).
+> Untuk informasi lebih lanjut tentang CORS dan header CORS, silakan mengunjungi [dokumentasi web MDN tentang CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#The_HTTP_response_headers).
 
 <a name="route-caching"></a>
 ## Melakukan _Cache Route_
 
-Saat menerapkan aplikasi Anda ke produksi, Anda harus memanfaatkan cache rute Laravel. Menggunakan cache rute akan secara drastis mengurangi jumlah waktu yang diperlukan untuk mendaftarkan semua rute aplikasi Anda. Untuk membuat cache rute, jalankan perintah Artisan `route:cache`:
-
-When deploying your application to production, you should take advantage of Laravel's route cache. Using the route cache will drastically decrease the amount of time it takes to register all of your application's routes. To generate a route cache, execute the `route:cache` Artisan command:
+Saat men-_delpoy_ aplikasi Anda ke lingkungan _production_, Anda harus memanfaatkan _cache_ rute Laravel. Menggunakan _cache_ rute akan mengurangi jumlah waktu yang diperlukan untuk mendaftarkan semua rute aplikasi Anda secara drastis. Untuk membuat _cache_ rute, jalankan perintah Artisan `route:cache`:
 
 ```shell
 php artisan route:cache
