@@ -111,9 +111,9 @@ Begitu anda sudah meng-configure sebuah queue driver, set nilai dari opsi `queue
 
     'queue' => true,
 
-Even when the `queue` option is set to `false`, it's important to remember that some Scout drivers like Algolia and Meilisearch always index records asynchronously. Meaning, even though the index operation has completed within your Laravel application, the search engine itself may not reflect the new and updated records immediately.
+Sekalipun opsi `queue` sudah di-set ke `false`, penting untuk diingat bahwa beberapa driver Scout seperti Algolia dan Meilisearch selalu meng-indeks record secara asynchronous. Artinya, meskipun operasi indeks di aplikasi laravel anda telah selesai, search engine-nya bisa jadi tidak langsung merefleksikan perubahan data yang terjadi.
 
-To specify the connection and queue that your Scout jobs utilize, you may define the `queue` configuration option as an array:
+Untuk menentukan koneksi dan antrian yang digunakan oleh Scout jobs anda, anda bisa mendefinisikan opsi konfigurasi `queue` sebagai array:
 
     'queue' => [
         'connection' => 'redis',
@@ -121,12 +121,12 @@ To specify the connection and queue that your Scout jobs utilize, you may define
     ],
 
 <a name="configuration"></a>
-## Configuration
+## Konfigurasi
 
 <a name="configuring-model-indexes"></a>
-### Configuring Model Indexes
+### Meng-configure Model Index
 
-Each Eloquent model is synced with a given search "index", which contains all of the searchable records for that model. In other words, you can think of each index like a MySQL table. By default, each model will be persisted to an index matching the model's typical "table" name. Typically, this is the plural form of the model name; however, you are free to customize the model's index by overriding the `searchableAs` method on the model:
+Masing-masing Eloquent model tersinkronisasi dengan sebuah search "index" yang ditentukan, yang berisi semua searchable record untuk model tersebut. Dengan kata lain, anda bisa menganggap masing-masing index seperti sebuah table di MySQL. Secara default, masing-masing model akan tersimpan ke sebuah indexyang sesuai dengan nama table yang dari model. Typically, this is the plural form of the model name; however, you are free to customize the model's index by overriding the `searchableAs` method on the model:
 
     <?php
 
