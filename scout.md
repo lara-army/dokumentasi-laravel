@@ -1,56 +1,56 @@
 # Laravel Scout
 
-- [Introduction](#introduction)
-- [Installation](#installation)
-    - [Driver Prerequisites](#driver-prerequisites)
-    - [Queueing](#queueing)
-- [Configuration](#configuration)
-    - [Configuring Model Indexes](#configuring-model-indexes)
-    - [Configuring Searchable Data](#configuring-searchable-data)
-    - [Configuring The Model ID](#configuring-the-model-id)
-    - [Configuring Search Engines Per Model](#configuring-search-engines-per-model)
-    - [Identifying Users](#identifying-users)
-- [Database / Collection Engines](#database-and-collection-engines)
-    - [Database Engine](#database-engine)
-    - [Collection Engine](#collection-engine)
-- [Indexing](#indexing)
+- [Pengenalan](#introduction)
+- [Instalasi](#installation)
+    - [Prasyarat Driver](#driver-prerequisites)
+    - [Membuat Antrian](#queueing)
+- [Konfigurasi](#configuration)
+    - [Mengkonfigurasi Indeks Model](#configuring-model-indexes)
+    - [Mengkonfigurasi Data Yang Bisa Dicari](#configuring-searchable-data)
+    - [Mengkonfigurasi Model ID](#configuring-the-model-id)
+    - [Mengkonfigurasi Mesin Pencari Per Model](#configuring-search-engines-per-model)
+    - [Mengidentifikasi Pengguna](#identifying-users)
+- [Mesin Basis Data / Koleksi](#database-and-collection-engines)
+    - [Mesin Basis Data](#database-engine)
+    - [Mesin Collection](#collection-engine)
+- [Membuat Indeks](#indexing)
     - [Batch Import](#batch-import)
-    - [Adding Records](#adding-records)
-    - [Updating Records](#updating-records)
-    - [Removing Records](#removing-records)
-    - [Pausing Indexing](#pausing-indexing)
-    - [Conditionally Searchable Model Instances](#conditionally-searchable-model-instances)
-- [Searching](#searching)
-    - [Where Clauses](#where-clauses)
+    - [Menambah Data](#adding-records)
+    - [Memperbaharui Data](#updating-records)
+    - [Menghapus Data](#removing-records)
+    - [Menghentikan Sementara Proses Indeks](#pausing-indexing)
+    - [Contoh Model Yang Bisa Dicari Berdasarkan Kondisi](#conditionally-searchable-model-instances)
+- [Pencarian](#searching)
+    - [Klausa Where](#where-clauses)
     - [Pagination](#pagination)
-    - [Soft Deleting](#soft-deleting)
-    - [Customizing Engine Searches](#customizing-engine-searches)
-- [Custom Engines](#custom-engines)
+    - [Melakukan Soft Delete](#soft-deleting)
+    - [Customize Engine Searche](#customizing-engine-searches)
+- [Custom Engine](#custom-engines)
 - [Builder Macros](#builder-macros)
 
 <a name="introduction"></a>
 ## Introduction
 
-[Laravel Scout](https://github.com/laravel/scout) provides a simple, driver based solution for adding full-text search to your [Eloquent models](/docs/{{version}}/eloquent). Using model observers, Scout will automatically keep your search indexes in sync with your Eloquent records.
+[Laravel Scout](https://github.com/laravel/scout) menyediakan sebuah solusi berbasis driver yang sederhana untuk menambahan fitur pencarian full-text ke [Eloquent models](/docs/{{version}}/eloquent) anda. Dengan menggunakan model observers, Scout secara otomatis akan membuat indeks pencarian anda selalu sinkron dengan record Eloquent anda.
 
-Currently, Scout ships with [Algolia](https://www.algolia.com/), [MeiliSearch](https://www.meilisearch.com), and MySQL / PostgreSQL (`database`) drivers. In addition, Scout includes a "collection" driver that is designed for local development usage and does not require any external dependencies or third-party services. Furthermore, writing custom drivers is simple and you are free to extend Scout with your own search implementations.
+Pada saat ini, Scout mengusung driver [Algolia](https://www.algolia.com/), [MeiliSearch](https://www.meilisearch.com), dan MySQL / PostgreSQL (`database`). Ditambah lagi, Scout menyertakan juga "collection" driver yang didesain untuk digunakan dalam pengembangan di lingkup lokal dan tidak memiliki ketergantungan terhadap layanan eksternal atau pihak ketiga. Lebih jauh lagi, menulis custom driver jadi sederhana dan anda bebas untuk meng-extend Scout dengan implementasi pencarian anda sendiri.
 
 <a name="installation"></a>
-## Installation
+## Instalasi
 
-First, install Scout via the Composer package manager:
+Pertama, install Scout melalui Composer package manager:
 
 ```shell
 composer require laravel/scout
 ```
 
-After installing Scout, you should publish the Scout configuration file using the `vendor:publish` Artisan command. This command will publish the `scout.php` configuration file to your application's `config` directory:
+Sesudah menginstall Scout, anda harus mem-publish file konfigurasi Scout menggunakan perintah artisan `vendor:publish`. Perintah ini akan mem-publish file konfigurasi `scout.php` ke folder `config` milik aplikasi anda:
 
 ```shell
 php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
 ```
 
-Finally, add the `Laravel\Scout\Searchable` trait to the model you would like to make searchable. This trait will register a model observer that will automatically keep the model in sync with your search driver:
+Akhirnya, tambahkan trait `Laravel\Scout\Searchable` ke model yang akan anda buat searchable. Trait ini akan me-register sebuah model observer yang secara otomatis akan membuat model tetap sinkron dengan search driver anda:
 
     <?php
 
