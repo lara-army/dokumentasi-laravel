@@ -70,7 +70,7 @@ Akhirnya, tambahkan trait `Laravel\Scout\Searchable` ke model yang akan anda bua
 <a name="algolia"></a>
 #### Algolia
 
-When using the Algolia driver, you should configure your Algolia `id` and `secret` credentials in your `config/scout.php` configuration file. Once your credentials have been configured, you will also need to install the Algolia PHP SDK via the Composer package manager:
+Saat menggunakan driver Algolia, anda harus meng-configure `id` dan `secret` credential Algolia anda di file konfigurasi `config/scout.php` anda. Begitu  credential anda sudah di-configure, anda juga akan perlu meng-install PHP SDK Algolia menggunakan Composer package manager:
 
 ```shell
 composer require algolia/algoliasearch-client-php
@@ -79,15 +79,15 @@ composer require algolia/algoliasearch-client-php
 <a name="meilisearch"></a>
 #### MeiliSearch
 
-[MeiliSearch](https://www.meilisearch.com) is a blazingly fast and open source search engine. If you aren't sure how to install MeiliSearch on your local machine, you may use [Laravel Sail](/docs/{{version}}/sail#meilisearch), Laravel's officially supported Docker development environment.
+[MeiliSearch](https://www.meilisearch.com) adalah sebuah search engine open source yang sangat cepat laksana kilat. Kalau anda belum yakin bisa meng-install MeiliSearch di local machine, anda bisa menggunakan [Laravel Sail](/docs/{{version}}/sail#meilisearch), Docker development environment yang secara resmi disupport oleh Laravel.
 
-When using the MeiliSearch driver you will need to install the MeiliSearch PHP SDK via the Composer package manager:
+Ketika menggunakan driver MeiliSearch anda akan perlu meng-install PHP SDK MeiliSearch menggunakan Composer package manager:
 
 ```shell
 composer require meilisearch/meilisearch-php http-interop/http-factory-guzzle
 ```
 
-Then, set the `SCOUT_DRIVER` environment variable as well as your MeiliSearch `host` and `key` credentials within your application's `.env` file:
+Lalu, set environment variable `SCOUT_DRIVER` beserta `host` dan `key` credential MeiliSearch anda yang berada di file `.env`:
 
 ```ini
 SCOUT_DRIVER=meilisearch
@@ -95,19 +95,19 @@ MEILISEARCH_HOST=http://127.0.0.1:7700
 MEILISEARCH_KEY=masterKey
 ```
 
-For more information regarding MeiliSearch, please consult the [MeiliSearch documentation](https://docs.meilisearch.com/learn/getting_started/quick_start.html).
+Untuk informasi lebih lanjut tentang MeiliSearch, silahkan kunjungi halaman [MeiliSearch documentation](https://docs.meilisearch.com/learn/getting_started/quick_start.html).
 
-In addition, you should ensure that you install a version of `meilisearch/meilisearch-php` that is compatible with your MeiliSearch binary version by reviewing [MeiliSearch's documentation regarding binary compatibility](https://github.com/meilisearch/meilisearch-php#-compatibility-with-meilisearch).
+Sebagai tambahan, anda harus memastikan kalau yang anda install adalah versi `meilisearch/meilisearch-php` yang compatible dengan versi binary dari MeiliSearch anda dengan cara meninjau [dokumentasi MeiliSearch tentang binary compatibility](https://github.com/meilisearch/meilisearch-php#-compatibility-with-meilisearch).
 
-> **Warning**  
-> When upgrading Scout on an application that utilizes MeiliSearch, you should always [review any additional breaking changes](https://github.com/meilisearch/MeiliSearch/releases) to the MeiliSearch service itself.
+> **Perhatian**  
+> Saat melakukan upgrade Scout di aplikasi yang menggunakan MeiliSearch, anda harus selalu [meninjau bilamana ada tambahan breaking change](https://github.com/meilisearch/MeiliSearch/releases) terhadap layanan MeiliSearch itu sendiri.
 
 <a name="queueing"></a>
-### Queueing
+### Antrian
 
-While not strictly required to use Scout, you should strongly consider configuring a [queue driver](/docs/{{version}}/queues) before using the library. Running a queue worker will allow Scout to queue all operations that sync your model information to your search indexes, providing much better response times for your application's web interface.
+Meski tidak secara mengharuskan menggunakan Scout, anda harus benar-benar mempertimbangkan untuk meng-configure sebuah [queue driver](/docs/{{version}}/queues) sebelum menggunakan library ini. Dengan menjalankan sebuah queue worker akan memungkinkan Scout untuk mengirimkan ke dalam antrian semua operasi yang mensinkronkan informasi model ke indeks pencarian anda, sehingga response time interface web aplikasi anda akan menjadi lebih baik.
 
-Once you have configured a queue driver, set the value of the `queue` option in your `config/scout.php` configuration file to `true`:
+Begitu anda sudah meng-configure sebuah queue driver, set nilai dari opsi `queue` di file konfigurasi `config/scout.php` anda menjadi `true`:
 
     'queue' => true,
 
