@@ -7,6 +7,7 @@ _Repository_ ini merupakan terjemahan dari [dokumentasi resmi laravel](https://g
 _Repository_ ini bersifat terbuka, siapa saja dapat berkontribusi untuk penyempurnaannya. Jika Anda ingin berkontribusi, kirimkan _pull request_ ke _branch_ yang sesuai. Misalnya, dokumentasi untuk Laravel 9 akan dikirimkan ke _branch_ `9.x`. Dokumentasi yang ditujukan untuk Laravel versi berikutnya harus dikirimkan ke _branch_ `master`.
 
 Adapun beberapa pedoman yang disarankan untuk berkontribusi pada _repository_ adalah sebagai berikut:
+- Mohon untuk meminta _assignment_ pada _issue_ yang terdapat pada _tab_ [issues](https://github.com/sensasi-delight/dokumentasi-laravel/issues) untuk menghindari pengalihan bahasa ulang pada _file_ yang sedang dikerjakan oleh kontributor lain.
 - Terjemahkanlah ke dalam bahasa Indonesia yang mudah semi-formal dan mudah dipahami namun harus tetap menjaga konteks dari dokumentasi asal.
 - Kontributor tidak perlu menerjemahkan semua kalimat inggris ke dalam bahasa Indonesia untuk menjaga ke-masuk-akalan kalimat.
 - Kontributor juga dapat melakukan parafrase untuk meningkatkan pemahaman pembaca tanpa menghilangkan konteks asli dari dokumentasi asal.
