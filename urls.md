@@ -1,26 +1,26 @@
-# URL Generation
+# Pembuatan URL
 
-- [Introduction](#introduction)
-- [The Basics](#the-basics)
-    - [Generating URLs](#generating-urls)
-    - [Accessing The Current URL](#accessing-the-current-url)
-- [URLs For Named Routes](#urls-for-named-routes)
+- [Pengantar](#introduction)
+- [Dasar](#the-basics)
+    - [Menghasilkan URL](#generating-urls)
+    - [Mengakses URL Saat ini](#accessing-the-current-url)
+- [URL Untuk Rute Bernama](#urls-for-named-routes)
     - [Signed URLs](#signed-urls)
-- [URLs For Controller Actions](#urls-for-controller-actions)
-- [Default Values](#default-values)
+- [URLs Untuk _Action Controller_](#urls-for-controller-actions)
+- [Nilai _Default_](#default-values)
 
 <a name="introduction"></a>
-## Introduction
+## Pengantar
 
-Laravel provides several helpers to assist you in generating URLs for your application. These helpers are primarily helpful when building links in your templates and API responses, or when generating redirect responses to another part of your application.
+Laravel menyediakan beberapa _helper_ untuk mendampingi Anda dalam menghasilkan URL untuk aplikasi Anda. _Helper_ ini akan sangat berguna ketika membuat pranala (_link_) pada _template_ dan respons API Anda, atau ketika membuat respons _redirect_ yang menuju bagian lain aplikasi Anda.
 
 <a name="the-basics"></a>
-## The Basics
+## Dasar
 
 <a name="generating-urls"></a>
-### Generating URLs
+### Menghasilkan URL
 
-The `url` helper may be used to generate arbitrary URLs for your application. The generated URL will automatically use the scheme (HTTP or HTTPS) and host from the current request being handled by the application:
+_Helper_ `url` dapat digunakan untuk menghasilkan URL untuk aplikasi Anda. URL yang dihasilkan akan secara otomatis menggunakan skema (HTTP atau HTTPS) dan _host_ dari _request_ yang saat ini ditangani oleh aplikasi:
 
     $post = App\Models\Post::find(1);
 
@@ -29,29 +29,31 @@ The `url` helper may be used to generate arbitrary URLs for your application. Th
     // http://example.com/posts/1
 
 <a name="accessing-the-current-url"></a>
-### Accessing The Current URL
+### Mengakses URL Saat Ini
 
-If no path is provided to the `url` helper, an `Illuminate\Routing\UrlGenerator` instance is returned, allowing you to access information about the current URL:
+Jika tidak ada _path_ yang diberikan pada _helper_ `url`, _instance_ `Illuminate\Routing\UrlGenerator` akan dikembalikan, memungkinkan Anda untuk mengakses informasi terkait URL saat ini:
 
-    // Get the current URL without the query string...
+    // Mengambil URL saat ini tanpa string query...
     echo url()->current();
 
-    // Get the current URL including the query string...
+    // Mengambil URL saat ini dengan string query...
     echo url()->full();
 
-    // Get the full URL for the previous request...
+    // Mengambil URL penuh dari request sebelumnya...
     echo url()->previous();
 
-Each of these methods may also be accessed via the `URL` [facade](/docs/{{version}}/facades):
+Semua _method_ ini dapat diakses via [_facade_](/docs/{{version}}/facades) `URL`:
 
     use Illuminate\Support\Facades\URL;
 
     echo URL::current();
 
 <a name="urls-for-named-routes"></a>
-## URLs For Named Routes
+## URL Untuk Rute Bernama
 
-The `route` helper may be used to generate URLs to [named routes](/docs/{{version}}/routing#named-routes). Named routes allow you to generate URLs without being coupled to the actual URL defined on the route. Therefore, if the route's URL changes, no changes need to be made to your calls to the `route` function. For example, imagine your application contains a route defined like the following:
+_Helper_ `route` dapat digunakan untuk menghasilkan URL untuk [_named routes_](/docs/{{version}}/routing#named-routes). route yang telah diberi nama memungkinkan Anda untuk membuat URL tanpa 
+
+The `route` helper may be used to generate URLs to [named routes](/docs/{{version}}/routing#named-routes). Named routes allow you to generate URLs without being  to the actual URL defined on the route. Therefore, if the route's URL changes, no changes need to be made to your calls to the `route` function. For example, imagine your application contains a route defined like the following:
 
     Route::get('/post/{post}', function (Post $post) {
         //
