@@ -126,7 +126,7 @@ Untuk menentukan koneksi dan antrian yang digunakan oleh Scout jobs anda, anda b
 <a name="configuring-model-indexes"></a>
 ### Meng-configure Model Index
 
-Masing-masing Eloquent model tersinkronisasi dengan sebuah search "index" yang ditentukan, yang berisi semua searchable record untuk model tersebut. Dengan kata lain, anda bisa menganggap masing-masing index seperti sebuah table di MySQL. Secara default, masing-masing model akan tersimpan ke sebuah indexyang sesuai dengan nama table yang dari model. Typically, this is the plural form of the model name; however, you are free to customize the model's index by overriding the `searchableAs` method on the model:
+Masing-masing Eloquent model tersinkronisasi dengan sebuah search "index" yang ditentukan, yang berisi semua searchable record untuk model tersebut. Dengan kata lain, anda bisa menganggap masing-masing index seperti sebuah table di MySQL. Secara default, masing-masing model akan tersimpan ke sebuah index yang sesuai dengan nama table yang dari model. Umumnya, nama yang digunakan adalah bentuk jamak dari nama model; akan tetapi, anda bebas meng-customize index dari  model-nya dengan cara meng-override method `searchableAs` yang ada di model:
 
     <?php
 
@@ -151,9 +151,9 @@ Masing-masing Eloquent model tersinkronisasi dengan sebuah search "index" yang d
     }
 
 <a name="configuring-searchable-data"></a>
-### Configuring Searchable Data
+### Meng-Configure Data Yang Bisa Dicari
 
-By default, the entire `toArray` form of a given model will be persisted to its search index. If you would like to customize the data that is synchronized to the search index, you may override the `toSearchableArray` method on the model:
+Secara default, semua bentuk `toArray` dari sebuah model akan disimpan ke search index-nya. Jika anda ingin meng-customize data yang disinkronisasikan ke indeks pencarian, anda bisa meng-override method `toSearchableArray` di model:
 
     <?php
 
@@ -181,7 +181,7 @@ By default, the entire `toArray` form of a given model will be persisted to its 
         }
     }
 
-Some search engines such as MeiliSearch will only perform filter operations (`>`, `<`, etc.) on data of the correct type. So, when using these search engines and customizing your searchable data, you should ensure that numeric values are cast to their correct type:
+Beberapa mesin pencarian seperti MeiliSearch hanya akan melakukan operasi filtering (`>`, `<`, etc.) pada data yang tipenya benar. Sehingga, saat menggunakan mesin pencarian ini dan meng-customize data anda yang bisa dicari, anda harus memastikan kalau nilai-nilai numerik di-cast ke tipe yang benar:
 
     public function toSearchableArray()
     {
@@ -193,11 +193,11 @@ Some search engines such as MeiliSearch will only perform filter operations (`>`
     }
 
 <a name="configuring-filterable-data-for-meilisearch"></a>
-#### Configuring Filterable Data & Index Settings (MeiliSearch)
+#### Meng-Configure Data Yang Bisa Di-filter & Setting Indeks (MeiliSearch)
 
-Unlike Scout's other drivers, MeiliSearch requires you to pre-define index search settings such as filterable attributes, sortable attributes, and [other supported settings fields](https://docs.meilisearch.com/reference/api/settings.html).
+Tidak seperti driver Scout yang lain, MeiliSearch mengharuskan anda mendefinisikan terlebih dahulu setting indeks pencarian seperti filterable attributes, sortable attributes, dan [field setting lain yang di-support](https://docs.meilisearch.com/reference/api/settings.html).
 
-Filterable attributes are any attributes you plan to filter on when invoking Scout's `where` method, while sortable attributes are any attributes you plan to sort by when invoking Scout's `orderBy` method. To define your index settings, adjust the `index-settings` portion of your `meilisearch` configuration entry in your application's `scout` configuration file:
+Filterable attribute adalah attribut apapun yang anda rencanakan untuk di-filter saat anda menggunakan method `where`-nya Scout, sementara sortable attribute adalah attribut apapun yang anda akan sort saat memanggil method `orderBy`-nya Scout. Untuk menentukan settingan indeks, sesuaikan bagian `index-settings` dari isian konfigurasi `meilisearch` di file konfigurasi `scout` aplikasi anda:
 
 ```php
 use App\Models\User;
