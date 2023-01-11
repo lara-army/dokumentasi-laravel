@@ -4,9 +4,9 @@
 - [Dasar](#the-basics)
     - [Menghasilkan URL](#generating-urls)
     - [Mengakses URL Saat ini](#accessing-the-current-url)
-- [URL Untuk Rute Bernama](#urls-for-named-routes)
-    - [Signed URLs](#signed-urls)
-- [URLs Untuk _Action Controller_](#urls-for-controller-actions)
+- [URL Untuk _Named Route_](#urls-for-named-routes)
+    - [_Signed_ URL](#signed-urls)
+- [URLs Untuk Aksi _Controller_](#urls-for-controller-actions)
 - [Nilai _Default_](#default-values)
 
 <a name="introduction"></a>
@@ -49,7 +49,7 @@ Semua _method_ ini dapat diakses via [_facade_](/docs/{{version}}/facades) `URL`
     echo URL::current();
 
 <a name="urls-for-named-routes"></a>
-## URL Untuk Rute Bernama
+## URL Untuk _Named Route_
 
 _Helper_ `route` dapat digunakan untuk menghasilkan URL ke [_named routes_](/docs/{{version}}/routing#named-routes). Rute bernama memungkinkan Anda untuk menghasilkan URL tanpa harus ke URL aktual yang didefinisikan pada rute. Oleh karena itu, jika URL pada rute berubah, Anda tidak perlu merubah pemanggilan _function_ `route`-nya. Sebagai contoh, bayangkan aplikasi Anda berisi rute yang didefinisikan seperti berikut ini:
 
@@ -139,26 +139,21 @@ Alih-alih memvalidasi URL yang ditandatangani menggunakan _instance_ _request_ y
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
     ];
 
-Setelah Anda mendaftarkan _middleware_ di kernel Anda, Anda dapat melampirkannya ke sebuah rute. Jika permintaan yang masuk tidak memiliki tanda tangan yang valid, middleware akan secara otomatis mengembalikan respons HTTP `403`:
-
-Once you have registered the middleware in your kernel, you may attach it to a route. If the incoming request does not have a valid signature, the middleware will automatically return a `403` HTTP response:
+Setelah Anda mendaftarkan _middleware_ di kernel Anda, Anda dapat manambatkannya pada sebuah _route_. Jika permintaan yang masuk tidak memiliki tanda tangan yang valid, _middleware_ akan secara otomatis mengembalikan respons HTTP `403`:
 
     Route::post('/unsubscribe/{user}', function (Request $request) {
         // ...
     })->name('unsubscribe')->middleware('signed');
 
 <a name="responding-to-invalid-signed-routes"></a>
-#### Responding To Invalid Signed Routes
+#### Merespons _Signed Route_ yang tidak valid
 
-Ketika seseorang mengunjungi URL bertanda tangan yang telah kedaluwarsa, mereka akan menerima halaman kesalahan umum untuk kode status HTTP `403`. Namun, Anda dapat menyesuaikan perilaku ini dengan mendefinisikan penutupan "renderable" khusus untuk pengecualian `InvalidSignatureException` di penangan pengecualian Anda. Penutupan ini harus mengembalikan respons HTTP:
-
-When someone visits a signed URL that has expired, they will receive a generic error page for the `403` HTTP status code. However, you can customize this behavior by defining a custom "renderable" closure for the `InvalidSignatureException` exception in your exception handler. This closure should return an HTTP response:
+Ketika seseorang mengunjungi _signed_ URL yang telah kedaluwarsa, mereka akan menerima halaman eror yang umum untuk kode status HTTP `403`. Namun, Anda dapat menyesuaikan perilaku ini dengan mendefinisikan _closure_ "renderable" khusus untuk _exception_ `InvalidSignatureException` pada _exception handler_ Anda. _Closure_ ini harus mengembalikan respons HTTP:
 
     use Illuminate\Routing\Exceptions\InvalidSignatureException;
 
     /**
-     * Daftarkan callback penanganan pengecualian untuk aplikasi.
-     * Register the exception handling callbacks for the application.
+     * Mendaftarkan callback untuk exception handling pada aplikasi.
      *
      * @return void
      */
@@ -170,36 +165,28 @@ When someone visits a signed URL that has expired, they will receive a generic e
     }
 
 <a name="urls-for-controller-actions"></a>
-## URLs For Controller Actions
+## URL untuk Aksi _Controller_
 
-Fungsi `action` menghasilkan URL untuk aksi pengontrol yang diberikan:
-
-The `action` function generates a URL for the given controller action:
+Fungsi `action` menghasilkan URL untuk aksi pada _controller_ yang ditentukan:
 
     use App\Http\Controllers\HomeController;
 
     $url = action([HomeController::class, 'index']);
 
-Jika metode controller menerima parameter rute, Anda dapat mengoper array asosiatif parameter rute sebagai argumen kedua ke fungsi:
-
-If the controller method accepts route parameters, you may pass an associative array of route parameters as the second argument to the function:
+Jika _method controller_ memiliki parameter rute, Anda dapat mengoper _array_ asosiatif untuk parameter rute sebagai argumen kedua pada _function_:
 
     $url = action([UserController::class, 'profile'], ['id' => 1]);
 
 <a name="default-values"></a>
-## Default Values
+## Nilai _Default_
 
-Untuk beberapa aplikasi, Anda mungkin ingin menentukan nilai default seluruh permintaan untuk parameter URL tertentu. Misalnya, bayangkan banyak rute Anda mendefinisikan parameter `{locale}`:
-
-For some applications, you may wish to specify request-wide default values for certain URL parameters. For example, imagine many of your routes define a `{locale}` parameter:
+Untuk beberapa aplikasi, Anda mungkin ingin menentukan nilai _default_ untuk parameter URL tertentu. Misalnya, bayangkan rute Anda mendefinisikan parameter `{locale}` di banyak tempat:
 
     Route::get('/{locale}/posts', function () {
         //
     })->name('post.index');
 
-Akan sangat merepotkan untuk selalu mengoper `locale` setiap kali Anda memanggil _helper_ `route`. Jadi, Anda dapat menggunakan metode `URL::defaults` untuk mendefinisikan nilai default untuk parameter ini yang akan selalu diterapkan selama permintaan saat ini. Anda mungkin ingin memanggil metode ini dari [route middleware](/docs/{{version}}/middleware#assigning-middleware-to-routes) sehingga Anda memiliki akses ke permintaan saat ini:
-
-It is cumbersome to always pass the `locale` every time you call the `route` _helper_. So, you may use the `URL::defaults` method to define a default value for this parameter that will always be applied during the current request. You may wish to call this method from a [route middleware](/docs/{{version}}/middleware#assigning-middleware-to-routes) so that you have access to the current request:
+Akan sangat merepotkan untuk selalu mengoper `locale` setiap kali Anda memanggil _helper_ `route`. Jadi, Anda dapat menggunakan metode `URL::defaults` untuk mendefinisikan nilai _default_ untuk parameter ini yang akan selalu diterapkan pada permintaan saat ini. Anda mungkin ingin memanggil metode ini dari [_route middleware_](/docs/{{version}}/middleware#assigning-middleware-to-routes) sehingga Anda dapat mengakses permintaan saat ini:
 
     <?php
 
@@ -225,18 +212,14 @@ It is cumbersome to always pass the `locale` every time you call the `route` _he
         }
     }
 
-Setelah nilai default untuk parameter `locale` telah ditetapkan, Anda tidak lagi diharuskan untuk meneruskan nilainya ketika membuat URL melalui _helper_ `route`.
-
-Once the default value for the `locale` parameter has been set, you are no longer required to pass its value when generating URLs via the `route` _helper_.
+Setelah nilai _default_ untuk parameter `locale` telah ditetapkan, Anda tidak lagi diharuskan untuk meneruskan nilainya ketika membuat URL melalui _helper_ `route`.
 
 <a name="url-defaults-middleware-priority"></a>
-#### URL Defaults & Middleware Priority
+#### _Default_ URL & Prioritas _Middleware_
 
-Menetapkan nilai default URL dapat mengganggu penanganan Laravel terhadap binding model implisit. Oleh karena itu, Anda harus [memprioritaskan middleware Anda](/docs/{{version}}/middleware#sorting-middleware) yang mengatur default URL untuk dieksekusi sebelum middleware `SubstituteBindings` Laravel sendiri. Anda dapat mencapai ini dengan memastikan middleware Anda terjadi sebelum middleware `SubstituteBindings` dalam properti `$middlewarePriority` dari kernel HTTP aplikasi Anda.
+Pengaturan nilai _default_ URL dapat mengganggu penanganan Laravel terhadap _binding_ model implisit. Oleh karena itu, Anda harus [memprioritaskan middleware Anda](/docs/{{version}}/middleware#sorting-middleware) yang mengatur _default_ URL untuk dieksekusi sebelum _middleware_ `SubstituteBindings` Laravel sendiri. Anda dapat mewujudkan hal ini dengan cara memastikan _middleware_ yang diharapkan terjadi sebelum _middleware_ `SubstituteBindings` telah tercatat di dalam properti `$middlewarePriority` pada kernel HTTP aplikasi Anda.
 
-Setting URL default values can interfere with Laravel's handling of implicit model bindings. Therefore, you should [prioritize your middleware](/docs/{{version}}/middleware#sorting-middleware) that set URL defaults to be executed before Laravel's own `SubstituteBindings` middleware. You can accomplish this by making sure your middleware occurs before the `SubstituteBindings` middleware within the `$middlewarePriority` property of your application's HTTP kernel.
-
-Properti `$middlewarePriority` didefinisikan dalam kelas dasar `Illuminate\Foundation\Http\Kernel`. Anda dapat menyalin definisinya dari kelas tersebut dan menimpa di kernel HTTP aplikasi Anda untuk memodifikasinya:
+Properti `$middlewarePriority` didefinisikan dalam kelas dasar `Illuminate\Foundation\Http\Kernel`. Anda dapat menyalin definisinya dari kelas tersebut dan memasukkan/menimpa pada kernel HTTP aplikasi Anda untuk memodifikasinya:
 
     /**
      * Daftar middleware yang telah diurutkan prioritasnya.
