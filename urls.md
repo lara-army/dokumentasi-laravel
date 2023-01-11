@@ -73,41 +73,31 @@ Tentu saja, _helper_ `route` juga dapat digunakan untuk menghasilkan URL untuk r
 
     // http://example.com/post/1/comment/3
 
-Setiap elemen larik tambahan yang tidak sesuai dengan parameter definisi rute akan ditambahkan ke string kueri URL:
-
-Any additional array elements that do not correspond to the route's definition parameters will be added to the URL's query string:
+Setiap elemen _array_ tambahan yang tidak sesuai dengan parameter pada pendefinisian rute akan ditambahkan sebagai _string_ kueri URL:
 
     echo route('post.show', ['post' => 1, 'search' => 'rocket']);
 
     // http://example.com/post/1?search=rocket
 
 <a name="eloquent-models"></a>
-#### Eloquent Models
+#### Model Eloquent
 
-Anda akan sering membuat URL menggunakan route key (biasanya primary key) dari [model Eloquent] (/docs/{{{version}}/eloquent). Untuk alasan ini, Anda dapat mengoper model Eloquent sebagai nilai parameter. _Helper_ `route` akan secara otomatis mengekstrak route key model:
-
-You will often be generating URLs using the route key (typically the primary key) of [Eloquent models](/docs/{{version}}/eloquent). For this reason, you may pass Eloquent models as parameter values. The `route` _helper_ will automatically extract the model's route key:
+Anda akan sering membuat URL menggunakan _route key_ (biasanya _primary key_) dari [model Eloquent](/docs/{{version}}/eloquent). Untuk alasan ini, Anda dapat mengoper model Eloquent sebagai nilai parameter. _Helper_ `route` akan secara otomatis mengekstrak _route key_ milik model:
 
     echo route('post.show', ['post' => $post]);
 
 <a name="signed-urls"></a>
-### Signed URLs
+### _Signed URL_
 
-Laravel memungkinkan Anda untuk dengan mudah membuat URL yang "ditandatangani" ke rute bernama. URL ini memiliki hash "signature" yang ditambahkan ke string kueri yang memungkinkan Laravel untuk memverifikasi bahwa URL belum dimodifikasi sejak dibuat. URL yang ditandatangani sangat berguna untuk rute yang dapat diakses publik namun membutuhkan lapisan perlindungan terhadap manipulasi URL.
+Laravel memungkinkan Anda untuk membuat URL yang "ditandatangani" (_signed URL_) untuk _named route_ secara mudah. URL ini memiliki hash "signature" yang ditambahkan ke _string_ kueri yang memungkinkan Laravel untuk memverifikasi bahwa URL tidak dimodifikasi sejak dibuat. URL yang "ditandatangani" ini sangat berguna untuk rute yang dapat diakses publik namun membutuhkan lapisan perlindungan terhadap manipulasi URL.
 
-Laravel allows you to easily create "signed" URLs to named routes. These URLs have a "signature" hash appended to the query string which allows Laravel to verify that the URL has not been modified since it was created. Signed URLs are especially useful for routes that are publicly accessible yet need a layer of protection against URL manipulation.
-
-Misalnya, Anda mungkin menggunakan URL yang ditandatangani untuk mengimplementasikan tautan "berhenti berlangganan" publik yang diemailkan ke pelanggan Anda. Untuk membuat URL yang ditandatangani ke rute bernama, gunakan metode `signedRoute` dari fasad `URL`:
-
-For example, you might use signed URLs to implement a public "unsubscribe" link that is emailed to your customers. To create a signed URL to a named route, use the `signedRoute` method of the `URL` facade:
+Misalnya, Anda mungkin menggunakan URL yang "ditandatangani" ini untuk mengimplementasikan tautan "berhenti berlangganan" yang dapat diakses publik, yang diemailkan ke pelanggan Anda. Untuk membuat URL yang "ditandatangani" atas _named route_, Anda dapat menggunakan metode `signedRoute` dari _facade_ `URL`:
 
     use Illuminate\Support\Facades\URL;
 
     return URL::signedRoute('unsubscribe', ['user' => 1]);
 
-Jika Anda ingin membuat URL rute bertanda tangan sementara yang kedaluwarsa setelah jangka waktu tertentu, Anda dapat menggunakan metode `temporarySignedRoute`. Ketika Laravel memvalidasi URL rute bertanda tangan sementara, Laravel akan memastikan bahwa cap waktu kedaluwarsa yang dikodekan ke dalam URL bertanda tangan belum berlalu:
-
-If you would like to generate a temporary signed route URL that expires after a specified amount of time, you may use the `temporarySignedRoute` method. When Laravel validates a temporary signed route URL, it will ensure that the expiration timestamp that is encoded into the signed URL has not elapsed:
+Jika Anda ingin membuat URL rute bertanda tangan sementara yang dapat kedaluwarsa setelah jangka waktu tertentu, Anda dapat menggunakan metode `temporarySignedRoute`. Ketika Laravel memvalidasi URL rute bertanda tangan sementara, Laravel akan memastikan bahwa cap waktu kedaluwarsa yang dikodekan ke dalam URL bertanda tangan ini belum terlewati:
 
     use Illuminate\Support\Facades\URL;
 
@@ -116,11 +106,9 @@ If you would like to generate a temporary signed route URL that expires after a 
     );
 
 <a name="validating-signed-route-requests"></a>
-#### Validating Signed Route Requests
+#### Validasi terhadap _Request_ dari _Signed Route_
 
-Untuk memverifikasi bahwa permintaan yang masuk memiliki tanda tangan yang valid, anda harus memanggil metode `hasValidSignature` pada instance `Illuminate\Http\Request` yang masuk:
-
-To verify that an incoming request has a valid signature, you should call the `hasValidSignature` method on the incoming `Illuminate\Http\Request` instance:
+Untuk memverifikasi bahwa permintaan yang masuk memiliki tanda tangan yang valid, anda harus memanggil metode `hasValidSignature` pada _instance_ `Illuminate\Http\Request` yang masuk:
 
     use Illuminate\Http\Request;
 
@@ -132,22 +120,18 @@ To verify that an incoming request has a valid signature, you should call the `h
         // ...
     })->name('unsubscribe');
 
-Terkadang, Anda mungkin perlu mengizinkan frontend aplikasi Anda untuk menambahkan data ke URL yang ditandatangani, seperti saat melakukan paginasi sisi klien. Oleh karena itu, Anda dapat menentukan parameter kueri permintaan yang harus diabaikan saat memvalidasi URL yang ditandatangani menggunakan metode `hasValidSignatureWhileIgnoring`. Ingat, mengabaikan parameter memungkinkan siapa pun untuk memodifikasi parameter tersebut pada permintaan:
-
-Sometimes, you may need to allow your application's frontend to append data to a signed URL, such as when performing client-side pagination. Therefore, you can specify request query parameters that should be ignored when validating a signed URL using the `hasValidSignatureWhileIgnoring` method. Remember, ignoring parameters allows anyone to modify those parameters on the request:
+Terkadang, Anda mungkin perlu mengizinkan _frontend_ dari aplikasi Anda untuk menambahkan data ke URL yang ditandatangani ini, seperti saat melakukan _pagination_ dari sisi klien. Oleh karena itu, Anda dapat tidak mengikutsertakan parameter kueri _request_ dari "tanda tangan" yang akan diabaikan saat memvalidasi URL yang "ditandatangani" ini menggunakan metode `hasValidSignatureWhileIgnoring`. Ingat, mengabaikan parameter memungkinkan siapa pun untuk memodifikasi parameter tersebut:
 
     if (! $request->hasValidSignatureWhileIgnoring(['page', 'order'])) {
         abort(401);
     }
 
-Alih-alih memvalidasi URL yang ditandatangani menggunakan instance permintaan yang masuk, Anda dapat menetapkan `Illuminate\Routing\Middleware\ValidateSignature` [middleware](/docs/{{version}}/middleware) ke rute. Jika belum ada, Anda harus menetapkan middleware ini sebagai kunci dalam array `routeMiddleware` kernel HTTP Anda:
-
-Instead of validating signed URLs using the incoming request instance, you may assign the `Illuminate\Routing\Middleware\ValidateSignature` [middleware](/docs/{{version}}/middleware) to the route. If it is not already present, you should assign this middleware a key in your HTTP kernel's `routeMiddleware` array:
+Alih-alih memvalidasi URL yang ditandatangani menggunakan _instance_ _request_ yang masuk, Anda juga dapat menugaskan  [_middleware_](/docs/{{version}}/middleware) `Illuminate\Routing\Middleware\ValidateSignature` pada sebuah rute. Jika belum ada, Anda harus menetapkan _middleware_ ini sebagai kunci dalam _array_ `routeMiddleware` kernel HTTP Anda:
 
     /**
-     * The application's route middleware.
+     * Middleware rute pada aplikasi.
      *
-     * These middleware may be assigned to groups or used individually.
+     * middleware yang terdaftar disini dapat ditambatkan pada rute biasa dan rute grup.
      *
      * @var array
      */
@@ -155,7 +139,7 @@ Instead of validating signed URLs using the incoming request instance, you may a
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
     ];
 
-Setelah Anda mendaftarkan middleware di kernel Anda, Anda dapat melampirkannya ke sebuah rute. Jika permintaan yang masuk tidak memiliki tanda tangan yang valid, middleware akan secara otomatis mengembalikan respons HTTP `403`:
+Setelah Anda mendaftarkan _middleware_ di kernel Anda, Anda dapat melampirkannya ke sebuah rute. Jika permintaan yang masuk tidak memiliki tanda tangan yang valid, middleware akan secara otomatis mengembalikan respons HTTP `403`:
 
 Once you have registered the middleware in your kernel, you may attach it to a route. If the incoming request does not have a valid signature, the middleware will automatically return a `403` HTTP response:
 
@@ -248,13 +232,11 @@ Once the default value for the `locale` parameter has been set, you are no longe
 <a name="url-defaults-middleware-priority"></a>
 #### URL Defaults & Middleware Priority
 
-Menetapkan nilai default URL dapat mengganggu penanganan Laravel terhadap binding model implisit. Oleh karena itu, Anda harus [memprioritaskan middleware Anda](/docs/{{{version}}/middleware#sorting-middleware) yang mengatur default URL untuk dieksekusi sebelum middleware `SubstituteBindings` Laravel sendiri. Anda dapat mencapai ini dengan memastikan middleware Anda terjadi sebelum middleware `SubstituteBindings` dalam properti `$middlewarePriority` dari kernel HTTP aplikasi Anda.
+Menetapkan nilai default URL dapat mengganggu penanganan Laravel terhadap binding model implisit. Oleh karena itu, Anda harus [memprioritaskan middleware Anda](/docs/{{version}}/middleware#sorting-middleware) yang mengatur default URL untuk dieksekusi sebelum middleware `SubstituteBindings` Laravel sendiri. Anda dapat mencapai ini dengan memastikan middleware Anda terjadi sebelum middleware `SubstituteBindings` dalam properti `$middlewarePriority` dari kernel HTTP aplikasi Anda.
 
 Setting URL default values can interfere with Laravel's handling of implicit model bindings. Therefore, you should [prioritize your middleware](/docs/{{version}}/middleware#sorting-middleware) that set URL defaults to be executed before Laravel's own `SubstituteBindings` middleware. You can accomplish this by making sure your middleware occurs before the `SubstituteBindings` middleware within the `$middlewarePriority` property of your application's HTTP kernel.
 
-Properti `$middlewarePriority` didefinisikan dalam kelas `Illuminate\Foundation\Http\Kernel` dasar. Anda dapat menyalin definisinya dari kelas tersebut dan menimpa di kernel HTTP aplikasi Anda untuk memodifikasinya:
-
-The `$middlewarePriority` property is defined in the base `Illuminate\Foundation\Http\Kernel` class. You may copy its definition from that class and overwrite it in your application's HTTP kernel in order to modify it:
+Properti `$middlewarePriority` didefinisikan dalam kelas dasar `Illuminate\Foundation\Http\Kernel`. Anda dapat menyalin definisinya dari kelas tersebut dan menimpa di kernel HTTP aplikasi Anda untuk memodifikasinya:
 
     /**
      * Daftar middleware yang telah diurutkan prioritasnya.
