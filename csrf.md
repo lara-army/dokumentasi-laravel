@@ -14,9 +14,9 @@ _Cross-site request forgeries_ adalah jenis eksploitasi berbahaya di mana perint
 <a name="csrf-explanation"></a>
 #### Penjelasan Kerentanan
 
-Jika Anda tidak terbiasa dengan pemalsuan _request_ lintas-situs (CSRF), mari kita bahas contoh bagaimana kerentanan ini dapat dieksploitasi. Bayangkan aplikasi Anda memiliki rute `/pengguna/email` yang menerima permintaan `POST` untuk mengubah alamat email pengguna yang terotentikasi. Kemungkinan besar, rute ini mengharapkan kolom input `email` yang berisi alamat email yang ingin didaftarkan oleh pengguna.
+Jika Anda tidak belum akrab dengan istilah _cross-site request forgery_ (CSRF), mari kita bahas contoh bagaimana kerentanan ini dapat dieksploitasi. Bayangkan apabila aplikasi Anda memiliki _route_ `/pengguna/email` yang menerima _request_ `POST` untuk mengubah alamat email pengguna yang terotentikasi. Kemungkinan besar, _route_ ini mengharapkan kolom input `email` yang berisi alamat email yang ingin didaftarkan oleh pengguna.
 
-Tanpa perlindungan CSRF, situs web berbahaya dapat membuat formulir HTML yang mengarah ke rute `/user/email` aplikasi Anda dan mengirimkan alamat email "jahat" milik peretas:
+Tanpa perlindungan CSRF, situs web berbahaya dapat membuat formulir HTML yang mengarah ke _route_ `/user/email` aplikasi Anda dan mengirimkan alamat email "jahat" milik peretas:
 
 ```blade
 <form action="https://your-application.com/user/email" method="POST">
@@ -121,7 +121,7 @@ $.ajaxSetup({
 
 Laravel menyimpan token CSRF saat ini yang telah terenkripsi di dalam _cookie_ `XSRF-TOKEN` yang disertakan pada setiap respons yang dihasilkan oleh _framework_. Anda dapat menggunakan nilai _cookie_ ini untuk menetapkan nilai `X-XSRF-TOKEN` pada _header request_.
 
-Utamanya _cookie_ ini dikirim untuk kenyamanan pengembang karena beberapa _framework_ dan _library_ JavaScript, seperti Angular dan Axios, secara otomatis menempatkan nilai tersebut di _header_ `X-XSRF-TOKEN` untuk asal _request_ yang sama (_same-origin request_).
+Pada dasarnya _cookie_ ini dikirim untuk kenyamanan pengembang karena beberapa _framework_ dan _library_ JavaScript, seperti Angular dan Axios, secara otomatis menempatkan nilai tersebut di _header_ `X-XSRF-TOKEN` untuk asal _request_ yang sama (_same-origin request_).
 
 > **Catatan**  
 > Secara _default_, _file_ `resources/js/bootstrap.js` menyertakan pustaka HTTP Axios yang secara otomatis akan mengirimkan _header_ `X-XSRF-TOKEN` untuk Anda.
