@@ -14,7 +14,7 @@ _Cross-site request forgeries_ adalah jenis eksploitasi berbahaya di mana perint
 <a name="csrf-explanation"></a>
 #### Penjelasan Kerentanan
 
-Jika Anda tidak belum akrab dengan istilah _cross-site request forgery_ (CSRF), mari kita bahas contoh bagaimana kerentanan ini dapat dieksploitasi. Bayangkan apabila aplikasi Anda memiliki _route_ `/pengguna/email` yang menerima _request_ `POST` untuk mengubah alamat email pengguna yang terotentikasi. Kemungkinan besar, _route_ ini mengharapkan kolom input `email` yang berisi alamat email yang ingin didaftarkan oleh pengguna.
+Jika Anda belum akrab dengan istilah _cross-site request forgery_ (CSRF), mari kita bahas contoh bagaimana kerentanan ini dapat dieksploitasi. Bayangkan apabila aplikasi Anda memiliki _route_ `/pengguna/email` yang menerima _request_ `POST` untuk mengubah alamat email pengguna yang terotentikasi. Kemungkinan besar, _route_ ini mengharapkan kolom input `email` yang berisi alamat email yang ingin didaftarkan oleh pengguna.
 
 Tanpa perlindungan CSRF, situs web berbahaya dapat membuat formulir HTML yang mengarah ke _route_ `/user/email` aplikasi Anda dan mengirimkan alamat email "jahat" milik peretas:
 
