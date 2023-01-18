@@ -1,26 +1,26 @@
-# URL Generation
+# Pembuatan URL
 
-- [Introduction](#introduction)
-- [The Basics](#the-basics)
-    - [Generating URLs](#generating-urls)
-    - [Accessing The Current URL](#accessing-the-current-url)
-- [URLs For Named Routes](#urls-for-named-routes)
-    - [Signed URLs](#signed-urls)
-- [URLs For Controller Actions](#urls-for-controller-actions)
-- [Default Values](#default-values)
+- [Pengantar](#introduction)
+- [Dasar](#the-basics)
+    - [Membuat URL](#generating-urls)
+    - [Mengakses URL Saat ini](#accessing-the-current-url)
+- [URL Untuk _Named Route_](#urls-for-named-routes)
+    - [_Signed_ URL](#signed-urls)
+- [URL Untuk Aksi _Controller_](#urls-for-controller-actions)
+- [Nilai _Default_](#default-values)
 
 <a name="introduction"></a>
-## Introduction
+## Pengantar
 
-Laravel provides several helpers to assist you in generating URLs for your application. These helpers are primarily helpful when building links in your templates and API responses, or when generating redirect responses to another part of your application.
+Laravel menyediakan beberapa _helper_ untuk mendampingi Anda dalam membuat URL untuk aplikasi Anda. _Helper_ ini akan sangat berguna ketika membuat pranala (_link_) pada _template_ dan respons API Anda, atau ketika membuat respons _redirect_ (pengalihan) yang menuju bagian lain aplikasi Anda.
 
 <a name="the-basics"></a>
-## The Basics
+## Dasar
 
 <a name="generating-urls"></a>
-### Generating URLs
+### Membuat URL
 
-The `url` helper may be used to generate arbitrary URLs for your application. The generated URL will automatically use the scheme (HTTP or HTTPS) and host from the current request being handled by the application:
+_Helper_ `url` dapat digunakan untuk membuat URL untuk aplikasi Anda. URL yang dihasilkan akan secara otomatis menggunakan skema (HTTP atau HTTPS) dan _host_ dari _request_ (permintaan) yang sedang ditangani oleh aplikasi:
 
     $post = App\Models\Post::find(1);
 
@@ -29,41 +29,41 @@ The `url` helper may be used to generate arbitrary URLs for your application. Th
     // http://example.com/posts/1
 
 <a name="accessing-the-current-url"></a>
-### Accessing The Current URL
+### Mengakses URL Saat Ini
 
-If no path is provided to the `url` helper, an `Illuminate\Routing\UrlGenerator` instance is returned, allowing you to access information about the current URL:
+Jika tidak ada _path_ yang diberikan pada _helper_ `url`, _instance_ dari `Illuminate\Routing\UrlGenerator` akan dikembalikan, yang memungkinkan Anda untuk mengakses informasi terkait URL saat ini:
 
-    // Get the current URL without the query string...
+    // Mengambil URL saat ini tanpa string kueri...
     echo url()->current();
 
-    // Get the current URL including the query string...
+    // Mengambil URL saat ini dengan string kueri...
     echo url()->full();
 
-    // Get the full URL for the previous request...
+    // Mengambil URL lengkap dari request sebelumnya...
     echo url()->previous();
 
-Each of these methods may also be accessed via the `URL` [facade](/docs/{{version}}/facades):
+Semua metode (_method_) ini dapat diakses via [_facade_](/docs/{{version}}/facades) `URL`:
 
     use Illuminate\Support\Facades\URL;
 
     echo URL::current();
 
 <a name="urls-for-named-routes"></a>
-## URLs For Named Routes
+## URL Untuk _Named Route_
 
-The `route` helper may be used to generate URLs to [named routes](/docs/{{version}}/routing#named-routes). Named routes allow you to generate URLs without being coupled to the actual URL defined on the route. Therefore, if the route's URL changes, no changes need to be made to your calls to the `route` function. For example, imagine your application contains a route defined like the following:
+_Helper_ `route` dapat digunakan untuk membuat URL ke [_named route_](/docs/{{version}}/routing#named-routes) (rute bernama). Rute bernama memungkinkan Anda untuk membuat URL tanpa harus ke URL aktual yang didefinisikan pada rute (_route_). Oleh karena itu, jika URL pada rute telah berubah, Anda tidak perlu merubah pemanggilan fungsi (_function_) `route`-nya. Sebagai contoh, bayangkan aplikasi Anda berisi rute yang didefinisikan seperti berikut ini:
 
     Route::get('/post/{post}', function (Post $post) {
         //
     })->name('post.show');
 
-To generate a URL to this route, you may use the `route` helper like so:
+Untuk membuat URL ke rute ini, Anda dapat menggunakan _helper_ `route` seperti ini:
 
     echo route('post.show', ['post' => 1]);
 
     // http://example.com/post/1
 
-Of course, the `route` helper may also be used to generate URLs for routes with multiple parameters:
+Tentu saja, _helper_ `route` juga dapat digunakan untuk membuat URL untuk rute yang memiliki parameter yang banyak:
 
     Route::get('/post/{post}/comment/{comment}', function (Post $post, Comment $comment) {
         //
@@ -73,31 +73,31 @@ Of course, the `route` helper may also be used to generate URLs for routes with 
 
     // http://example.com/post/1/comment/3
 
-Any additional array elements that do not correspond to the route's definition parameters will be added to the URL's query string:
+Setiap elemen _array_ tambahan yang tidak sesuai dengan parameter pada pendefinisian rute akan ditambahkan sebagai _string_ kueri URL:
 
     echo route('post.show', ['post' => 1, 'search' => 'rocket']);
 
     // http://example.com/post/1?search=rocket
 
 <a name="eloquent-models"></a>
-#### Eloquent Models
+#### Model Eloquent
 
-You will often be generating URLs using the route key (typically the primary key) of [Eloquent models](/docs/{{version}}/eloquent). For this reason, you may pass Eloquent models as parameter values. The `route` helper will automatically extract the model's route key:
+Anda akan sering membuat URL menggunakan _route key_ (biasanya _primary key_) dari [model Eloquent](/docs/{{version}}/eloquent). Untuk alasan ini, Anda dapat mengoper model Eloquent sebagai nilai parameter. _Helper_ `route` akan secara otomatis mengekstrak _route key_ milik model:
 
     echo route('post.show', ['post' => $post]);
 
 <a name="signed-urls"></a>
-### Signed URLs
+### _Signed URL_
 
-Laravel allows you to easily create "signed" URLs to named routes. These URLs have a "signature" hash appended to the query string which allows Laravel to verify that the URL has not been modified since it was created. Signed URLs are especially useful for routes that are publicly accessible yet need a layer of protection against URL manipulation.
+Laravel memungkinkan Anda untuk membuat URL yang "ditandatangani" (_signed URL_) untuk _named route_ secara mudah. URL ini memiliki hash "signature" yang ditambahkan ke _string_ kueri yang memungkinkan Laravel untuk memverifikasi bahwa URL tidak dimodifikasi sejak dibuat. URL yang "ditandatangani" ini sangat berguna untuk rute yang dapat diakses publik namun membutuhkan lapisan perlindungan terhadap manipulasi URL.
 
-For example, you might use signed URLs to implement a public "unsubscribe" link that is emailed to your customers. To create a signed URL to a named route, use the `signedRoute` method of the `URL` facade:
+Misalnya, Anda mungkin menggunakan URL yang "ditandatangani" ini untuk mengimplementasikan tautan "berhenti berlangganan" yang dapat diakses publik, yang diemailkan ke pelanggan Anda. Untuk membuat URL yang "ditandatangani" atas _named route_, Anda dapat menggunakan metode `signedRoute` dari _facade_ `URL`:
 
     use Illuminate\Support\Facades\URL;
 
     return URL::signedRoute('unsubscribe', ['user' => 1]);
 
-If you would like to generate a temporary signed route URL that expires after a specified amount of time, you may use the `temporarySignedRoute` method. When Laravel validates a temporary signed route URL, it will ensure that the expiration timestamp that is encoded into the signed URL has not elapsed:
+Jika Anda ingin membuat URL rute bertanda tangan sementara yang dapat kedaluwarsa setelah jangka waktu tertentu, Anda dapat menggunakan metode `temporarySignedRoute`. Ketika Laravel memvalidasi URL rute bertanda tangan sementara, Laravel akan memastikan bahwa cap waktu kedaluwarsa yang dikodekan ke dalam URL bertanda tangan ini belum terlewati:
 
     use Illuminate\Support\Facades\URL;
 
@@ -106,9 +106,9 @@ If you would like to generate a temporary signed route URL that expires after a 
     );
 
 <a name="validating-signed-route-requests"></a>
-#### Validating Signed Route Requests
+#### Validasi terhadap _Request_ dari _Signed Route_
 
-To verify that an incoming request has a valid signature, you should call the `hasValidSignature` method on the incoming `Illuminate\Http\Request` instance:
+Untuk memverifikasi bahwa permintaan yang masuk memiliki tanda tangan yang valid, anda harus memanggil metode `hasValidSignature` pada _instance_ `Illuminate\Http\Request` yang masuk:
 
     use Illuminate\Http\Request;
 
@@ -120,18 +120,18 @@ To verify that an incoming request has a valid signature, you should call the `h
         // ...
     })->name('unsubscribe');
 
-Sometimes, you may need to allow your application's frontend to append data to a signed URL, such as when performing client-side pagination. Therefore, you can specify request query parameters that should be ignored when validating a signed URL using the `hasValidSignatureWhileIgnoring` method. Remember, ignoring parameters allows anyone to modify those parameters on the request:
+Terkadang, Anda mungkin perlu mengizinkan _frontend_ dari aplikasi Anda untuk menambahkan data ke URL yang ditandatangani ini, seperti saat melakukan _pagination_ dari sisi klien. Oleh karena itu, Anda dapat tidak mengikutsertakan parameter kueri _request_ dari "tanda tangan" yang akan diabaikan saat memvalidasi URL yang "ditandatangani" ini menggunakan metode `hasValidSignatureWhileIgnoring`. Ingat, mengabaikan parameter memungkinkan siapa pun untuk memodifikasi parameter tersebut:
 
     if (! $request->hasValidSignatureWhileIgnoring(['page', 'order'])) {
         abort(401);
     }
 
-Instead of validating signed URLs using the incoming request instance, you may assign the `Illuminate\Routing\Middleware\ValidateSignature` [middleware](/docs/{{version}}/middleware) to the route. If it is not already present, you should assign this middleware a key in your HTTP kernel's `routeMiddleware` array:
+Alih-alih memvalidasi URL yang ditandatangani menggunakan _instance_ _request_ yang masuk, Anda juga dapat menugaskan  [_middleware_](/docs/{{version}}/middleware) `Illuminate\Routing\Middleware\ValidateSignature` pada sebuah rute. Jika belum ada, Anda harus menetapkan _middleware_ ini sebagai kunci dalam _array_ `routeMiddleware` kernel HTTP Anda:
 
     /**
-     * The application's route middleware.
+     * Middleware rute pada aplikasi.
      *
-     * These middleware may be assigned to groups or used individually.
+     * middleware yang terdaftar disini dapat ditambatkan pada rute grup atau rute tunggal.
      *
      * @var array
      */
@@ -139,21 +139,21 @@ Instead of validating signed URLs using the incoming request instance, you may a
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
     ];
 
-Once you have registered the middleware in your kernel, you may attach it to a route. If the incoming request does not have a valid signature, the middleware will automatically return a `403` HTTP response:
+Setelah Anda mendaftarkan _middleware_ di kernel Anda, Anda dapat manambatkannya pada sebuah _route_. Jika permintaan yang masuk tidak memiliki tanda tangan yang valid, _middleware_ akan secara otomatis mengembalikan respons HTTP `403`:
 
     Route::post('/unsubscribe/{user}', function (Request $request) {
         // ...
     })->name('unsubscribe')->middleware('signed');
 
 <a name="responding-to-invalid-signed-routes"></a>
-#### Responding To Invalid Signed Routes
+#### Merespons _Signed Route_ yang tidak valid
 
-When someone visits a signed URL that has expired, they will receive a generic error page for the `403` HTTP status code. However, you can customize this behavior by defining a custom "renderable" closure for the `InvalidSignatureException` exception in your exception handler. This closure should return an HTTP response:
+Ketika seseorang mengunjungi _signed_ URL yang telah kedaluwarsa, mereka akan menerima halaman eror yang umum untuk kode status HTTP `403`. Namun, Anda dapat menyesuaikan perilaku ini dengan mendefinisikan sebuah _closure_ pada metode `renderable` khusus untuk _exception_ `InvalidSignatureException` pada penanganan _exception_ Anda. _Closure_ ini harus mengembalikan respons HTTP:
 
     use Illuminate\Routing\Exceptions\InvalidSignatureException;
 
     /**
-     * Register the exception handling callbacks for the application.
+     * Mendaftarkan callback untuk penanganan exception pada aplikasi.
      *
      * @return void
      */
@@ -165,28 +165,28 @@ When someone visits a signed URL that has expired, they will receive a generic e
     }
 
 <a name="urls-for-controller-actions"></a>
-## URLs For Controller Actions
+## URL untuk Aksi _Controller_
 
-The `action` function generates a URL for the given controller action:
+Fungsi `action` dapat menghasilkan URL untuk aksi pada _controller_ yang ditentukan:
 
     use App\Http\Controllers\HomeController;
 
     $url = action([HomeController::class, 'index']);
 
-If the controller method accepts route parameters, you may pass an associative array of route parameters as the second argument to the function:
+Jika metode pada _controller_ menerima parameter rute, Anda dapat mengoper _array_ asosiatif untuk parameter rute sebagai argumen kedua untuk fungsi:
 
     $url = action([UserController::class, 'profile'], ['id' => 1]);
 
 <a name="default-values"></a>
-## Default Values
+## Nilai _Default_
 
-For some applications, you may wish to specify request-wide default values for certain URL parameters. For example, imagine many of your routes define a `{locale}` parameter:
+Untuk beberapa aplikasi, Anda mungkin ingin menentukan nilai _default_ (bawaan) untuk parameter URL tertentu. Misalnya, bayangkan rute Anda mendefinisikan parameter `{locale}` di banyak tempat:
 
     Route::get('/{locale}/posts', function () {
         //
     })->name('post.index');
 
-It is cumbersome to always pass the `locale` every time you call the `route` helper. So, you may use the `URL::defaults` method to define a default value for this parameter that will always be applied during the current request. You may wish to call this method from a [route middleware](/docs/{{version}}/middleware#assigning-middleware-to-routes) so that you have access to the current request:
+Akan sangat merepotkan untuk selalu mengoper `locale` setiap kali Anda memanggil _helper_ `route`. Jadi, Anda dapat menggunakan metode `URL::defaults` untuk mendefinisikan nilai _default_ untuk parameter ini yang akan selalu diterapkan pada permintaan saat ini. Anda mungkin ingin memanggil metode ini dari [_middleware_ rute](/docs/{{version}}/middleware#assigning-middleware-to-routes) sehingga Anda dapat mengakses permintaan saat ini:
 
     <?php
 
@@ -198,7 +198,7 @@ It is cumbersome to always pass the `locale` every time you call the `route` hel
     class SetDefaultLocaleForUrls
     {
         /**
-         * Handle the incoming request.
+         * Menangani request yang masuk.
          *
          * @param  \Illuminate\Http\Request  $request
          * @param  \Closure  $next
@@ -212,19 +212,19 @@ It is cumbersome to always pass the `locale` every time you call the `route` hel
         }
     }
 
-Once the default value for the `locale` parameter has been set, you are no longer required to pass its value when generating URLs via the `route` helper.
+Setelah nilai _default_ untuk parameter `locale` telah ditetapkan, Anda tidak lagi diharuskan untuk meneruskan nilainya ketika membuat URL melalui _helper_ `route`.
 
 <a name="url-defaults-middleware-priority"></a>
-#### URL Defaults & Middleware Priority
+#### _Default_ URL & Prioritas _Middleware_
 
-Setting URL default values can interfere with Laravel's handling of implicit model bindings. Therefore, you should [prioritize your middleware](/docs/{{version}}/middleware#sorting-middleware) that set URL defaults to be executed before Laravel's own `SubstituteBindings` middleware. You can accomplish this by making sure your middleware occurs before the `SubstituteBindings` middleware within the `$middlewarePriority` property of your application's HTTP kernel.
+Pengaturan nilai _default_ URL dapat mengganggu penanganan Laravel terhadap _binding_ model secara implisit. Oleh karena itu, Anda harus [memprioritaskan middleware Anda](/docs/{{version}}/middleware#sorting-middleware) yang mengatur _default_ URL untuk dieksekusi sebelum _middleware_ `SubstituteBindings` Laravel sendiri. Anda dapat mewujudkan hal ini dengan cara memastikan _middleware_ yang diharapkan berjalan sebelum _middleware_ `SubstituteBindings` yang ada di dalam properti `$middlewarePriority` pada kernel HTTP aplikasi Anda.
 
-The `$middlewarePriority` property is defined in the base `Illuminate\Foundation\Http\Kernel` class. You may copy its definition from that class and overwrite it in your application's HTTP kernel in order to modify it:
+Properti `$middlewarePriority` didefinisikan dalam kelas dasar `Illuminate\Foundation\Http\Kernel`. Anda dapat menyalin definisinya dari kelas tersebut dan memasukkan/menimpa pada kernel HTTP aplikasi Anda untuk memodifikasinya:
 
     /**
-     * The priority-sorted list of middleware.
+     * Daftar middleware yang telah diurutkan prioritasnya.
      *
-     * This forces non-global middleware to always be in the given order.
+     * Pengurututan ini bertujuan untuk memaksa middleware non-global untuk selalu berada dalam urutan yang diberikan.
      *
      * @var array
      */
