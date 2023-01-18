@@ -6,13 +6,13 @@
     - [Mengakses URL Saat ini](#accessing-the-current-url)
 - [URL Untuk _Named Route_](#urls-for-named-routes)
     - [_Signed_ URL](#signed-urls)
-- [URLs Untuk Aksi _Controller_](#urls-for-controller-actions)
+- [URL Untuk Aksi _Controller_](#urls-for-controller-actions)
 - [Nilai _Default_](#default-values)
 
 <a name="introduction"></a>
 ## Pengantar
 
-Laravel menyediakan beberapa _helper_ untuk mendampingi Anda dalam menghasilkan URL untuk aplikasi Anda. _Helper_ ini akan sangat berguna ketika membuat pranala (_link_) pada _template_ dan respons API Anda, atau ketika membuat respons _redirect_ yang menuju bagian lain aplikasi Anda.
+Laravel menyediakan beberapa _helper_ untuk mendampingi Anda dalam menghasilkan URL untuk aplikasi Anda. _Helper_ ini akan sangat berguna ketika membuat pranala (_link_) pada _template_ dan respons API Anda, atau ketika membuat respons _redirect_ (pengalihan) yang menuju bagian lain aplikasi Anda.
 
 <a name="the-basics"></a>
 ## Dasar
@@ -20,7 +20,7 @@ Laravel menyediakan beberapa _helper_ untuk mendampingi Anda dalam menghasilkan 
 <a name="generating-urls"></a>
 ### Menghasilkan URL
 
-_Helper_ `url` dapat digunakan untuk menghasilkan URL untuk aplikasi Anda. URL yang dihasilkan akan secara otomatis menggunakan skema (HTTP atau HTTPS) dan _host_ dari _request_ yang saat ini ditangani oleh aplikasi:
+_Helper_ `url` dapat digunakan untuk menghasilkan URL untuk aplikasi Anda. URL yang dihasilkan akan secara otomatis menggunakan skema (HTTP atau HTTPS) dan _host_ dari _request_ (permintaan) yang sedang ditangani oleh aplikasi:
 
     $post = App\Models\Post::find(1);
 
@@ -31,18 +31,18 @@ _Helper_ `url` dapat digunakan untuk menghasilkan URL untuk aplikasi Anda. URL y
 <a name="accessing-the-current-url"></a>
 ### Mengakses URL Saat Ini
 
-Jika tidak ada _path_ yang diberikan pada _helper_ `url`, _instance_ `Illuminate\Routing\UrlGenerator` akan dikembalikan, memungkinkan Anda untuk mengakses informasi terkait URL saat ini:
+Jika tidak ada _path_ yang diberikan pada _helper_ `url`, _instance_ dari `Illuminate\Routing\UrlGenerator` akan dikembalikan, yang memungkinkan Anda untuk mengakses informasi terkait URL saat ini:
 
-    // Mengambil URL saat ini tanpa string query...
+    // Mengambil URL saat ini tanpa string kueri...
     echo url()->current();
 
-    // Mengambil URL saat ini dengan string query...
+    // Mengambil URL saat ini dengan string kueri...
     echo url()->full();
 
-    // Mengambil URL penuh dari request sebelumnya...
+    // Mengambil URL lengkap dari request sebelumnya...
     echo url()->previous();
 
-Semua _method_ ini dapat diakses via [_facade_](/docs/{{version}}/facades) `URL`:
+Semua metode (_method_) ini dapat diakses via [_facade_](/docs/{{version}}/facades) `URL`:
 
     use Illuminate\Support\Facades\URL;
 
@@ -51,7 +51,7 @@ Semua _method_ ini dapat diakses via [_facade_](/docs/{{version}}/facades) `URL`
 <a name="urls-for-named-routes"></a>
 ## URL Untuk _Named Route_
 
-_Helper_ `route` dapat digunakan untuk menghasilkan URL ke [_named routes_](/docs/{{version}}/routing#named-routes). Rute bernama memungkinkan Anda untuk menghasilkan URL tanpa harus ke URL aktual yang didefinisikan pada rute. Oleh karena itu, jika URL pada rute berubah, Anda tidak perlu merubah pemanggilan _function_ `route`-nya. Sebagai contoh, bayangkan aplikasi Anda berisi rute yang didefinisikan seperti berikut ini:
+_Helper_ `route` dapat digunakan untuk menghasilkan URL ke [_named route_](/docs/{{version}}/routing#named-routes) (rute bernama). Rute bernama memungkinkan Anda untuk menghasilkan URL tanpa harus ke URL aktual yang didefinisikan pada rute (_route_). Oleh karena itu, jika URL pada rute telah berubah, Anda tidak perlu merubah pemanggilan fungsi (_function_) `route`-nya. Sebagai contoh, bayangkan aplikasi Anda berisi rute yang didefinisikan seperti berikut ini:
 
     Route::get('/post/{post}', function (Post $post) {
         //
@@ -131,7 +131,7 @@ Alih-alih memvalidasi URL yang ditandatangani menggunakan _instance_ _request_ y
     /**
      * Middleware rute pada aplikasi.
      *
-     * middleware yang terdaftar disini dapat ditambatkan pada rute biasa dan rute grup.
+     * middleware yang terdaftar disini dapat ditambatkan pada rute grup atau rute tunggal.
      *
      * @var array
      */
@@ -148,12 +148,12 @@ Setelah Anda mendaftarkan _middleware_ di kernel Anda, Anda dapat manambatkannya
 <a name="responding-to-invalid-signed-routes"></a>
 #### Merespons _Signed Route_ yang tidak valid
 
-Ketika seseorang mengunjungi _signed_ URL yang telah kedaluwarsa, mereka akan menerima halaman eror yang umum untuk kode status HTTP `403`. Namun, Anda dapat menyesuaikan perilaku ini dengan mendefinisikan _closure_ "renderable" khusus untuk _exception_ `InvalidSignatureException` pada _exception handler_ Anda. _Closure_ ini harus mengembalikan respons HTTP:
+Ketika seseorang mengunjungi _signed_ URL yang telah kedaluwarsa, mereka akan menerima halaman eror yang umum untuk kode status HTTP `403`. Namun, Anda dapat menyesuaikan perilaku ini dengan mendefinisikan sebuah _closure_ pada metode `renderable` khusus untuk _exception_ `InvalidSignatureException` pada penanganan _exception_ Anda. _Closure_ ini harus mengembalikan respons HTTP:
 
     use Illuminate\Routing\Exceptions\InvalidSignatureException;
 
     /**
-     * Mendaftarkan callback untuk exception handling pada aplikasi.
+     * Mendaftarkan callback untuk penanganan exception pada aplikasi.
      *
      * @return void
      */
@@ -173,20 +173,20 @@ Fungsi `action` menghasilkan URL untuk aksi pada _controller_ yang ditentukan:
 
     $url = action([HomeController::class, 'index']);
 
-Jika _method controller_ memiliki parameter rute, Anda dapat mengoper _array_ asosiatif untuk parameter rute sebagai argumen kedua pada _function_:
+Jika metode pada _controller_ menerima parameter rute, Anda dapat mengoper _array_ asosiatif untuk parameter rute sebagai argumen kedua untuk fungsi:
 
     $url = action([UserController::class, 'profile'], ['id' => 1]);
 
 <a name="default-values"></a>
 ## Nilai _Default_
 
-Untuk beberapa aplikasi, Anda mungkin ingin menentukan nilai _default_ untuk parameter URL tertentu. Misalnya, bayangkan rute Anda mendefinisikan parameter `{locale}` di banyak tempat:
+Untuk beberapa aplikasi, Anda mungkin ingin menentukan nilai _default_ (bawaan) untuk parameter URL tertentu. Misalnya, bayangkan rute Anda mendefinisikan parameter `{locale}` di banyak tempat:
 
     Route::get('/{locale}/posts', function () {
         //
     })->name('post.index');
 
-Akan sangat merepotkan untuk selalu mengoper `locale` setiap kali Anda memanggil _helper_ `route`. Jadi, Anda dapat menggunakan metode `URL::defaults` untuk mendefinisikan nilai _default_ untuk parameter ini yang akan selalu diterapkan pada permintaan saat ini. Anda mungkin ingin memanggil metode ini dari [_route middleware_](/docs/{{version}}/middleware#assigning-middleware-to-routes) sehingga Anda dapat mengakses permintaan saat ini:
+Akan sangat merepotkan untuk selalu mengoper `locale` setiap kali Anda memanggil _helper_ `route`. Jadi, Anda dapat menggunakan metode `URL::defaults` untuk mendefinisikan nilai _default_ untuk parameter ini yang akan selalu diterapkan pada permintaan saat ini. Anda mungkin ingin memanggil metode ini dari [_middleware_ rute](/docs/{{version}}/middleware#assigning-middleware-to-routes) sehingga Anda dapat mengakses permintaan saat ini:
 
     <?php
 
@@ -217,7 +217,7 @@ Setelah nilai _default_ untuk parameter `locale` telah ditetapkan, Anda tidak la
 <a name="url-defaults-middleware-priority"></a>
 #### _Default_ URL & Prioritas _Middleware_
 
-Pengaturan nilai _default_ URL dapat mengganggu penanganan Laravel terhadap _binding_ model implisit. Oleh karena itu, Anda harus [memprioritaskan middleware Anda](/docs/{{version}}/middleware#sorting-middleware) yang mengatur _default_ URL untuk dieksekusi sebelum _middleware_ `SubstituteBindings` Laravel sendiri. Anda dapat mewujudkan hal ini dengan cara memastikan _middleware_ yang diharapkan terjadi sebelum _middleware_ `SubstituteBindings` telah tercatat di dalam properti `$middlewarePriority` pada kernel HTTP aplikasi Anda.
+Pengaturan nilai _default_ URL dapat mengganggu penanganan Laravel terhadap _binding_ model secara implisit. Oleh karena itu, Anda harus [memprioritaskan middleware Anda](/docs/{{version}}/middleware#sorting-middleware) yang mengatur _default_ URL untuk dieksekusi sebelum _middleware_ `SubstituteBindings` Laravel sendiri. Anda dapat mewujudkan hal ini dengan cara memastikan _middleware_ yang diharapkan berjalan sebelum _middleware_ `SubstituteBindings` yang ada di dalam properti `$middlewarePriority` pada kernel HTTP aplikasi Anda.
 
 Properti `$middlewarePriority` didefinisikan dalam kelas dasar `Illuminate\Foundation\Http\Kernel`. Anda dapat menyalin definisinya dari kelas tersebut dan memasukkan/menimpa pada kernel HTTP aplikasi Anda untuk memodifikasinya:
 
