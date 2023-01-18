@@ -2,7 +2,7 @@
 
 - [Pengantar](#introduction)
 - [Dasar](#the-basics)
-    - [Menghasilkan URL](#generating-urls)
+    - [Membuat URL](#generating-urls)
     - [Mengakses URL Saat ini](#accessing-the-current-url)
 - [URL Untuk _Named Route_](#urls-for-named-routes)
     - [_Signed_ URL](#signed-urls)
@@ -12,15 +12,15 @@
 <a name="introduction"></a>
 ## Pengantar
 
-Laravel menyediakan beberapa _helper_ untuk mendampingi Anda dalam menghasilkan URL untuk aplikasi Anda. _Helper_ ini akan sangat berguna ketika membuat pranala (_link_) pada _template_ dan respons API Anda, atau ketika membuat respons _redirect_ (pengalihan) yang menuju bagian lain aplikasi Anda.
+Laravel menyediakan beberapa _helper_ untuk mendampingi Anda dalam membuat URL untuk aplikasi Anda. _Helper_ ini akan sangat berguna ketika membuat pranala (_link_) pada _template_ dan respons API Anda, atau ketika membuat respons _redirect_ (pengalihan) yang menuju bagian lain aplikasi Anda.
 
 <a name="the-basics"></a>
 ## Dasar
 
 <a name="generating-urls"></a>
-### Menghasilkan URL
+### Membuat URL
 
-_Helper_ `url` dapat digunakan untuk menghasilkan URL untuk aplikasi Anda. URL yang dihasilkan akan secara otomatis menggunakan skema (HTTP atau HTTPS) dan _host_ dari _request_ (permintaan) yang sedang ditangani oleh aplikasi:
+_Helper_ `url` dapat digunakan untuk membuat URL untuk aplikasi Anda. URL yang dihasilkan akan secara otomatis menggunakan skema (HTTP atau HTTPS) dan _host_ dari _request_ (permintaan) yang sedang ditangani oleh aplikasi:
 
     $post = App\Models\Post::find(1);
 
@@ -51,19 +51,19 @@ Semua metode (_method_) ini dapat diakses via [_facade_](/docs/{{version}}/facad
 <a name="urls-for-named-routes"></a>
 ## URL Untuk _Named Route_
 
-_Helper_ `route` dapat digunakan untuk menghasilkan URL ke [_named route_](/docs/{{version}}/routing#named-routes) (rute bernama). Rute bernama memungkinkan Anda untuk menghasilkan URL tanpa harus ke URL aktual yang didefinisikan pada rute (_route_). Oleh karena itu, jika URL pada rute telah berubah, Anda tidak perlu merubah pemanggilan fungsi (_function_) `route`-nya. Sebagai contoh, bayangkan aplikasi Anda berisi rute yang didefinisikan seperti berikut ini:
+_Helper_ `route` dapat digunakan untuk membuat URL ke [_named route_](/docs/{{version}}/routing#named-routes) (rute bernama). Rute bernama memungkinkan Anda untuk membuat URL tanpa harus ke URL aktual yang didefinisikan pada rute (_route_). Oleh karena itu, jika URL pada rute telah berubah, Anda tidak perlu merubah pemanggilan fungsi (_function_) `route`-nya. Sebagai contoh, bayangkan aplikasi Anda berisi rute yang didefinisikan seperti berikut ini:
 
     Route::get('/post/{post}', function (Post $post) {
         //
     })->name('post.show');
 
-Untuk menghasilkan URL ke rute ini, Anda dapat menggunakan _helper_ `route` seperti ini:
+Untuk membuat URL ke rute ini, Anda dapat menggunakan _helper_ `route` seperti ini:
 
     echo route('post.show', ['post' => 1]);
 
     // http://example.com/post/1
 
-Tentu saja, _helper_ `route` juga dapat digunakan untuk menghasilkan URL untuk rute yang memiliki parameter yang banyak:
+Tentu saja, _helper_ `route` juga dapat digunakan untuk membuat URL untuk rute yang memiliki parameter yang banyak:
 
     Route::get('/post/{post}/comment/{comment}', function (Post $post, Comment $comment) {
         //
@@ -167,7 +167,7 @@ Ketika seseorang mengunjungi _signed_ URL yang telah kedaluwarsa, mereka akan me
 <a name="urls-for-controller-actions"></a>
 ## URL untuk Aksi _Controller_
 
-Fungsi `action` menghasilkan URL untuk aksi pada _controller_ yang ditentukan:
+Fungsi `action` dapat menghasilkan URL untuk aksi pada _controller_ yang ditentukan:
 
     use App\Http\Controllers\HomeController;
 
