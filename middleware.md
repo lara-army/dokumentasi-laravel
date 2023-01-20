@@ -1,32 +1,32 @@
 # Middleware
 
-- [Introduction](#introduction)
-- [Defining Middleware](#defining-middleware)
-- [Registering Middleware](#registering-middleware)
-    - [Global Middleware](#global-middleware)
-    - [Assigning Middleware To Routes](#assigning-middleware-to-routes)
-    - [Middleware Groups](#middleware-groups)
-    - [Sorting Middleware](#sorting-middleware)
-- [Middleware Parameters](#middleware-parameters)
-- [Terminable Middleware](#terminable-middleware)
+- [Pendahuluan](#introduction)
+- [Mendefinisikan _Middleware_](#defining-middleware)
+- [Mendaftarkan _Middleware_](#registering-middleware)
+    - [_Middleware_ Global](#global-middleware)
+    - [Menugaskan _Middleware_ pada Rute](#assigning-middleware-to-routes)
+    - [Grup _Middleware_](#middleware-groups)
+    - [Mengurutkan _Middleware_](#sorting-middleware)
+- [Parameter _Middleware_](#middleware-parameters)
+- [_Middleware_ yang Dapat Dihentikan](#terminable-middleware)
 
 <a name="introduction"></a>
-## Introduction
+## Pendahuluan
 
-Middleware provide a convenient mechanism for inspecting and filtering HTTP requests entering your application. For example, Laravel includes a middleware that verifies the user of your application is authenticated. If the user is not authenticated, the middleware will redirect the user to your application's login screen. However, if the user is authenticated, the middleware will allow the request to proceed further into the application.
+_Middleware_ menyediakan mekanisme yang mudah untuk memeriksa dan menyaring _request_ HTTP yang masuk ke aplikasi Anda. Misalnya, Laravel menyertakan _middleware_ yang memverifikasi bahwa pengguna pada aplikasi Anda telah terautentikasi. Jika pengguna tidak terautentikasi, _middleware_ akan mengarahkan pengguna ke halaman _login_. Namun, jika pengguna telah terautentikasi, _middleware_ akan mengizinkan _request_ untuk melakukan proses lebih lanjut terhadap aplikasi.  
 
-Additional middleware can be written to perform a variety of tasks besides authentication. For example, a logging middleware might log all incoming requests to your application. There are several middleware included in the Laravel framework, including middleware for authentication and CSRF protection. All of these middleware are located in the `app/Http/Middleware` directory.
+_Middleware_ tambahan dapat ditulis untuk melakukan berbagai tugas selain autentikasi. Misalnya, _middleware_ untuk _log_ mungkin akan mencatat semua _request_ yang masuk ke aplikasi Anda. Ada beberapa _middleware_ yang disertakan dalam _framework_ Laravel, termasuk _middleware_ untuk autentikasi dan perlindungan CSRF. Semua _middleware_ ini terletak di dalam direktori `app/Http/Middleware`.
 
 <a name="defining-middleware"></a>
-## Defining Middleware
+## Mendefinisikan _Middleware_
 
-To create a new middleware, use the `make:middleware` Artisan command:
+Untuk membuat _middleware_ baru, Anda dapat menggunakan perintah Artisan `make:middleware`:
 
 ```shell
 php artisan make:middleware EnsureTokenIsValid
 ```
 
-This command will place a new `EnsureTokenIsValid` class within your `app/Http/Middleware` directory. In this middleware, we will only allow access to the route if the supplied `token` input matches a specified value. Otherwise, we will redirect the users back to the `home` URI:
+Perintah ini akan menempatkan kelas `EnsureTokenIsValid` yang baru di dalam direktori `app/Http/Middleware` Anda. Dalam _middleware_ ini, kita hanya mengizinkan akses ke _route_ tujuan jika _input_ `token` yang disediakan telah sesuai dengan nilai yang ditentukan. Jika tidak, kita akan mengarahkan pengguna kembali ke URI `home`:
 
     <?php
 
@@ -37,7 +37,7 @@ This command will place a new `EnsureTokenIsValid` class within your `app/Http/M
     class EnsureTokenIsValid
     {
         /**
-         * Handle an incoming request.
+         * Menangani request yang masuk.
          *
          * @param  \Illuminate\Http\Request  $request
          * @param  \Closure  $next
@@ -53,18 +53,18 @@ This command will place a new `EnsureTokenIsValid` class within your `app/Http/M
         }
     }
 
-As you can see, if the given `token` does not match our secret token, the middleware will return an HTTP redirect to the client; otherwise, the request will be passed further into the application. To pass the request deeper into the application (allowing the middleware to "pass"), you should call the `$next` callback with the `$request`.
+Seperti yang Anda lihat, jika `token` yang diberikan tidak cocok dengan token rahasia kita, _middleware_ akan mengembalikan HTTP _redirect_ ke klien; jika sebaliknya, _request_ akan diteruskan ke dalam aplikasi. Untuk meneruskan _request_ lebih jauh ke dalam aplikasi, Anda harus memanggil _callback_ `$next` disertai `$request`.
 
-It's best to envision middleware as a series of "layers" HTTP requests must pass through before they hit your application. Each layer can examine the request and even reject it entirely.
+Untuk lebih mudah memahaminya, Anda dapat membayangkan _middleware_ sebagai serangkaian "lapisan" yang harus dilewati oleh _request_ HTTP sebelum mencapai aplikasi Anda. Setiap lapisan akan memeriksa _request_ dan bahkan menolaknya secara keseluruhan.
 
-> **Note**  
-> All middleware are resolved via the [service container](/docs/{{version}}/container), so you may type-hint any dependencies you need within a middleware's constructor.
+> **Catatan**  
+> Semua _middleware_ dideklarasikan melalui [_service container_](/docs/{{version}}/container), jadi Anda dapat melakukan _type-hint_ dependensi apa pun yang Anda perlukan di dalam _constructor_ milik _middleware_.
 
 <a name="before-after-middleware"></a>
 <a name="middleware-and-responses"></a>
-#### Middleware & Responses
+#### Sebelum-sesudah _Middleware_
 
-Of course, a middleware can perform tasks before or after passing the request deeper into the application. For example, the following middleware would perform some task **before** the request is handled by the application:
+Tentu saja, _middleware_ dapat melakukan tugas-tugas yang berjalan sebelum atau sesudah meneruskan _request_ yanh lebih dalam ke aplikasi. Sebagai contoh, _middleware_ berikut ini akan melakukan beberapa tugas **sebelum** _request_ ditangani oleh aplikasi:
 
     <?php
 
@@ -82,7 +82,7 @@ Of course, a middleware can perform tasks before or after passing the request de
         }
     }
 
-However, this middleware would perform its task **after** the request is handled by the application:
+Namun, middleware ini akan melakukan tugasnya **setelah** _request_ ditangani oleh aplikasi:
 
     <?php
 
@@ -103,19 +103,19 @@ However, this middleware would perform its task **after** the request is handled
     }
 
 <a name="registering-middleware"></a>
-## Registering Middleware
+##  Mendaftarkan _Middleware_
 
 <a name="global-middleware"></a>
-### Global Middleware
+### _Middleware_ Global
 
-If you want a middleware to run during every HTTP request to your application, list the middleware class in the `$middleware` property of your `app/Http/Kernel.php` class.
+Jika Anda ingin sebuah _middleware_ dapat berjalan di setiap _request_ HTTP pada aplikasi Anda, Anda dapat mendaftarkan kelas _middleware_ tersebut pada properti `$middleware` dari kelas `app/Http/Kernel.php` Anda.
 
 <a name="assigning-middleware-to-routes"></a>
-### Assigning Middleware To Routes
+### Menugaskan _Middleware_ pada Rute
 
-If you would like to assign middleware to specific routes, you should first assign the middleware a key in your application's `app/Http/Kernel.php` file. By default, the `$routeMiddleware` property of this class contains entries for the middleware included with Laravel. You may add your own middleware to this list and assign it a key of your choosing:
+Jika Anda ingin menugaskan _middleware_ ke _route_ tertentu, Anda harus menetapkan sebuah kunci (_array_) untuk _middleware_ tersebut di dalam _file_ `app/Http/Kernel.php` pada aplikasi Anda. Secara default, properti `$routeMiddleware` dari kelas ini berisi entri untuk _middleware_ bawaan dari Laravel. Anda dapat menambahkan _middleware_ Anda sendiri ke dalam daftar ini dan menetapkan kunci yang Anda pilih:
 
-    // Within App\Http\Kernel class...
+    // Kelas App\Http\Kernel...
 
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
@@ -129,19 +129,19 @@ If you would like to assign middleware to specific routes, you should first assi
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
 
-Once the middleware has been defined in the HTTP kernel, you may use the `middleware` method to assign middleware to a route:
+Setelah _middleware_ didefinisikan dalam kernel HTTP, Anda dapat menggunakan metode `middleware` untuk menetapkan _middleware_ pada suatu _route_:
 
     Route::get('/profile', function () {
         //
     })->middleware('auth');
 
-You may assign multiple middleware to the route by passing an array of middleware names to the `middleware` method:
+Anda dapat menugaskan beberapa _middleware_ pada satu _route_ dengan mengoper _array_ nama (kunci) _middleware_ pada metode `middleware`:
 
     Route::get('/', function () {
         //
-    })->middleware(['first', 'second']);
+    })->middleware(['pertama', 'kedua']);
 
-When assigning middleware, you may also pass the fully qualified class name:
+Ketika menetapkan _middleware_, Anda juga dapat mengoper nama kelas yang lengkap:
 
     use App\Http\Middleware\EnsureTokenIsValid;
 
@@ -150,9 +150,9 @@ When assigning middleware, you may also pass the fully qualified class name:
     })->middleware(EnsureTokenIsValid::class);
 
 <a name="excluding-middleware"></a>
-#### Excluding Middleware
+#### Mengecualikan _Middleware_
 
-When assigning middleware to a group of routes, you may occasionally need to prevent the middleware from being applied to an individual route within the group. You may accomplish this using the `withoutMiddleware` method:
+Ketika menugaskan _middleware_ ke sekelompok _route_ (grup), Anda mungkin sesekali perlu mencegah _middleware_ untuk diterapkan ke salah satu _route_di dalam grup tersebut. Anda dapat melakukannya dengan menggunakan metode `withoutMiddleware`:
 
     use App\Http\Middleware\EnsureTokenIsValid;
 
@@ -166,7 +166,7 @@ When assigning middleware to a group of routes, you may occasionally need to pre
         })->withoutMiddleware([EnsureTokenIsValid::class]);
     });
 
-You may also exclude a given set of middleware from an entire [group](/docs/{{version}}/routing#route-groups) of route definitions:
+Anda juga dapat mengecualikan sekumpulan _middleware_ tertentu untuk seluruh [grup](/docs/{{version}}/routing#route-groups) ketika mendefinisikan _route_:
 
     use App\Http\Middleware\EnsureTokenIsValid;
 
@@ -176,17 +176,17 @@ You may also exclude a given set of middleware from an entire [group](/docs/{{ve
         });
     });
 
-The `withoutMiddleware` method can only remove route middleware and does not apply to [global middleware](#global-middleware).
+Metode `withoutMiddleware` hanya dapat menghapus _middleware_ _route_ dan tidak berlaku untuk [_middleware_ global](#global-middleware).
 
 <a name="middleware-groups"></a>
-### Middleware Groups
+### Grup _Middleware_
 
-Sometimes you may want to group several middleware under a single key to make them easier to assign to routes. You may accomplish this using the `$middlewareGroups` property of your HTTP kernel.
+Terkadang Anda ingin mengelompokkan beberapa _middleware_ ke dalam satu (kata) kunci untuk memudahkan penugasannya ke _route_-_route_. Anda dapat mencapai hal ini menggunakan properti `$middlewareGroups` pada kernel HTTP Anda.
 
-Laravel includes predefined `web` and `api` middleware groups that contain common middleware you may want to apply to your web and API routes. Remember, these middleware groups are automatically applied by your application's `App\Providers\RouteServiceProvider` service provider to routes within your corresponding `web` and `api` route files:
+Laravel menyertakan grup _middleware_ yang telah didefinisikan sebelumnya bernama `web` dan `api`  yang berisi _middleware_ umum yang mungkin ingin Anda terapkan ke rute web dan API Anda. Ingat, grup _middleware_ ini secara otomatis diterapkan oleh penyedia layanan `App\Providers\RouteServiceProvider` aplikasi Anda ke _route_-_route_ yang terdapat di dalam file `web` dan `api` milik Anda:
 
     /**
-     * The application's route middleware groups.
+     * Grup middleware untuk _route_ pada aplikasi.
      *
      * @var array
      */
@@ -206,7 +206,7 @@ Laravel includes predefined `web` and `api` middleware groups that contain commo
         ],
     ];
 
-Middleware groups may be assigned to routes and controller actions using the same syntax as individual middleware. Again, middleware groups make it more convenient to assign many middleware to a route at once:
+Grup _middleware_ dapat ditugaskan ke _route_ dan _action_ pada _controller_ menggunakan sintaks yang sama seperti _middleware_ tunggal. Sekali lagi, grup _middleware_ berguna untuk memudahkan penugasan banyak _middleware_ sekaligus ke sebuah _route_:
 
     Route::get('/', function () {
         //
@@ -216,18 +216,18 @@ Middleware groups may be assigned to routes and controller actions using the sam
         //
     });
 
-> **Note**  
-> Out of the box, the `web` and `api` middleware groups are automatically applied to your application's corresponding `routes/web.php` and `routes/api.php` files by the `App\Providers\RouteServiceProvider`.
+> **Catatan**  
+> Laravel secara _default_ memiliki grup _middleware_ bernama `web` dan `api` yang secara otomatis diterapkan pada _file_ `routes/web.php` dan `routes/api.php` pada aplikasi Anda yang terdapat pada _file_ `App\Providers\RouteServiceProvider`.
 
 <a name="sorting-middleware"></a>
-### Sorting Middleware
+### Mengurutkan _Middleware_
 
-Rarely, you may need your middleware to execute in a specific order but not have control over their order when they are assigned to the route. In this case, you may specify your middleware priority using the `$middlewarePriority` property of your `app/Http/Kernel.php` file. This property may not exist in your HTTP kernel by default. If it does not exist, you may copy its default definition below:
+Walau jarang, Anda mungkin akan memerlukan _middleware_ yang dieksekusi dalam urutan tertentu, namun Anda tidak dapat mengendalikan urutannya ketika _middleware_ tersebut ditugaskan pada sebuah _route_. Dalam hal ini, Anda dapat menentukan prioritas _middleware_ Anda dengan menggunakan properti `$middlewarePriority` pada _file_ `app/Http/Kernel.php`. Properti ini mungkin tidak ada pada kernel HTTP secara _default_. Anda dapat menyalin definisi _default_ untuk properti tersebut pada kode di bawah ini:
 
     /**
-     * The priority-sorted list of middleware.
+     * Daftar middleware yang diurutkan berdasarkan prioritasnya.
      *
-     * This forces non-global middleware to always be in the given order.
+     * Hal ini akan memaksa middleware non-global untuk selalu berada pada urutan yang sudah ditentukan.
      *
      * @var string[]
      */
@@ -245,11 +245,11 @@ Rarely, you may need your middleware to execute in a specific order but not have
     ];
 
 <a name="middleware-parameters"></a>
-## Middleware Parameters
+## Parameter _Middleware_
 
-Middleware can also receive additional parameters. For example, if your application needs to verify that the authenticated user has a given "role" before performing a given action, you could create an `EnsureUserHasRole` middleware that receives a role name as an additional argument.
+_Middleware_ juga dapat menerima parameter tambahan. Misalnya, jika aplikasi Anda perlu memverifikasi bahwa pengguna yang diautentikasi memiliki "peran" tertentu sebelum melakukan tindakan tertentu, Anda dapat membuat _middleware_ `EnsureUserHasRole` yang menerima nama peran sebagai argumen tambahan.
 
-Additional middleware parameters will be passed to the middleware after the `$next` argument:
+Parameter tambahan untuk _middleware_ akan diteruskan ke _middleware_ setelah argumen `$next`:
 
     <?php
 
@@ -260,7 +260,7 @@ Additional middleware parameters will be passed to the middleware after the `$ne
     class EnsureUserHasRole
     {
         /**
-         * Handle the incoming request.
+         * Menangani request yang masuk.
          *
          * @param  \Illuminate\Http\Request  $request
          * @param  \Closure  $next
@@ -278,16 +278,16 @@ Additional middleware parameters will be passed to the middleware after the `$ne
 
     }
 
-Middleware parameters may be specified when defining the route by separating the middleware name and parameters with a `:`. Multiple parameters should be delimited by commas:
+Argumen untuk _middleware_ dapat ditentukan ketika mendefinisikan _route_ dengan memisahkan nama _middleware_ dan parameter dengan tanda `:`. Jika terdapat lebih dari satu parameter tambahan, antar argumen harus dipisahkan dengan koma:
 
     Route::put('/post/{id}', function ($id) {
         //
     })->middleware('role:editor');
 
 <a name="terminable-middleware"></a>
-## Terminable Middleware
+## _Middleware_ yang Dapat Dihentikan
 
-Sometimes a middleware may need to do some work after the HTTP response has been sent to the browser. If you define a `terminate` method on your middleware and your web server is using FastCGI, the `terminate` method will automatically be called after the response is sent to the browser:
+Terkadang _middleware_ mungkin perlu melakukan beberapa pekerjaan setelah mengirimkan respons HTTP ke _browser_. Jika Anda mendefinisikan metode `terminate` pada _middleware_ Anda dan server web Anda telah menggunakan FastCGI, metode `terminate` akan secara otomatis dipanggil setelah respons dikirim ke _browser_:
 
     <?php
 
@@ -298,7 +298,7 @@ Sometimes a middleware may need to do some work after the HTTP response has been
     class TerminatingMiddleware
     {
         /**
-         * Handle an incoming request.
+         * Menangani request yang masuk.
          *
          * @param  \Illuminate\Http\Request  $request
          * @param  \Closure  $next
@@ -310,7 +310,7 @@ Sometimes a middleware may need to do some work after the HTTP response has been
         }
 
         /**
-         * Handle tasks after the response has been sent to the browser.
+         * Menangani tugas setelah respons dikirimkan ke browser.
          *
          * @param  \Illuminate\Http\Request  $request
          * @param  \Illuminate\Http\Response  $response
@@ -322,14 +322,14 @@ Sometimes a middleware may need to do some work after the HTTP response has been
         }
     }
 
-The `terminate` method should receive both the request and the response. Once you have defined a terminable middleware, you should add it to the list of routes or global middleware in the `app/Http/Kernel.php` file.
+Metode `terminate` harus menerima _request_ dan _response_. Setelah Anda mendefinisikan _middleware_ yang dapat dihentikan (_terminable_), Anda harus _middleware_ tersebut ke daftar _route_ atau _middleware_ global pada _file_ `app/Http/Kernel.php`.
 
-When calling the `terminate` method on your middleware, Laravel will resolve a fresh instance of the middleware from the [service container](/docs/{{version}}/container). If you would like to use the same middleware instance when the `handle` and `terminate` methods are called, register the middleware with the container using the container's `singleton` method. Typically this should be done in the `register` method of your `AppServiceProvider`:
+Ketika memanggil metode `terminate` pada _middleware_, Laravel akan membuat _instance_ baru _middleware_ yang berasal dari [_service container_](/docs/{{version}}/container). Jika Anda ingin menggunakan _instance middleware_ yang sama ketika metode `handle` dan `terminate` dipanggil, Anda dapat mendaftarkan _middleware_ pada _container_ menggunakan metode `singleton` milik _container_. Biasanya ini harus dilakukan di dalam metode `register` pada `AppServiceProvider` Anda:
 
     use App\Http\Middleware\TerminatingMiddleware;
 
     /**
-     * Register any application services.
+     * Mendaftarkan layanan pada aplikasi.
      *
      * @return void
      */
