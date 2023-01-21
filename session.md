@@ -313,9 +313,9 @@ Karena tujuan dari metode-metode di atas tidak mudah dimengerti, mari kita bahas
 </div>
 
 <a name="registering-the-driver"></a>
-#### Mendaftarksn _Driver_
+#### Mendaftarkan _Driver_
 
-Setelah driver Anda diimplementasikan, Anda siap untuk mendaftarkannya ke Laravel. Untuk menambahkan driver tambahan ke _backend session_ milik Laravel, Anda dapat menggunakan metode `extend` yang disediakan oleh [_facade_](/docs/{{version}}/facades) `Session`. Anda harus memanggil metode `extend` dari metode `boot` pada [_service provider_](/docs/{{version}}/providers). Anda dapat mendaftarkannya pada `App\Providers\AppServiceProvider` yang sudah ada atau membuat _provider_ yang baru:
+Setelah driver Anda diimplementasikan, Anda siap untuk mendaftarkannya ke Laravel. Untuk menambahkan _driver_ tambahan ke _backend session_ milik Laravel, Anda dapat menggunakan metode `extend` yang disediakan oleh [_facade_](/docs/{{version}}/facades) `Session`. Anda harus memanggil metode `extend` dari metode `boot` pada [_service provider_](/docs/{{version}}/providers). Anda dapat mendaftarkannya pada `App\Providers\AppServiceProvider` yang sudah ada atau membuat _provider_ yang baru:
 
     <?php
 
