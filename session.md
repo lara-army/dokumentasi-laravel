@@ -4,7 +4,7 @@
     - [Konfigurasi](#configuration)
     - [Prasyarat _Driver_](#driver-prerequisites)
 - [Berinteraksi dengan _Session_](#interacting-with-the-session)
-    - [Melakukan _Retrieve_ Data](#retrieving-data)
+    - [Mengambil Data](#retrieving-data)
     - [Menyimpan Data](#storing-data)
     - [_Flash_ Data](#flash-data)
     - [Menghapus Data](#deleting-data)
@@ -79,7 +79,7 @@ Sebelum menggunakan _session_ Redis pada Laravel, Anda harus menginstal ekstensi
 ## Berinteraksi dengan _Session_
 
 <a name="retrieving-data"></a>
-### Melakukan _Retrieve_ Data
+### Mengambil Data
 
 Terdapat dua cara utama untuk bekerja dengan data _session_ pada Laravel: _helper_ global `session` dan melalui _instance_ `Request`. Pertama-tama, mari lihat cara mengakses _session_ melalui _instance_ `Request` yang dapat di-_type-hint_ pada _closure route_ atau metode _controller_. Perlu diingat, dependensi pada metode _controller_ telah terinjeksi secara otomatis melalui [_service container_](/docs/{{version}}/container) Laravel:
 
@@ -107,7 +107,7 @@ Terdapat dua cara utama untuk bekerja dengan data _session_ pada Laravel: _helpe
         }
     }
 
-Ketika anda melakukan _retrieve_ untuk sebuah _item_ pada _sessiom_, Anda juga dapat mengoper nilai _default_ sebagai argumen kedua pada metode `get`. Nilai _default_ ini akan dikembalikan jika nama kunci yang sudah ditentukan tidak ditemukan pada _session_. Jika Anda mengoper sebuah _closure_ sebagai nilai _default_, maka _closure_ tersebut akan dieksekusi jika nama kunci yang ditentukan tidak terdapat pada _session_:
+Ketika anda mengambil (_retrieve_) sebuah _item_ pada _sessiom_, Anda juga dapat mengoper nilai _default_ sebagai argumen kedua pada metode `get`. Nilai _default_ ini akan dikembalikan jika nama kunci yang sudah ditentukan tidak ditemukan pada _session_. Jika Anda mengoper sebuah _closure_ sebagai nilai _default_, maka _closure_ tersebut akan dieksekusi jika nama kunci yang ditentukan tidak terdapat pada _session_:
 
     $value = $request->session()->get('key', 'default');
 
@@ -118,10 +118,10 @@ Ketika anda melakukan _retrieve_ untuk sebuah _item_ pada _sessiom_, Anda juga d
 <a name="the-global-session-helper"></a>
 #### _Helper Session_ Global
 
-Anda juga dapat menggunakan fungsi global PHP bernama `session` untuk me-_retrieve_ dan menyimpan data pada _session_. Ketika _helper_ `session` dipanggil dengan satu argumen _string_, fungsi tersebut akan mengembalikan nilai dari nama kunci pada _session_. Namun, ketika _helper_ tersebut dipanggil dengan argumen _array_ pasangan kunci-nilai (_key-value pairs_ / _array_ asosiatif), Nilai-nilai tersebut akan disimpan pada _session_:
+Anda juga dapat menggunakan fungsi global PHP bernama `session` untuk mengambil dan menyimpan data pada _session_. Ketika _helper_ `session` dipanggil dengan satu argumen _string_, fungsi tersebut akan mengembalikan nilai dari nama kunci pada _session_. Namun, ketika _helper_ tersebut dipanggil dengan argumen _array_ pasangan kunci-nilai (_key-value pairs_ / _array_ asosiatif), Nilai-nilai tersebut akan disimpan pada _session_:
 
     Route::get('/beranda', function () {
-        // Retrieve data dari session...
+        // Mengambil data dari session...
         $value = session('nama');
 
         // Menentukan nilai default...
@@ -135,9 +135,9 @@ Anda juga dapat menggunakan fungsi global PHP bernama `session` untuk me-_retrie
 > Dalam praktiknya, terdapat sebuah perbedaan kecil pada pemanfaatan _session_ antara menggunakan _instance_ HTTP _request_ dan _helper_ global _session_. Ke-dua metode tersebut dapat dimasukkan ke dalam [pengujian](/docs/{{version}}/testing) melalui metode `assertSessionHss` yang terdapat pada semua kasus/skenario pengujian.
 
 <a name="retrieving-all-session-data"></a>
-#### _Retrieve_ Semua Data pada _Session_
+#### Mengambil Semua Data pada _Session_
 
-Jika Anda ingin me-_retrieve_ semua data yang terdapat pada _session_, Anda dapat menggunakan metode `all`:
+Jika Anda ingin mengambil semua data yang terdapat pada _session_, Anda dapat menggunakan metode `all`:
 
     $data = $request->session()->all();
 
@@ -181,9 +181,9 @@ Metode `push` dapat digunakan untuk mendorong (menambahkan _item_ di ujung _arra
     $request->session()->push('pengguna.daftarTeman', 'Taylor Otwell');
 
 <a name="retrieving-deleting-an-item"></a>
-#### Me-_Retrieve_ & Menghapus _Item_
+#### Mengambil & Menghapus _Item_
 
-Metode `pull` akan me-_retrieve_ dan menghapus sebuah _item_ pada _session_ dengan satu _statement_ (perintah):
+Metode `pull` akan mengambil dan menghapus sebuah _item_ pada _session_ dengan satu _statement_ (perintah):
 
     $value = $request->session()->pull('key', 'default');
 
@@ -305,7 +305,7 @@ Karena tujuan dari metode-metode di atas tidak mudah dimengerti, mari kita bahas
 - Metode `open` biasanya digunakan pada sistem penyimpanan _session_ berbasis _file_, Karena Laravel disertai _driver_ `file` untuk _session_, Anda akan sangat jarang mengubah metode ini. Anda dapat. Anda dapat membiarkan metode ini kosong.
 
 - Metode `close` mirip seperti metode `open` yang biasanya dapat diabaikan. Untuk kebanyakan, hal ini tidak diperlukan.
-- Metode `read` harus mengembalikan data _session_ dalam bentuk _string_ pada `$sessiomId` yang terkait. Anda tidak perlu melakukan serialisasi atau pengkodean lainnya ketika melakukan _retrieve_ atau penyimpanan data _session_ dalam _driver_ Anda. Laravel akan melakukan serialisasi untuk Anda.
+- Metode `read` harus mengembalikan data _session_ dalam bentuk _string_ pada `$sessiomId` yang terkait. Anda tidak perlu melakukan serialisasi atau pengkodean lainnya ketika mengambil atau menyimpan data _session_ dalam _driver_ Anda. Laravel akan melakukan serialisasi untuk Anda.
 - Metode `write` harus menuliskan string `$data` yang diberikan dengan `$sessionId` yang terkait ke sistem penyimpanan persisten, seperti MongoDB atau sistem penyimpanan lain yang Anda pilih. Sekali lagi, Anda tidak perlu melakukan serialisasi apa pun - Laravel sudah menanganinya untuk Anda. 
 - Metode `destroy` harus menghapus data dengan `$sessionId` yang terkait pada penyimpanan persisten.
 - Metode `gc` harus "menghancurkan" semua data _session_ yang usianya melebihi `$lifetime` yang ditentukan yang mana adalah _timestamp_ UNIX. Untuk sistem peng-kedaluawarsa-an secara mandiri seperti Memcached dan Redis, metode ini dapat dibiarkan kosong.
