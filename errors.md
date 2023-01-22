@@ -18,12 +18,12 @@
 <a name="pendahuluan"></a>
 ## Pendahuluan
 
-Saat Anda memulai proyek Laravel baru, penanganan eror dan exception sudah dikonfigurasi. Di kelas `App\Exceptions\Handler`, semua exception yang dilemparkan oleh aplikasi Anda dicatat dan diteruskan ke pengguna. Jadi, kita akan mendalami kelas lebih dalam pada dokumentasi ini.
+Saat Anda memulai proyek Laravel baru, penanganan eror dan _exception_ sudah dikonfigurasi. Di kelas `App\Exceptions\Handler`, semua _exception_ yang dilemparkan oleh aplikasi Anda dicatat dan diteruskan ke pengguna. Jadi, kita akan mendalami kelas lebih dalam pada dokumentasi ini.
 
 <a name="konfigurasi"></a>
 ## Konfigurasi
 
-Opsi `debug` di file konfigurasi `config/app.php` Anda menentukan berapa banyak informasi tentang eror yang akan ditampilkan kepada pengguna. Secara default, pengaturan ini sudah diatur untuk mengikuti nilai variabel environment `APP_DEBUG`, yang disimpan di file `.env` Anda.
+Opsi `debug` di file konfigurasi `config/app.php` Anda menentukan berapa banyak informasi tentang eror yang akan ditampilkan kepada pengguna. Secara _default_, pengaturan ini sudah diatur untuk mengikuti nilai variabel environment `APP_DEBUG`, yang disimpan di file `.env` Anda.
 
 Selama pengembangan pada tahap lokal, Anda harus menetapkan variabel environment `APP_DEBUG` menjadi `true`. **Pada environment production Anda, nilai pada variabel `APP_DEBUG` harus selalu `false`. Jika nilai diatur ke `true` dalam production, ada risiko bahwa nilai tersebut akan diekspos dalam setelan sensitif kepada pengguna aplikasi Anda.**
 
@@ -33,9 +33,9 @@ Selama pengembangan pada tahap lokal, Anda harus menetapkan variabel environment
 <a name="melaporkan-exception"></a>
 ### Melaporkan Exception
 
-Semua exception ditangani oleh kelas `App\Exceptions\Handler`. Kelas ini berisi metode `register` tempat Anda dapat mendaftarkan pelaporan exception khusus dan menampilkan callback. Kami akan memeriksa masing-masing konsep ini secara rinci. Laporan exception digunakan untuk mencatat exception atau mengirimkannya ke layanan eksternal, seperti [Flare](https://flareapp.io), [Bugsnag](https://bugsnag.com), atau [Sentry](https://github.com/getsentry/sentry-laravel). Secara default, exception akan dicatat berdasarkan konfigurasi [logging](/docs/{{version}}/logging) Anda. Namun, Anda dapat menyimpan exception saat mengerjakan proyek Anda.
+Semua _exception_ ditangani oleh kelas `App\Exceptions\Handler`. Kelas ini berisi metode `register` tempat Anda dapat mendaftarkan pelaporan _exception_ khusus dan menampilkan _callback_. Kami akan memeriksa masing-masing konsep ini secara rinci. Laporan _exception_ digunakan untuk mencatat _exception_ atau mengirimkannya ke layanan eksternal, seperti [Flare](https://flareapp.io), [Bugsnag](https://bugsnag.com), atau [Sentry](https://github.com/getsentry/sentry-laravel). Secara _default_, _exception_ akan dicatat berdasarkan konfigurasi [logging](/docs/{{version}}/logging) Anda. Namun, Anda dapat menyimpan _exception_ saat mengerjakan proyek Anda.
 
-Misalnya, jika Anda ingin melaporkan jenis exception yang berbeda dengan cara yang berbeda, Anda dapat menggunakan metode `reportable` untuk mendaftarkan closure yang harus dijalankan saat exception jenis tertentu perlu dilaporkan. Laravel akan menyimpulkan jenis exception apa yang dilaporkan oleh closure dengan memeriksa tipe-petunjuk dari closure:
+Misalnya, jika Anda ingin melaporkan jenis _exception_ yang berbeda dengan menggunakan cara yang berbeda, Anda dapat menggunakan metode `reportable` untuk mendaftarkan _closure_ yang harus dijalankan saat _exception_ jenis tertentu perlu dilaporkan. Laravel akan menyimpulkan jenis _exception_ apa yang dilaporkan oleh _closure_ dengan memeriksa tipe-petunjuk dari _closure_:
 
 ```php
     use App\Exceptions\InvalidOrderException;
@@ -53,7 +53,7 @@ Misalnya, jika Anda ingin melaporkan jenis exception yang berbeda dengan cara ya
     }
 ```
 
-Saat Anda mendaftarkan callback pelaporan exception kustom menggunakan metode `reportable`, Laravel selalu mencatat exception menggunakan konfigurasi pembuatan log default aplikasi. Jika Anda ingin berhenti menyebarkan exception ke tumpukan logging default, Anda dapat menggunakan metode `stop` saat menentukan callback laporan, atau mengembalikan `false` dari callback:
+Saat Anda mendaftarkan _callback_ pelaporan _exception_ kustom menggunakan metode `reportable`, Laravel selalu mencatat _exception_ menggunakan konfigurasi pembuatan _log_ _default_ aplikasi. Jika Anda ingin berhenti menyebarkan _exception_ ke tumpukan _logging_ _default_, Anda dapat menggunakan metode `stop` saat menentukan _callback_ laporan, atau mengembalikan `false` dari _callback_:
 
 ```php
     $this->reportable(function (InvalidOrderException $e) {
@@ -66,12 +66,12 @@ Saat Anda mendaftarkan callback pelaporan exception kustom menggunakan metode `r
 ```
 
 > **Catatan**  
-> Untuk menyesuaikan pelaporan exception untuk exception yang diberikan, Anda juga dapat menggunakan [reportable exceptions](/docs/{{version}}/errors#renderable-exceptions).
+> Untuk menyesuaikan pelaporan _exception_ untuk _exception_ yang diberikan, Anda juga dapat menggunakan [reportable exceptions](/docs/{{version}}/errors#renderable-exceptions).
 
 <a name="global-log-context"></a>
 #### Konteks Log Global
 
-Jika tersedia, Laravel akan secara otomatis menambahkan ID pengguna saat ini ke setiap pesan log exception sebagai data kontekstual. Anda dapat menentukan data kontekstual global Anda sendiri dengan mengganti metode `context` dari kelas `App\Exceptions\Handler` aplikasi Anda. Informasi ini akan disertakan dalam setiap pesan log exception yang ditulis oleh aplikasi Anda:
+Jika tersedia, Laravel akan secara otomatis menambahkan ID pengguna saat ini ke setiap pesan _log_ _exception_ sebagai data kontekstual. Anda dapat menentukan data kontekstual global Anda sendiri dengan mengganti metode `context` dari kelas `App\Exceptions\Handler` aplikasi Anda. Informasi ini akan disertakan dalam setiap pesan _log_ _exception_ yang ditulis oleh aplikasi Anda:
 
 ```php
     /**
@@ -90,7 +90,7 @@ Jika tersedia, Laravel akan secara otomatis menambahkan ID pengguna saat ini ke 
 <a name="konteks-log-exception"></a>
 #### Konteks Log Exception
 
-Meskipun menambahkan konteks ke setiap pesan log dapat membantu, terkadang beberapa exception dapat memiliki konteks unik yang ingin Anda sertakan dalam log. Dengan menentukan metode `context` pada salah satu exception khusus aplikasi, Anda dapat menentukan bahwa semua data yang relevan untuk exception tersebut akan ditambahkan ke entri log exception:
+Meskipun menambahkan konteks ke setiap pesan _log_ dapat membantu, terkadang beberapa _exception_ dapat memiliki konteks unik yang ingin Anda sertakan dalam _log_. Dengan menentukan metode `context` pada salah satu _exception_ khusus aplikasi, Anda dapat menentukan bahwa semua data yang relevan untuk _exception_ tersebut akan ditambahkan ke entri _log_ _exception_:
 
 ```php
     <?php
@@ -118,7 +118,7 @@ Meskipun menambahkan konteks ke setiap pesan log dapat membantu, terkadang beber
 <a name="report-pembantu"></a>
 #### `report` Pembantu
 
-Terkadang Anda mungkin perlu melaporkan exception tetapi terus menangani permintaan saat ini. Fungsi helper `report` memungkinkan Anda melaporkan exception dengan cepat melalui pengendali exception tanpa menampilkan halaman eror ke pengguna:
+Terkadang Anda mungkin perlu melaporkan _exception_ tetapi terus menangani permintaan saat ini. Fungsi helper `report` memungkinkan Anda melaporkan _exception_ dengan cepat melalui pengendali _exception_ tanpa menampilkan halaman eror ke pengguna:
 
 ```php
     public function isValid($value)
@@ -138,9 +138,9 @@ Terkadang Anda mungkin perlu melaporkan exception tetapi terus menangani permint
 
 Ketika pesan yang ditulis ke aplikasi Anda [logs](/docs/{{version}}/logging), pesan ditulis pada [tingkat log](/docs/{{version}}/logging#log-levels) tertentu, yang menunjukkan tingkat keseriusan atau pentingnya pesan yang sedang dicatat dalam log.
 
-Seperti yang disebutkan di atas, bahkan saat mencatat callback pelaporan exception kustom menggunakan metode `reportable`, Laravel akan tetap mencatat exception menggunakan konfigurasi logging default untuk aplikasi. Namun, karena level log terkadang dapat memengaruhi saluran tempat pesan dicatat, Anda mungkin ingin mengonfigurasi level log tempat exception tertentu dicatat.
+Seperti yang disebutkan di atas, bahkan saat mencatat _callback_ pelaporan _exception_ kustom menggunakan metode `reportable`, Laravel akan tetap mencatat _exception_ menggunakan konfigurasi _logging_ _default_ untuk aplikasi. Namun, karena level log terkadang dapat memengaruhi saluran tempat pesan dicatat, Anda mungkin ingin mengonfigurasi level log tempat _exception_ tertentu dicatat.
 
-Untuk melakukannya, Anda dapat menentukan array dengan tipe exception dan level log yang terkait di dalam properti `$levels` dari pengendali exception aplikasi Anda :
+Untuk melakukannya, Anda dapat menentukan array dengan tipe _exception_ dan level log yang terkait di dalam properti `$levels` dari pengendali _exception_ aplikasi Anda :
 
 ```php
     use PDOException;
@@ -159,7 +159,7 @@ Untuk melakukannya, Anda dapat menentukan array dengan tipe exception dan level 
 <a name="mengabaikan-exception-berdasarkan-tipe"></a>
 ### Mengabaikan Exception Berdasarkan Tipe
 
-Saat membuat aplikasi Anda, akan ada beberapa jenis exception yang ingin Anda abaikan dan tidak pernah laporkan. Pengendali exception aplikasi Anda berisi properti `$dontReport` yang diinisialisasi ke array kosong. Setiap kelas yang Anda tambahkan ke properti ini tidak akan dilaporkan. Namun, mereka mungkin masih memiliki logika pada rendering kustom :
+Saat membuat aplikasi Anda, akan ada beberapa jenis _exception_ yang ingin Anda abaikan dan tidak pernah laporkan. Pengendali _exception_ aplikasi Anda berisi properti `$dontReport` yang diinisialisasi ke _array_ kosong. Setiap kelas yang Anda tambahkan ke properti ini tidak akan dilaporkan. Namun, mereka mungkin masih memiliki logika pada rendering kustom :
 
 ```php
     use App\Exceptions\InvalidOrderException;
@@ -175,14 +175,14 @@ Saat membuat aplikasi Anda, akan ada beberapa jenis exception yang ingin Anda ab
 ```
 
 > **Catatan**  
-> Di belakang layar, Laravel sudah mengabaikan beberapa jenis eror untuk Anda, seperti exception yang dihasilkan dari eror 404 HTTP "not found" atau 419 respons HTTP yang dihasilkan oleh token CSRF yang tidak valid.
+> Di belakang layar, Laravel sudah mengabaikan beberapa jenis eror untuk Anda, seperti _exception_ yang dihasilkan dari eror 404 HTTP "not found" atau 419 respons HTTP yang dihasilkan oleh _token CSRF_ yang tidak valid.
 
 <a name="menampilkan-exception"></a>
 ### Menampilkan Exception
 
-Secara default, penanganan exception Laravel akan mengonversi exception menjadi respons HTTP untuk Anda. Namun, Anda bebas mendaftarkan closure perenderan khusus untuk exception dari jenis tertentu. Anda dapat melakukannya melalui metode `renderable` dari penanganan exception Anda.
+Secara _default_, penanganan _exception_ Laravel akan mengonversi _exception_ menjadi respons HTTP untuk Anda. Namun, Anda bebas mendaftarkan _closure_ perenderan khusus untuk _exception_ dari jenis tertentu. Anda dapat melakukannya melalui metode `renderable` dari penanganan _exception_ Anda.
 
-Closure yang diteruskan ke metode `renderable` harus mengembalikan instance `Illuminate\Http\Response`, yang dapat dihasilkan menggunakan bantuan `response`. Laravel akan menyimpulkan jenis exception apa yang dibuat oleh closure dengan memeriksa tipe-hint dari closure :
+_Closure_ yang diteruskan ke metode `renderable` harus mengembalikan instance `Illuminate\Http\Response`, yang dapat dihasilkan menggunakan bantuan `response`. Laravel akan menyimpulkan jenis _exception_ apa yang dibuat oleh _closure_ dengan memeriksa tipe-hint dari _closure_ :
 
 ```php
     use App\Exceptions\InvalidOrderException;
@@ -200,7 +200,7 @@ Closure yang diteruskan ke metode `renderable` harus mengembalikan instance `Ill
     }
 ```
 
-Kamu juga dapat menggunakan metode `renderable` untuk mengganti perilaku rendering untuk exception Laravel atau Symfony bawaan seperti `NotFoundHttpException`. Jika closure yang diberikan ke metode `renderable` tidak mengembalikan nilai, perenderan exception default Laravel akan digunakan :
+Kamu juga dapat menggunakan metode `renderable` untuk mengganti perilaku _rendering_ untuk _exception_ Laravel atau Symfony bawaan seperti `NotFoundHttpException`. Jika _closure_ yang diberikan ke metode `renderable` tidak mengembalikan nilai, perenderan _exception_ _default_ Laravel akan digunakan:
 
 ```php
     use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -225,7 +225,7 @@ Kamu juga dapat menggunakan metode `renderable` untuk mengganti perilaku renderi
 <a name="exception-yang-dapat-dilaporkan-ditampilkan"></a>
 ### Exception yang Dapat Dilaporkan & Ditampilkan
 
-Alih-alih memeriksa exception jenis dalam metode `register` penangan exception, Anda dapat menentukan metode `report` dan `render` langsung pada exception kustom Anda. Ketika metode ini ada, mereka akan dipanggil secara otomatis oleh framework :
+Alih-alih memeriksa _exception_ jenis dalam metode `register` penangan _exception_, Anda dapat menentukan metode `report` dan `render` langsung pada _exception_ kustom Anda. Ketika metode ini ada, mereka akan dipanggil secara otomatis oleh _framework_ :
 
 ```php
     <?php
@@ -259,7 +259,7 @@ Alih-alih memeriksa exception jenis dalam metode `register` penangan exception, 
     }
 ```
 
-Jika exception Anda memperluas exception yang sudah dapat dirender, seperti Laravel bawaan atau exception Symfony, Anda dapat mengembalikan `false` dari metode `render` exception untuk menampilkan respons HTTP default exception :
+Jika _exception_ Anda memperluas _exception_ yang sudah dapat dirender, seperti Laravel bawaan atau _exception Symfony_, Anda dapat mengembalikan `false` dari metode `render` _exception_ untuk menampilkan respons HTTP _default_ _exception_:
 
 ```php
     /**
@@ -276,7 +276,7 @@ Jika exception Anda memperluas exception yang sudah dapat dirender, seperti Lara
     }
 ```
 
-Jika exception Anda berisi logika pelaporan kustom yang hanya diperlukan ketika kondisi tertentu terpenuhi, Anda mungkin perlu menginstruksikan Laravel untuk terkadang melaporkan exception tersebut menggunakan konfigurasi penanganan exception default. Untuk menyelesaikannya, Anda dapat mengembalikan nilai `false` dari metode `report` exception :
+Jika _exception_ Anda berisi logika pelaporan kustom yang hanya diperlukan ketika kondisi tertentu terpenuhi, Anda mungkin perlu menginstruksikan Laravel untuk terkadang melaporkan _exception_ tersebut menggunakan konfigurasi penanganan _exception_ _default_. Untuk menyelesaikannya, Anda dapat mengembalikan nilai `false` dari metode `report` _exception_:
 
 ```php
     /**
@@ -293,12 +293,12 @@ Jika exception Anda berisi logika pelaporan kustom yang hanya diperlukan ketika 
 ```
 
 > **Catatan**  
-> Kamu dapat menulis-petunjuk dependensi yang diperlukan dari metode dan mereka akan secara otomatis disuntikkan ke dalam metode oleh Laravel [wadah layanan](/docs/{{version}}/container).
+> Kamu dapat menulis-petunjuk dependensi yang diperlukan dari metode dan mereka akan secara otomatis disuntikkan ke dalam metode oleh Laravel [service container](/docs/{{version}}/container).
 
 <a name="http-exception"></a>
 ## HTTP Exception
 
-Beberapa exception mendeskripsikan kode eror HTTP dari server. Misalnya, ini mungkin erir "page not found" error (404), "unauthorized error" (401), atau bahkan eror 500 yang dihasilkan pengembang. Untuk menghasilkan respon seperti itu, Anda dapat menggunakan bantuan `abort`:
+Beberapa _exception_ mendeskripsikan kode eror HTTP dari server. Misalnya, ini mungkin erir "page not found" error (404), "unauthorized error" (401), atau bahkan eror 500 yang dihasilkan pengembang. Untuk menghasilkan respon seperti itu, Anda dapat menggunakan bantuan `abort`:
 
 ```php
     abort(404);
@@ -313,7 +313,7 @@ Laravel memudahkan untuk menampilkan halaman eror kustom untuk berbagai kode sta
     <h2>{{ $exception->getMessage() }}</h2>
 ```
 
-Kamu dapat mempublikasikan template halaman eror default Laravel menggunakan perintah Artisan `vendor:publish`. Setelah templat dipublikasikan, Anda dapat menyesuaikannya sesuai keinginan Anda:
+Kamu dapat mempublikasikan template halaman eror _default_ Laravel menggunakan perintah Artisan `vendor:publish`. Setelah templat dipublikasikan, Anda dapat menyesuaikannya sesuai keinginan Anda:
 
 ```shell
 php artisan vendor:publish --tag=laravel-errors
