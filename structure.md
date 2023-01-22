@@ -1,184 +1,212 @@
-# Directory Structure
+# Struktur Direktori
 
-- [Introduction](#introduction)
-- [The Root Directory](#the-root-directory)
-    - [The `app` Directory](#the-root-app-directory)
-    - [The `bootstrap` Directory](#the-bootstrap-directory)
-    - [The `config` Directory](#the-config-directory)
-    - [The `database` Directory](#the-database-directory)
-    - [The `lang` Directory](#the-lang-directory)
-    - [The `public` Directory](#the-public-directory)
-    - [The `resources` Directory](#the-resources-directory)
-    - [The `routes` Directory](#the-routes-directory)
-    - [The `storage` Directory](#the-storage-directory)
-    - [The `tests` Directory](#the-tests-directory)
-    - [The `vendor` Directory](#the-vendor-directory)
-- [The App Directory](#the-app-directory)
-    - [The `Broadcasting` Directory](#the-broadcasting-directory)
-    - [The `Console` Directory](#the-console-directory)
-    - [The `Events` Directory](#the-events-directory)
-    - [The `Exceptions` Directory](#the-exceptions-directory)
-    - [The `Http` Directory](#the-http-directory)
-    - [The `Jobs` Directory](#the-jobs-directory)
-    - [The `Listeners` Directory](#the-listeners-directory)
-    - [The `Mail` Directory](#the-mail-directory)
-    - [The `Models` Directory](#the-models-directory)
-    - [The `Notifications` Directory](#the-notifications-directory)
-    - [The `Policies` Directory](#the-policies-directory)
-    - [The `Providers` Directory](#the-providers-directory)
-    - [The `Rules` Directory](#the-rules-directory)
+- [Pengantar](#pengantar)
+- [Direktori Akar](#direktori-akar)
+    - [`app` Direktori](#the-root-app-directory)
+    - [`bootstrap` Direktori](#the-bootstrap-directory)
+    - [`config` Direktori](#the-config-directory)
+    - [`database` Direktori](#the-database-directory)
+    - [`lang` Direktori](#the-lang-directory)
+    - [`public` Direktori](#the-public-directory)
+    - [`resources` Direktori](#the-resources-directory)
+    - [`routes` Direktori](#the-routes-directory)
+    - [`storage` Direktori](#the-storage-directory)
+    - [`tests` Direktori](#the-tests-directory)
+    - [`vendor` Direktori](#the-vendor-directory)
+- [Direktori Aplikasi](#the-app-directory)
+    - [`Broadcasting` Direktori](#the-broadcasting-directory)
+    - [`Console` Direktori](#the-console-directory)
+    - [`Events` Direktori](#the-events-directory)
+    - [`Exceptions` Direktori](#the-exceptions-directory)
+    - [`Http` Direktori](#the-http-directory)
+    - [`Jobs` Direktori](#the-jobs-directory)
+    - [`Listeners` Direktori](#the-listeners-directory)
+    - [`Mail` Direktori](#the-mail-directory)
+    - [`Models` Direktori](#the-models-directory)
+    - [`Notifications` Direktori](#the-notifications-directory)
+    - [`Policies` Direktori](#the-policies-directory)
+    - [`Providers` Direktori](#the-providers-directory)
+    - [`Rules` Direktori](#the-rules-directory)
 
 <a name="introduction"></a>
-## Introduction
 
-The default Laravel application structure is intended to provide a great starting point for both large and small applications. But you are free to organize your application however you like. Laravel imposes almost no restrictions on where any given class is located - as long as Composer can autoload the class.
+## Pengantar
 
-> **Note**
-> New to Laravel? Check out the [Laravel Bootcamp](https://bootcamp.laravel.com) for a hands-on tour of the framework while we walk you through building your first Laravel application.
+Struktur aplikasi Laravel secara _default_ dimaksudkan untuk memberikan titik awal yang bagus untuk aplikasi besar dan kecil. Tetapi Anda bebas mengatur aplikasi sesuka Anda. Laravel hampir tidak memberlakukan batasan di mana kelas tertentu berada - selama Composer dapat memuat otomatis kelas tersebut.
+
+> **Catatan**
+> Baru menggunakan Laravel? Lihat [Laravel Bootcamp](https://bootcamp.laravel.com) untuk melihat langsung framework ini sementara kami memandu anda membuat aplikasi Laravel pertama anda.
 
 <a name="the-root-directory"></a>
-## The Root Directory
+
+## Direktori Akar
 
 <a name="the-root-app-directory"></a>
-#### The App Directory
 
-The `app` directory contains the core code of your application. We'll explore this directory in more detail soon; however, almost all of the classes in your application will be in this directory.
+#### Direktori `app` 
+
+`app` direktori berisi kode inti aplikasi anda. Kami akan menjelajahi direktori ini lebih detail segera; namun, hampir semua _class_ di aplikasi anda akan berada di direktori ini.
 
 <a name="the-bootstrap-directory"></a>
-#### The Bootstrap Directory
 
-The `bootstrap` directory contains the `app.php` file which bootstraps the framework. This directory also houses a `cache` directory which contains framework generated files for performance optimization such as the route and services cache files. You should not typically need to modify any files within this directory.
+#### Direktori `bootstrap` 
+
+Direktori `bootstrap` berisi file `app.php` dimana terdapat framework bootstrap. Direktori ini juga menampung direktori `cache` yang berisi file kerangka kerja yang dihasilkan untuk pengoptimalan kinerja seperti rute dan layanan file _cache_. Biasanya Anda tidak perlu mengubah file apa pun di dalam direktori ini.
 
 <a name="the-config-directory"></a>
-#### The Config Directory
 
-The `config` directory, as the name implies, contains all of your application's configuration files. It's a great idea to read through all of these files and familiarize yourself with all of the options available to you.
+#### Direktori `config`
+
+Direktori `config`, seperti namanya, berisi semua file konfigurasi aplikasi Anda. Merupakan ide bagus untuk membaca semua file ini dan membiasakan diri dengan semua opsi yang tersedia untuk Anda.
 
 <a name="the-database-directory"></a>
-#### The Database Directory
 
-The `database` directory contains your database migrations, model factories, and seeds. If you wish, you may also use this directory to hold an SQLite database.
+#### Direktori `database`
+
+Direktori `database` berisi migrasi database, pabrik model, dan _seeds_. Jika mau, Anda juga dapat menggunakan direktori ini untuk menyimpan database SQLite.
 
 <a name="the-lang-directory"></a>
-#### The Lang Directory
 
-The `lang` directory houses all of your application's language files.
+#### Direktori `lang`
+
+Direktori `lang` menampung semua file bahasa aplikasi Anda.
 
 <a name="the-public-directory"></a>
-#### The Public Directory
 
-The `public` directory contains the `index.php` file, which is the entry point for all requests entering your application and configures autoloading. This directory also houses your assets such as images, JavaScript, and CSS.
+#### Direktori `public`
+
+Direktori `public` berisi file `index.php`, yang merupakan titik masuk untuk semua permintaan yang masuk ke aplikasi Anda dan mengonfigurasi pemuatan otomatis. Direktori ini juga menampung aset anda seperti gambar, JavaScript, dan CSS.
 
 <a name="the-resources-directory"></a>
-#### The Resources Directory
 
-The `resources` directory contains your [views](/docs/{{version}}/views) as well as your raw, un-compiled assets such as CSS or JavaScript.
+#### Direktori `resources`
+
+Direktori `resources` berisi [tampilan](/docs/{{version}}/views) anda serta aset mentah Anda yang belum dikompilasi seperti CSS atau JavaScript.
 
 <a name="the-routes-directory"></a>
-#### The Routes Directory
 
-The `routes` directory contains all of the route definitions for your application. By default, several route files are included with Laravel: `web.php`, `api.php`, `console.php`, and `channels.php`.
+#### Direktori `routes`
 
-The `web.php` file contains routes that the `RouteServiceProvider` places in the `web` middleware group, which provides session state, CSRF protection, and cookie encryption. If your application does not offer a stateless, RESTful API then all your routes will most likely be defined in the `web.php` file.
+Direktori `routes` berisi semua definisi rute untuk aplikasi anda. Secara _default_, beberapa file rute disertakan dengan Laravel: `web.php`, `api.php`, `console.php`, dan `channels.php`.
 
-The `api.php` file contains routes that the `RouteServiceProvider` places in the `api` middleware group. These routes are intended to be stateless, so requests entering the application through these routes are intended to be authenticated [via tokens](/docs/{{version}}/sanctum) and will not have access to session state.
+File `web.php` berisi rute yang ditempatkan `RouteServiceProvider` di grup middleware `web`, yang menyediakan status sesi, perlindungan CSRF, dan enkripsi cookie. Jika aplikasi Anda tidak menawarkan stateless, RESTful API maka semua rute Anda kemungkinan besar akan ditentukan dalam file `web.php`.
+
+File `api.php` berisi rute yang ditempatkan `RouteServiceProvider` di grup middleware `api`. Rute-rute ini dimaksudkan untuk menjadi _stateless_ jadi permintaan yang masuk ke aplikasi melalui rute ini dimaksudkan untuk diautentikasi [melalui token](/docs/{{version}}/sanctum) dan tidak akan memiliki akses ke keadaan _session_.
 
 The `console.php` file is where you may define all of your closure based console commands. Each closure is bound to a command instance allowing a simple approach to interacting with each command's IO methods. Even though this file does not define HTTP routes, it defines console based entry points (routes) into your application.
+File `console.php` adalah tempat anda dapat menentukan semua perintah konsol berbasis _closures_. Setiap _closures_ terikat pada instance perintah yang memungkinkan pendekatan sederhana untuk berinteraksi dengan metode IO setiap perintah. Meskipun file ini tidak menentukan rute HTTP, file ini menentukan titik masuk (rute) berbasis konsol ke dalam aplikasi anda.
 
-The `channels.php` file is where you may register all of the [event broadcasting](/docs/{{version}}/broadcasting) channels that your application supports.
+File `channels.php` adalah tempat anda dapat mendaftarkan semua saluran [penyiaran acara](/docs/{{version}}/broadcasting) yang didukung aplikasi anda.
 
 <a name="the-storage-directory"></a>
-#### The Storage Directory
 
-The `storage` directory contains your logs, compiled Blade templates, file based sessions, file caches, and other files generated by the framework. This directory is segregated into `app`, `framework`, and `logs` directories. The `app` directory may be used to store any files generated by your application. The `framework` directory is used to store framework generated files and caches. Finally, the `logs` directory contains your application's log files.
+#### Direktori `storage`
 
-The `storage/app/public` directory may be used to store user-generated files, such as profile avatars, that should be publicly accessible. You should create a symbolic link at `public/storage` which points to this directory. You may create the link using the `php artisan storage:link` Artisan command.
+Direktori `storage` berisi log anda, template Blade yang dikompilasi, _sessions_ berbasis file, _cache_ file, dan file lain yang dihasilkan oleh framework. Direktori ini dipisahkan menjadi direktori `app`, `framework`, dan `logs`. Direktori `app` dapat digunakan untuk menyimpan file apa pun yang dihasilkan oleh aplikasi anda. Direktori `framework` digunakan untuk menyimpan file dan _cache_ yang dihasilkan framework. Terakhir, direktori `logs` berisi file log aplikasi anda.
+
+Direktori `storage/app/public` dapat digunakan untuk menyimpan file yang dibuat pengguna, seperti avatar profil, yang harus dapat diakses publik. Anda harus membuat tautan simbolis di `public/storage` yang mengarah ke direktori ini. Anda dapat membuat tautan menggunakan perintah `php artisan storage:link` pada artisan _command_.
 
 <a name="the-tests-directory"></a>
-#### The Tests Directory
 
-The `tests` directory contains your automated tests. Example [PHPUnit](https://phpunit.de/) unit tests and feature tests are provided out of the box. Each test class should be suffixed with the word `Test`. You may run your tests using the `phpunit` or `php vendor/bin/phpunit` commands. Or, if you would like a more detailed and beautiful representation of your test results, you may run your tests using the `php artisan test` Artisan command.
+#### Direktori `tests`
+
+Direktori `tests` berisi pengujian otomatis Anda. Contoh pengujian unit [PHPUnit](https://phpunit.de/) dan pengujian fitur disediakan secara langsung. Setiap kelas tes harus diakhiri dengan kata `Test`. Anda dapat menjalankan pengujian menggunakan perintah `phpunit` atau `php vendor/bin/phpunit`. Atau, jika Anda menginginkan representasi hasil pengujian yang lebih detail dan indah, Anda dapat menjalankan pengujian menggunakan perintah Artisan `php artisan test`.
 
 <a name="the-vendor-directory"></a>
-#### The Vendor Directory
 
-The `vendor` directory contains your [Composer](https://getcomposer.org) dependencies.
+#### Direktori `vendor`
+
+Direktori `vendor` berisi dependensi [Composer](https://getcomposer.org) Anda.
 
 <a name="the-app-directory"></a>
-## The App Directory
 
-The majority of your application is housed in the `app` directory. By default, this directory is namespaced under `App` and is autoloaded by Composer using the [PSR-4 autoloading standard](https://www.php-fig.org/psr/psr-4/).
+## Direktori Aplikasi
 
-The `app` directory contains a variety of additional directories such as `Console`, `Http`, and `Providers`. Think of the `Console` and `Http` directories as providing an API into the core of your application. The HTTP protocol and CLI are both mechanisms to interact with your application, but do not actually contain application logic. In other words, they are two ways of issuing commands to your application. The `Console` directory contains all of your Artisan commands, while the `Http` directory contains your controllers, middleware, and requests.
+Sebagian besar aplikasi Anda ditempatkan di direktori `app`. Secara _default_ direktori ini adalah namespace dalam `App` dan dimuat secara otomatis oleh Composer menggunakan [standar pemuatan otomatis PSR-4](https://www.php-fig.org/psr/psr-4/).
 
-A variety of other directories will be generated inside the `app` directory as you use the `make` Artisan commands to generate classes. So, for example, the `app/Jobs` directory will not exist until you execute the `make:job` Artisan command to generate a job class.
+Direktori `app` berisi berbagai direktori tambahan seperti `Console`, `Http`, dan `Providers`. Mengingat direktori `Console` dan `Http` sebagai penyedia API ke dalam inti aplikasi Anda. Protokol HTTP dan CLI keduanya merupakan mekanisme untuk berinteraksi dengan aplikasi Anda, tetapi sebenarnya tidak berisi logika aplikasi. Dengan kata lain, itu adalah dua cara untuk mengeluarkan perintah ke aplikasi Anda. Direktori `Console` berisi semua perintah Artisan Anda, sedangkan direktori `Http` berisi controller, middleware, dan permintaan Anda.
 
-> **Note**  
-> Many of the classes in the `app` directory can be generated by Artisan via commands. To review the available commands, run the `php artisan list make` command in your terminal.
+Berbagai direktori lain akan dibuat di dalam direktori `app` saat Anda menggunakan perintah `make` pada artisan _command_ untuk membuat kelas. Jadi, misalnya, direktori `app/Jobs` tidak akan ada sampai Anda menjalankan perintah Artisan `make:job` untuk menghasilkan kelas pekerjaan.
+
+> **Catatan**  
+> Banyak kelas di direktori `app` dapat dihasilkan oleh Artisan melalui perintah. Untuk meninjau perintah yang tersedia, jalankan perintah `php artisan list make` di terminal Anda.
 
 <a name="the-broadcasting-directory"></a>
-#### The Broadcasting Directory
 
-The `Broadcasting` directory contains all of the broadcast channel classes for your application. These classes are generated using the `make:channel` command. This directory does not exist by default, but will be created for you when you create your first channel. To learn more about channels, check out the documentation on [event broadcasting](/docs/{{version}}/broadcasting).
+#### Direktori `Broadcasting`
+
+Direktori `Broadcasting` berisi semua kelas saluran siaran untuk aplikasi Anda. Kelas-kelas ini dihasilkan menggunakan perintah `make:channel`. Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk Anda saat Anda membuat saluran pertama kali. Untuk mempelajari lebih lanjut tentang saluran, lihat dokumentasi di [penyiaran acara](/docs/{{version}}/broadcasting).
 
 <a name="the-console-directory"></a>
-#### The Console Directory
 
-The `Console` directory contains all of the custom Artisan commands for your application. These commands may be generated using the `make:command` command. This directory also houses your console kernel, which is where your custom Artisan commands are registered and your [scheduled tasks](/docs/{{version}}/scheduling) are defined.
+#### Direktori `Console`
+
+Direktori `Console` berisi semua perintah Artisan khusus untuk aplikasi Anda. Perintah-perintah ini dapat dibuat menggunakan perintah `make:command`. Direktori ini juga menampung kernel konsol Anda, tempat perintah Artisan kustom Anda yang didaftarkan dan [tugas terjadwal](/docs/{{version}}/scheduling) Anda yang telah ditentukan.
 
 <a name="the-events-directory"></a>
-#### The Events Directory
 
-This directory does not exist by default, but will be created for you by the `event:generate` and `make:event` Artisan commands. The `Events` directory houses [event classes](/docs/{{version}}/events). Events may be used to alert other parts of your application that a given action has occurred, providing a great deal of flexibility and decoupling.
+#### Direktori `Events`
+
+Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk Anda dengan perintah Artisan `event:generate` dan `make:event`. Direktori `Events` berisi [kelas acara](/docs/{{version}}/events). _Events_ dapat digunakan untuk memperingatkan bagian lain dari aplikasi Anda bahwa tindakan tertentu telah terjadi, memberikan banyak fleksibilitas dan _decoupling_.
 
 <a name="the-exceptions-directory"></a>
-#### The Exceptions Directory
 
-The `Exceptions` directory contains your application's exception handler and is also a good place to place any exceptions thrown by your application. If you would like to customize how your exceptions are logged or rendered, you should modify the `Handler` class in this directory.
+#### Direktori `Exceptions`
+
+Direktori `Exceptions` berisi pengendali pengecualian aplikasi Anda dan juga merupakan tempat yang baik untuk menempatkan pengecualian apa pun yang dilemparkan oleh aplikasi Anda. Jika Anda ingin menyesuaikan bagaimana pengecualian dicatat atau dirender, Anda harus memodifikasi kelas `Handler` di direktori ini.
 
 <a name="the-http-directory"></a>
-#### The Http Directory
 
-The `Http` directory contains your controllers, middleware, and form requests. Almost all of the logic to handle requests entering your application will be placed in this directory.
+#### Direktori `Http`
+
+Direktori `Http` berisi controller, middleware, dan permintaan formulir Anda. Hampir semua logika untuk menangani permintaan yang masuk ke aplikasi Anda akan ditempatkan di direktori ini.
 
 <a name="the-jobs-directory"></a>
-#### The Jobs Directory
 
-This directory does not exist by default, but will be created for you if you execute the `make:job` Artisan command. The `Jobs` directory houses the [queueable jobs](/docs/{{version}}/queues) for your application. Jobs may be queued by your application or run synchronously within the current request lifecycle. Jobs that run synchronously during the current request are sometimes referred to as "commands" since they are an implementation of the [command pattern](https://en.wikipedia.org/wiki/Command_pattern).
+#### Direktori `Jobs`
+
+Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk Anda jika Anda menjalankan perintah Artisan `make:job`. Direktori `Jobs` menyimpan [_queueable jobs_](/docs/{{version}}/queues) untuk aplikasi Anda. `Jobs` mungkin diantrekan oleh aplikasi Anda atau dijalankan secara sinkron dalam _lifecycle_ permintaan saat itu. Tugas yang dijalankan secara sinkron selama permintaan saat ini terkadang disebut sebagai "perintah" karena merupakan implementasi dari [pola perintah](https://en.wikipedia.org/wiki/Command_pattern).
 
 <a name="the-listeners-directory"></a>
-#### The Listeners Directory
 
-This directory does not exist by default, but will be created for you if you execute the `event:generate` or `make:listener` Artisan commands. The `Listeners` directory contains the classes that handle your [events](/docs/{{version}}/events). Event listeners receive an event instance and perform logic in response to the event being fired. For example, a `UserRegistered` event might be handled by a `SendWelcomeEmail` listener.
+#### Direktori `Listeners`
+
+Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk Anda jika Anda menjalankan perintah Artisan `event:generate` atau `make:listener`. Direktori `Listeners` berisi kelas yang menangani [_events_](/docs/{{version}}/events) Anda. _Event listeners_ menerima instance _event_ dan melakukan logika sebagai respons terhadap _events_ yang dipicu. Misalnya, peristiwa `UserRegistered` mungkin ditangani oleh pendengar `SendWelcomeEmail`.
 
 <a name="the-mail-directory"></a>
-#### The Mail Directory
 
-This directory does not exist by default, but will be created for you if you execute the `make:mail` Artisan command. The `Mail` directory contains all of your [classes that represent emails](/docs/{{version}}/mail) sent by your application. Mail objects allow you to encapsulate all of the logic of building an email in a single, simple class that may be sent using the `Mail::send` method.
+#### Direktori `Mail`
+
+Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk Anda jika Anda menjalankan perintah Artisan `make:mail`. Direktori `Mail` berisi semua [kelas yang mewakili email](/docs/{{version}}/mail) yang dikirim oleh aplikasi Anda. Objek email memungkinkan Anda merangkum semua logika pembuatan email dalam satu kelas sederhana yang dapat dikirim menggunakan metode `Mail::send`.
 
 <a name="the-models-directory"></a>
-#### The Models Directory
 
-The `Models` directory contains all of your [Eloquent model classes](/docs/{{version}}/eloquent). The Eloquent ORM included with Laravel provides a beautiful, simple ActiveRecord implementation for working with your database. Each database table has a corresponding "Model" which is used to interact with that table. Models allow you to query for data in your tables, as well as insert new records into the table.
+#### Direktori `Models`
+
+Direktori `Models` berisi semua [kelas model Eloquent](/docs/{{version}}/eloquent). Eloquent ORM yang disertakan dengan Laravel menyediakan implementasi ActiveRecord yang indah dan sederhana untuk bekerja dengan database Anda. Setiap tabel database memiliki "Model" yang sesuai yang digunakan untuk berinteraksi dengan tabel tersebut. Model memungkinkan Anda melakukan kueri data di tabel Anda, serta menyisipkan rekaman baru ke dalam tabel.
 
 <a name="the-notifications-directory"></a>
-#### The Notifications Directory
 
-This directory does not exist by default, but will be created for you if you execute the `make:notification` Artisan command. The `Notifications` directory contains all of the "transactional" [notifications](/docs/{{version}}/notifications) that are sent by your application, such as simple notifications about events that happen within your application. Laravel's notification feature abstracts sending notifications over a variety of drivers such as email, Slack, SMS, or stored in a database.
+#### Direktori `Notifications`
+
+Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk Anda jika Anda menjalankan perintah Artisan `make:notification`. Direktori `Notifikasi` berisi semua [notifikasi](/docs/{{version}}/notifikasi) "transaksional" yang dikirim oleh aplikasi Anda, seperti notifikasi sederhana tentang peristiwa yang terjadi dalam aplikasi Anda. Fitur notifikasi Laravel mengabstraksi pengiriman notifikasi melalui berbagai driver seperti email, Slack, SMS, atau disimpan dalam database.
 
 <a name="the-policies-directory"></a>
-#### The Policies Directory
 
-This directory does not exist by default, but will be created for you if you execute the `make:policy` Artisan command. The `Policies` directory contains the [authorization policy classes](/docs/{{version}}/authorization) for your application. Policies are used to determine if a user can perform a given action against a resource.
+#### Direktori `Policies`
+
+Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk Anda jika Anda menjalankan perintah Artisan `make:policy`. Direktori `Policies` berisi [class kebijakan otorisasi](/docs/{{version}}/authorization) untuk aplikasi Anda. Kebijakan digunakan untuk menentukan apakah pengguna dapat melakukan tindakan tertentu terhadap sumber daya.
 
 <a name="the-providers-directory"></a>
-#### The Providers Directory
 
-The `Providers` directory contains all of the [service providers](/docs/{{version}}/providers) for your application. Service providers bootstrap your application by binding services in the service container, registering events, or performing any other tasks to prepare your application for incoming requests.
+#### Direktori `Providers`
 
-In a fresh Laravel application, this directory will already contain several providers. You are free to add your own providers to this directory as needed.
+Direktori `Providers` berisi semua [penyedia layanan](/docs/{{version}}/providers) untuk aplikasi Anda. Penyedia layanan mem-bootstrap aplikasi Anda dengan mengikat layanan di wadah layanan, mendaftarkan acara, atau melakukan tugas lain untuk mempersiapkan aplikasi Anda untuk permintaan masuk.
+
+Di aplikasi Laravel yang baru, direktori ini sudah berisi beberapa penyedia. Anda bebas menambahkan penyedia Anda sendiri ke direktori ini sesuai kebutuhan.
 
 <a name="the-rules-directory"></a>
-#### The Rules Directory
 
-This directory does not exist by default, but will be created for you if you execute the `make:rule` Artisan command. The `Rules` directory contains the custom validation rule objects for your application. Rules are used to encapsulate complicated validation logic in a simple object. For more information, check out the [validation documentation](/docs/{{version}}/validation).
+#### Direktori `Rules`
+
+Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk Anda jika Anda menjalankan perintah Artisan `make:rule`. Direktori `Rules` berisi objek aturan validasi khusus untuk aplikasi Anda. Aturan digunakan untuk merangkum logika validasi yang rumit dalam objek sederhana. Untuk informasi lebih lanjut, lihat [dokumentasi validasi](/docs/{{version}}/validation).
