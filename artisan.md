@@ -1,4 +1,4 @@
-# _Console_ Artisan
+# Konsol Artisan
 
 - [Pengantar](#introduction)
   - [Tinker (REPL)](#tinker)
@@ -94,7 +94,7 @@ Tinker dilengkapi dengan sebuah daftar "allow" untuk menentukan perintah Artisan
 <a name="classes-that-should-not-be-aliased"></a>
 #### _Class_-_Class_ yang Seharusnya Tidak Diberi Alias
 
-Typically, Tinker automatically aliases classes as you interact with them in Tinker. However, you may wish to never alias some classes. You may accomplish this by listing the classes in the `dont_alias` array of your `tinker.php` configuration file:
+Biasanya, Tinker secara otomatis membuat alias terhadap kelas-kelas saat Anda berinteraksi dengan kelas-kelas tersebut. Namun, Anda mungkin mengharapkan beberapa kelas untuk tidak diberi alias. Anda dapat mewujudkan hal ini dengan mendaftarkan kelas-kelas tersebut ke _array_ `dont_alias` pada _file_ konfigurasi `tinker.php` Anda:
 
     'dont_alias' => [
         App\Models\User::class,
