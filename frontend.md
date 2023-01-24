@@ -1,29 +1,30 @@
-# Frontend
+# _Frontend_
 
-- [Introduction](#introduction)
-- [Using PHP](#using-php)
-    - [PHP & Blade](#php-and-blade)
+- [Pengantar](#pengantar)
+- [Menggunakan PHP](#menggunakan-php)
+    - [PHP and Blade](#php-and-blade)
     - [Livewire](#livewire)
-    - [Starter Kits](#php-starter-kits)
-- [Using Vue / React](#using-vue-react)
+    - [Kit Pemula PHP](#php-starter-kits)
+- [Menggunakan Vue / React](#menggunakan-vue-/-react)
     - [Inertia](#inertia)
     - [Starter Kits](#inertia-starter-kits)
-- [Bundling Assets](#bundling-assets)
+    - [Kit Pemula Inertia](#inertia-starter-kits)
+- [Membundel Aset](#bundling-assets)
 
 <a name="introduction"></a>
-## Introduction
+## Pengantar
 
-Laravel is a backend framework that provides all of the features you need to build modern web applications, such as [routing](/docs/{{version}}/routing), [validation](/docs/{{version}}/validation), [caching](/docs/{{version}}/cache), [queues](/docs/{{version}}/queues), [file storage](/docs/{{version}}/filesystem), and more. However, we believe it's important to offer developers a beautiful full-stack experience, including powerful approaches for building your application's frontend.
+Laravel adalah framework _backend_ yang menyediakan semua fitur yang Anda perlukan untuk membangun aplikasi web modern, seperti [_route_](/docs/{{version}}/routing), [validasi](/docs/{{version}}/validasi), [_cache_](/docs/{{version}}/cache), [_queues_](/docs/{{version}}/queues), [penyimpanan _file_](/docs/{{version}}/filesystem ), dan masih banyak lagi. Namun, kami yakin penting untuk menawarkan pengalaman full-stack yang indah kepada developer, termasuk pendekatan yang andal untuk membangun aplikasi _frontend_ anda.
 
-There are two primary ways to tackle frontend development when building an application with Laravel, and which approach you choose is determined by whether you would like to build your frontend by leveraging PHP or by using JavaScript frameworks such as Vue and React. We'll discuss both of these options below so that you can make an informed decision regarding the best approach to frontend development for your application.
+Ada dua cara utama untuk menangani pengembangan _frontend_ saat membangun aplikasi dengan Laravel, dan pendekatan mana yang Anda pilih yang telah ditentukan oleh anda apakah Anda ingin membangun _frontend_ dengan memanfaatkan PHP atau dengan menggunakan framework JavaScript seperti Vue dan React. Kami akan membahas kedua opsi tersebut di bawah ini sehingga Anda dapat membuat keputusan berdasarkan informasi mengenai pendekatan terbaik untuk pengembangan _frontend_ untuk aplikasi Anda.
 
 <a name="using-php"></a>
-## Using PHP
+## Menggunakan PHP
 
 <a name="php-and-blade"></a>
-### PHP & Blade
+### PHP and Blade
 
-In the past, most PHP applications rendered HTML to the browser using simple HTML templates interspersed with PHP `echo` statements which render data that was retrieved from a database during the request:
+Di masa lalu, sebagian besar aplikasi PHP menampilkan HTML ke browser menggunakan template HTML sederhana **diselingi** dengan pernyataan PHP `echo` yang menampilkan data yang diambil dari database selama permintaan:
 
 ```blade
 <div>
@@ -33,7 +34,7 @@ In the past, most PHP applications rendered HTML to the browser using simple HTM
 </div>
 ```
 
-In Laravel, this approach to rendering HTML can still be achieved using [views](/docs/{{version}}/views) and [Blade](/docs/{{version}}/blade). Blade is an extremely light-weight templating language that provides convenient, short syntax for displaying data, iterating over data, and more:
+Di Laravel, pendekatan menampilkan HTML ini masih dapat dicapai dengan menggunakan [_views_](/docs/{{version}}/views) dan [_Blade_](/docs/{{version}}/blade). Blade adalah bahasa templating yang sangat ringan yang menyediakan sintaks pendek yang nyaman untuk menampilkan data, mengulangi data, dan banyak lagi:
 
 ```blade
 <div>
@@ -43,7 +44,7 @@ In Laravel, this approach to rendering HTML can still be achieved using [views](
 </div>
 ```
 
-When building applications in this fashion, form submissions and other page interactions typically receive an entirely new HTML document from the server and the entire page is re-rendered by the browser. Even today, many applications may be perfectly suited to having their frontends constructed in this way using simple Blade templates.
+Saat membuat aplikasi dengan cara ini, pengiriman formulir dan interaksi halaman lainnya biasanya menerima dokumen HTML yang sama sekali baru dari server dan seluruh halaman dirender ulang oleh browser. Bahkan saat ini, banyak aplikasi mungkin sangat cocok untuk membangun _frontend_ mereka dengan cara ini menggunakan template _Blade_ sederhana.
 
 <a name="growing-expectations"></a>
 #### Growing Expectations
@@ -105,7 +106,7 @@ If you're new to Laravel, we recommend getting familiar with the basic usage of 
 If you would like to build your frontend using PHP and Livewire, you can leverage our Breeze or Jetstream [starter kits](/docs/{{version}}/starter-kits) to jump-start your application's development. Both of these starter kits scaffold your application's backend and frontend authentication flow using [Blade](/docs/{{version}}/blade) and [Tailwind](https://tailwindcss.com) so that you can simply start building your next big idea.
 
 <a name="using-vue-react"></a>
-## Using Vue / React
+## Menggunakan Vue / React
 
 Although it's possible to build modern frontends using Laravel and Livewire, many developers still prefer to leverage the power of a JavaScript framework like Vue or React. This allows developers to take advantage of the rich ecosystem of JavaScript packages and tools available via NPM.
 
