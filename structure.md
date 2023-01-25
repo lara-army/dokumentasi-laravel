@@ -2,31 +2,31 @@
 
 - [Pengantar](#pengantar)
 - [Direktori _Root_](#direktori-root)
-    - [Direktori `app`](#the-root-app-directory)
-    - [Direktori `bootstrap`](#the-bootstrap-directory)
-    - [Direktori `config`](#the-config-directory)
-    - [Direktori `database`](#the-database-directory)
-    - [Direktori `lang`](#the-lang-directory)
-    - [Direktori `public`](#the-public-directory)
-    - [Direktori `resources`](#the-resources-directory)
-    - [Direktori `routes`](#the-routes-directory)
-    - [Direktori `storage`](#the-storage-directory)
-    - [Direktori `tests`](#the-tests-directory)
-    - [Direktori `vendor`](#the-vendor-directory)
-- [Direktori _App_](#the-app-directory)
-    - [Direktori `Broadcasting`](#the-broadcasting-directory)
-    - [Direktori `Console`](#the-console-directory)
-    - [Direktori `Events`](#the-events-directory)
-    - [Direktori `Exceptions`](#the-exceptions-directory)
-    - [Direktori `Http`](#the-http-directory)
-    - [Direktori `Jobs`](#the-jobs-directory)
-    - [Direktori `Listeners`](#the-listeners-directory)
-    - [Direktori `Mail`](#the-mail-directory)
-    - [Direktori `Models`](#the-models-directory)
-    - [Direktori `Notifications`](#the-notifications-directory)
-    - [Direktori `Policies`](#the-policies-directory)
-    - [Direktori `Providers`](#the-providers-directory)
-    - [Direktori `Rules`](#the-rules-directory)
+    - [Direktori `app`](#direktori-app)
+    - [Direktori `bootstrap`](#direktori-bootstrap)
+    - [Direktori `config`](#direktori-config)
+    - [Direktori `database`](#direktori-database)
+    - [Direktori `lang`](#direktori-lang)
+    - [Direktori `public`](#direktori-public)
+    - [Direktori `resources`](#direktori-resource)
+    - [Direktori `routes`](#direktori-routes)
+    - [Direktori `storage`](#direktori-storage)
+    - [Direktori `tests`](#direktori-tests)
+    - [Direktori `vendor`](#direktori-vendor)
+- [Direktori _App_](#direktori-app)
+    - [Direktori `Broadcasting`](#direktori-broadcasting)
+    - [Direktori `Console`](#direktori-console)
+    - [Direktori `Events`](#direktori-events)
+    - [Direktori `Exceptions`](#direktori-exceptions)
+    - [Direktori `Http`](#direktori-http)
+    - [Direktori `Jobs`](#direktori-jobs)
+    - [Direktori `Listeners`](#direktori-listeners)
+    - [Direktori `Mail`](#direktori-mail)
+    - [Direktori `Models`](#direktori-models)
+    - [Direktori `Notifications`](#direktori-notifications)
+    - [Direktori `Policies`](#direktori-policies)
+    - [Direktori `Providers`](#direktori-providers)
+    - [Direktori `Rules`](#direktori-rules)
 
 <a name="introduction"></a>
 ## Pengantar
@@ -57,7 +57,7 @@ Direktori `config`, seperti namanya, berisi semua _file_ konfigurasi aplikasi an
 <a name="the-database-directory"></a>
 #### Direktori `database`
 
-Direktori `database` berisi migrasi database, model _factories_, dan _seeds_. Jika mau, anda juga dapat menggunakan direktori ini untuk menyimpan database SQLite.
+Direktori `database` berisi migrasi _database_, model _factories_, dan _seeds_. Jika mau, anda juga dapat menggunakan direktori ini untuk menyimpan _database SQLite_.
 
 <a name="the-lang-directory"></a>
 #### Direktori `lang`
@@ -79,13 +79,13 @@ Direktori `resources` berisi [tampilan](/docs/{{version}}/views) anda serta aset
 
 Direktori `routes` berisi semua definisi rute untuk aplikasi anda. Secara _default_, beberapa _file_ rute disertakan dengan Laravel: `web.php`, `api.php`, `console.php`, dan `channels.php`.
 
-File `web.php` berisi rute yang ditempatkan `RouteServiceProvider` di grup middleware `web`, yang menyediakan status sesi, perlindungan CSRF, dan enkripsi cookie. Jika aplikasi anda tidak menawarkan stateless, RESTful API maka semua rute anda kemungkinan besar akan ditentukan dalam _file_ `web.php`.
+_File_ `web.php` berisi rute yang ditempatkan `RouteServiceProvider` di grup _middleware_ `web`, yang menyediakan status _session_, perlindungan CSRF, dan enkripsi _cookie_. Jika aplikasi anda tidak menawarkan _stateless_, _RESTful API_ maka semua rute anda kemungkinan besar akan ditentukan dalam _file_ `web.php`.
 
-File `api.php` berisi rute yang ditempatkan `RouteServiceProvider` di grup middleware `api`. Rute-rute ini dimaksudkan untuk menjadi _stateless_ jadi permintaan yang masuk ke aplikasi melalui rute ini dimaksudkan untuk diautentikasi [melalui token](/docs/{{version}}/sanctum) dan tidak akan memiliki akses ke keadaan _session_.
+_File_ `api.php` berisi rute yang ditempatkan `RouteServiceProvider` di grup _middleware_ `api`. Rute-rute ini dimaksudkan untuk menjadi _stateless_ jadi permintaan yang masuk ke aplikasi melalui rute ini dimaksudkan untuk diautentikasi [melalui token](/docs/{{version}}/sanctum) dan tidak akan memiliki akses ke keadaan _session_.
 
-File `console.php` adalah tempat anda dapat menentukan semua perintah konsol berbasis _closures_. Setiap _closures_ terikat pada instance perintah yang memungkinkan pendekatan sederhana untuk berinteraksi dengan metode IO setiap perintah. Meskipun _file_ ini tidak menentukan rute HTTP, _file_ ini menentukan titik masuk (rute) berbasis konsol ke dalam aplikasi anda.
+_File_ `console.php` adalah tempat anda dapat menentukan semua perintah konsol berbasis _closures_. Setiap _closures_ terikat pada _instance_ perintah yang memungkinkan pendekatan sederhana untuk berinteraksi dengan metode _IO_ setiap perintah. Meskipun _file_ ini tidak menentukan rute HTTP, _file_ ini menentukan titik masuk (rute) berbasis konsol ke dalam aplikasi anda.
 
-File `channels.php` adalah tempat anda dapat mendaftarkan semua saluran [penyiaran acara](/docs/{{version}}/broadcasting) yang didukung aplikasi anda.
+_File_ `channels.php` adalah tempat anda dapat mendaftarkan semua saluran [penyiaran acara](/docs/{{version}}/broadcasting) yang didukung aplikasi anda.
 
 <a name="the-storage-directory"></a>
 #### Direktori `storage`
@@ -107,9 +107,9 @@ Direktori `vendor` berisi dependensi [Composer](https://getcomposer.org) anda.
 <a name="the-app-directory"></a>
 ## Direktori _App_
 
-Sebagian besar aplikasi anda ditempatkan di direktori `app`. Secara _default_ direktori ini adalah namespace dalam `App` dan dimuat secara otomatis oleh Composer menggunakan [standar pemuatan otomatis PSR-4](https://www.php-fig.org/psr/psr-4/).
+Sebagian besar aplikasi anda ditempatkan di direktori `app`. Secara _default_ direktori ini adalah _namespace_ dalam `App` dan dimuat secara otomatis oleh Composer menggunakan [standar pemuatan otomatis PSR-4](https://www.php-fig.org/psr/psr-4/).
 
-Direktori `app` berisi berbagai direktori tambahan seperti `Console`, `Http`, dan `Providers`. Mengingat direktori `Console` dan `Http` sebagai penyedia API ke dalam inti aplikasi anda. Protokol HTTP dan CLI keduanya merupakan mekanisme untuk berinteraksi dengan aplikasi anda, tetapi sebenarnya tidak berisi logika aplikasi. Dengan kata lain, itu adalah dua cara untuk mengeluarkan perintah ke aplikasi anda. Direktori `Console` berisi semua perintah Artisan anda, sedangkan direktori `Http` berisi controller, middleware, dan permintaan anda.
+Direktori `app` berisi berbagai direktori tambahan seperti `Console`, `Http`, dan `Providers`. Mengingat direktori `Console` dan `Http` sebagai penyedia API ke dalam inti aplikasi anda. Protokol HTTP dan CLI keduanya merupakan mekanisme untuk berinteraksi dengan aplikasi anda, tetapi sebenarnya tidak berisi logika aplikasi. Dengan kata lain, itu adalah dua cara untuk mengeluarkan perintah ke aplikasi anda. Direktori `Console` berisi semua perintah Artisan anda, sedangkan direktori `Http` berisi controller, _middleware_, dan permintaan anda.
 
 Berbagai direktori lain akan dibuat di dalam direktori `app` saat anda menggunakan perintah `make` pada artisan _command_ untuk membuat kelas. Jadi, misalnya, direktori `app/Jobs` tidak akan ada sampai anda menjalankan perintah Artisan `make:job` untuk menghasilkan kelas pekerjaan.
 
@@ -124,12 +124,12 @@ Direktori `Broadcasting` berisi semua kelas saluran siaran untuk aplikasi anda. 
 <a name="the-console-directory"></a>
 #### Direktori `Console`
 
-Direktori `Console` berisi semua perintah Artisan khusus untuk aplikasi anda. Perintah-perintah ini dapat dibuat menggunakan perintah `make:command`. Direktori ini juga menampung kernel konsol anda, tempat perintah Artisan kustom anda yang didaftarkan dan [tugas terjadwal](/docs/{{version}}/scheduling) anda yang telah ditentukan.
+Direktori `Console` berisi semua perintah Artisan khusus untuk aplikasi anda. Perintah-perintah ini dapat dibuat menggunakan perintah `make:command`. Direktori ini juga menampung _kernel_ konsol anda, tempat perintah Artisan kustom anda yang didaftarkan dan [tugas terjadwal](/docs/{{version}}/scheduling) anda yang telah ditentukan.
 
 <a name="the-events-directory"></a>
 #### Direktori `Events`
 
-Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk anda dengan perintah Artisan `event:generate` dan `make:event`. Direktori `Events` berisi [kelas acara](/docs/{{version}}/events). _Events_ dapat digunakan untuk memperingatkan bagian lain dari aplikasi anda bahwa tindakan tertentu telah terjadi, memberikan banyak fleksibilitas dan _decoupling_.
+Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk anda dengan perintah Artisan `event:generate` dan `make:event`. Direktori `Events` berisi [_event classes_](/docs/{{version}}/events). _Events_ dapat digunakan untuk memperingatkan bagian lain dari aplikasi anda bahwa tindakan tertentu telah terjadi, memberikan banyak fleksibilitas dan _decoupling_.
 
 <a name="the-exceptions-directory"></a>
 #### Direktori `Exceptions`
@@ -139,17 +139,17 @@ Direktori `Exceptions` berisi pengendali pengecualian aplikasi anda dan juga mer
 <a name="the-http-directory"></a>
 #### Direktori `Http`
 
-Direktori `Http` berisi controller, middleware, dan permintaan formulir anda. Hampir semua logika untuk menangani permintaan yang masuk ke aplikasi anda akan ditempatkan di direktori ini.
+Direktori `Http` berisi controller, _middleware_, dan permintaan formulir anda. Hampir semua logika untuk menangani permintaan yang masuk ke aplikasi anda akan ditempatkan di direktori ini.
 
 <a name="the-jobs-directory"></a>
 #### Direktori `Jobs`
 
-Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk anda jika anda menjalankan perintah Artisan `make:job`. Direktori `Jobs` menyimpan [_queueable jobs_](/docs/{{version}}/queues) untuk aplikasi anda. `Jobs` mungkin diantrekan oleh aplikasi anda atau dijalankan secara sinkron dalam _lifecycle_ permintaan saat itu. Tugas yang dijalankan secara sinkron selama permintaan saat ini terkadang disebut sebagai "perintah" karena merupakan implementasi dari [pola perintah](https://en.wikipedia.org/wiki/Command_pattern).
+Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk anda jika anda menjalankan perintah Artisan `make:job`. Direktori `Jobs` menyimpan [_queueable jobs_](/docs/{{version}}/queues) untuk aplikasi anda. `Jobs` mungkin diantrekan oleh aplikasi anda atau dijalankan secara sinkron dalam _lifecycle_ permintaan saat itu. Tugas yang dijalankan secara sinkron selama permintaan saat ini terkadang disebut sebagai "perintah" karena merupakan implementasi dari [_command pattern_](https://en.wikipedia.org/wiki/Command_pattern).
 
 <a name="the-listeners-directory"></a>
 #### Direktori `Listeners`
 
-Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk anda jika anda menjalankan perintah Artisan `event:generate` atau `make:listener`. Direktori `Listeners` berisi kelas yang menangani [_events_](/docs/{{version}}/events) anda. _Event listeners_ menerima instance _event_ dan melakukan logika sebagai respons terhadap _events_ yang dipicu. Misalnya, peristiwa `UserRegistered` mungkin ditangani oleh pendengar `SendWelcomeEmail`.
+Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk anda jika anda menjalankan perintah Artisan `event:generate` atau `make:listener`. Direktori `Listeners` berisi kelas yang menangani [_events_](/docs/{{version}}/events) anda. _Event listeners_ menerima _instance_ _event_ dan melakukan logika sebagai respons terhadap _events_ yang dipicu. Misalnya, peristiwa `UserRegistered` mungkin ditangani oleh pendengar `SendWelcomeEmail`.
 
 <a name="the-mail-directory"></a>
 #### Direktori `Mail`
@@ -159,12 +159,12 @@ Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk anda jika and
 <a name="the-models-directory"></a>
 #### Direktori `Models`
 
-Direktori `Models` berisi semua [kelas model Eloquent](/docs/{{version}}/eloquent). Eloquent ORM yang disertakan dengan Laravel menyediakan implementasi ActiveRecord yang indah dan sederhana untuk bekerja dengan database anda. Setiap tabel database memiliki "Model" yang sesuai yang digunakan untuk berinteraksi dengan tabel tersebut. Model memungkinkan anda melakukan kueri data di tabel anda, serta menyisipkan rekaman baru ke dalam tabel.
+Direktori `Models` berisi semua [kelas model Eloquent](/docs/{{version}}/eloquent). _Eloquent ORM_ yang disertakan dengan Laravel menyediakan implementasi _ActiveRecord_ yang indah dan sederhana untuk bekerja dengan _database_ anda. Setiap tabel _database_ memiliki "Model" yang sesuai yang digunakan untuk berinteraksi dengan tabel tersebut. Model memungkinkan anda melakukan kueri data di tabel anda, serta menyisipkan rekaman baru ke dalam tabel.
 
 <a name="the-notifications-directory"></a>
 #### Direktori `Notifications`
 
-Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk anda jika anda menjalankan perintah Artisan `make:notification`. Direktori `Notifikasi` berisi semua [notifikasi](/docs/{{version}}/notifikasi) "transaksional" yang dikirim oleh aplikasi anda, seperti notifikasi sederhana tentang peristiwa yang terjadi dalam aplikasi anda. Fitur notifikasi Laravel mengabstraksi pengiriman notifikasi melalui berbagai driver seperti email, Slack, SMS, atau disimpan dalam database.
+Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk anda jika anda menjalankan perintah Artisan `make:notification`. Direktori `Notifikasi` berisi semua [notifikasi](/docs/{{version}}/notification) "transaksional" yang dikirim oleh aplikasi anda, seperti notifikasi sederhana tentang peristiwa yang terjadi dalam aplikasi anda. Fitur notifikasi Laravel mengabstraksi pengiriman notifikasi melalui berbagai driver seperti email, Slack, SMS, atau disimpan dalam _database_.
 
 <a name="the-policies-directory"></a>
 #### Direktori `Policies`
@@ -174,7 +174,7 @@ Direktori ini tidak ada secara _default_, tetapi akan dibuat untuk anda jika and
 <a name="the-providers-directory"></a>
 #### Direktori `Providers`
 
-Direktori `Providers` berisi semua [penyedia layanan (_service provider_)](/docs/{{version}}/providers) untuk aplikasi anda. Penyedia layanan mem-bootstrap aplikasi anda dengan mengikat layanan di wadah layanan, mendaftarkan acara, atau melakukan tugas lain untuk mempersiapkan aplikasi anda untuk permintaan masuk.
+Direktori `Providers` berisi semua [penyedia layanan (_service provider_)](/docs/{{version}}/providers) untuk aplikasi anda. Penyedia layanan mem-_bootstrap_ aplikasi anda dengan mengikat layanan di wadah layanan, mendaftarkan acara, atau melakukan tugas lain untuk mempersiapkan aplikasi anda untuk permintaan masuk.
 
 Pada aplikasi Laravel yang baru, direktori ini sudah berisi beberapa penyedia. anda bebas menambahkan penyedia anda sendiri ke direktori ini sesuai kebutuhan.
 
