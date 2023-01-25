@@ -9,8 +9,8 @@
 - [Menulis Pesan _Log_](#writing-log-messages)
     - [Informasi Kontekstual](#contextual-information)
     - [Menulis pada Kanal Tertentu](#writing-to-specific-channels)
-- [Kostumisasi Kanal Monolog](#monolog-channel-customization)
-    - [Kostumisasi Monolog untuk Kanal](#customizing-monolog-for-channels)
+- [Kustomisasi Kanal Monolog](#monolog-channel-customization)
+    - [Kustomisasi Monolog untuk Kanal](#customizing-monolog-for-channels)
     - [Membuat Kanal _Handler_ Monolog](#creating-monolog-handler-channels)
     - [Membuat Kanal Kustom Via _Factory_](#creating-custom-channels-via-factories)
 
@@ -298,7 +298,7 @@ Anda mungkin juga ingin menyertakan kanal _on-demand_ dalam tumpukan yang _on-de
 ## Kustomisasi Kanal Monolog
 
 <a name="customizing-monolog-for-channels"></a>
-### Kostumisasi Monolog untuk Kanal
+### Kustomisasi Monolog untuk Kanal
 
 Terkadang Anda mungkin membutuhkan kontrol penuh atas bagaimana Monolog dikonfigurasi untuk kanal yang sudah ada. Sebagai contoh, Anda mungkin ingin mengonfigurasi implementasi `FormatterInterface` Monolog yang kustom untuk kanal `single` bawaan Laravel.
 
