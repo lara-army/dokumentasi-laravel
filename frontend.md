@@ -9,7 +9,7 @@
     - [Inertia](#inertia)
     - [Starter Kits](#inertia-starter-kits)
     - [Kit Pemula Inertia](#inertia-starter-kits)
-- [Membundel Aset](#bundling-assets)
+- [_Bundling assets_](#bundling-assets)
 
 <a name="introduction"></a>
 ## Pengantar
