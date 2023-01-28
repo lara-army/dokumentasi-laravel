@@ -26,7 +26,7 @@ Ada dua cara utama untuk menangani pengembangan _frontend_ saat membangun aplika
 
 Di masa lalu, sebagian besar aplikasi PHP menampilkan HTML ke browser menggunakan template HTML sederhana **diselingi** dengan pernyataan PHP `echo` yang menampilkan data yang diambil dari database selama permintaan:
 
-```blade
+```php
 <div>
     <?php foreach ($users as $user): ?>
         Hello, <?php echo $user->name; ?> <br />
@@ -36,7 +36,7 @@ Di masa lalu, sebagian besar aplikasi PHP menampilkan HTML ke browser menggunaka
 
 Di Laravel, pendekatan menampilkan HTML ini masih dapat dicapai dengan menggunakan [_views_](/docs/{{version}}/views) dan [_Blade_](/docs/{{version}}/blade). Blade adalah bahasa templating yang sangat ringan yang menyediakan sintaks pendek yang nyaman untuk menampilkan data, mengulangi data, dan banyak lagi:
 
-```blade
+```php
 <div>
     @foreach ($users as $user)
         Hello, {{ $user->name }} <br />
@@ -101,7 +101,7 @@ Bagi banyak orang, Livewire telah merevolusi pengembangan frontend dengan Larave
 Jika Anda baru menggunakan Laravel, sebaiknya pahami penggunaan dasar [views](/docs/{{version}}/views) dan [Blade](/docs/{{version}}/blade). Kemudian, lihat [dokumentasi Laravel Livewire](https://laravel-livewire.com/docs) resmi untuk mempelajari cara membawa aplikasi Anda ke level selanjutnya dengan komponen Livewire interaktif.
 
 <a name="php-starter-kits"></a>
-### Kit Pemula
+### Kit Pemula PHP
 
 Jika Anda ingin membuat frontend menggunakan PHP dan Livewire, Anda dapat memanfaatkan [starter kit](/docs/{{version}}/starter-kits) Breeze atau Jetstream kami untuk memulai pengembangan aplikasi Anda. Kedua starter kit ini menyusun alur autentikasi backend dan frontend aplikasi Anda menggunakan [Blade](/docs/{{version}}/blade) dan [Tailwind](https://tailwindcss.com) sehingga Anda dapat langsung mulai membangun ide besar berikutnya.
 
@@ -176,23 +176,23 @@ const props = defineProps(['user']);
 
 Seperti yang Anda lihat, Inertia memungkinkan Anda untuk memanfaatkan kekuatan penuh Vue atau React ketika membangun frontend Anda, sambil menyediakan jembatan yang ringan antara backend yang didukung oleh Laravel dengan frontend yang didukung oleh JavaScript.
 
-#### Server-Side Rendering
+#### Rendering Sisi Server
 
-If you're concerned about diving into Inertia because your application requires server-side rendering, don't worry. Inertia offers [server-side rendering support](https://inertiajs.com/server-side-rendering). And, when deploying your application via [Laravel Forge](https://forge.laravel.com), it's a breeze to ensure that Inertia's server-side rendering process is always running.
+Jika Anda khawatir untuk menyelami Inertia karena aplikasi Anda membutuhkan rendering sisi server, jangan khawatir. Inertia menawarkan [dukungan rendering sisi server](https://inertiajs.com/server-side-rendering). Dan, ketika men-_deploy_ aplikasi Anda melalui [Laravel Forge](https://forge.laravel.com), sangat mudah untuk memastikan bahwa proses rendering sisi server Inertia selalu berjalan.
 
 <a name="inertia-starter-kits"></a>
-### Starter Kits
+### Kit Pemula Inertia
 
-If you would like to build your frontend using Inertia and Vue / React, you can leverage our Breeze or Jetstream [starter kits](/docs/{{version}}/starter-kits#breeze-and-inertia) to jump-start your application's development. Both of these starter kits scaffold your application's backend and frontend authentication flow using Inertia, Vue / React, [Tailwind](https://tailwindcss.com), and [Vite](https://vitejs.dev) so that you can start building your next big idea.
+Jika Anda ingin membangun frontend menggunakan Inertia dan Vue / React, Anda dapat memanfaatkan [kit pemula breeze dan inertia](/docs/{{version}}/starter-kits#breeze-dan-inertia) untuk memulai pengembangan aplikasi Anda. Kedua starter kit ini akan membangun alur otentikasi backend dan frontend aplikasi Anda menggunakan Inertia, Vue/React, [Tailwind](https://tailwindcss.com), dan [Vite](https://vitejs.dev) sehingga Anda bisa mulai membangun ide besar Anda berikutnya.
 
 <a name="bundling-assets"></a>
-## Bundling Assets
+## Aset Bundel
 
-Regardless of whether you choose to develop your frontend using Blade and Livewire or Vue / React and Inertia, you will likely need to bundle your application's CSS into production ready assets. Of course, if you choose to build your application's frontend with Vue or React, you will also need to bundle your components into browser ready JavaScript assets.
+Terlepas dari apakah Anda memilih untuk mengembangkan frontend menggunakan Blade dan Livewire atau Vue / React dan Inertia, Anda mungkin perlu memaketkan CSS aplikasi Anda ke dalam aset yang siap untuk produksi. Tentu saja, jika Anda memilih untuk membangun frontend aplikasi Anda dengan Vue atau React, Anda juga perlu memaketkan komponen-komponen Anda ke dalam aset-aset JavaScript yang siap digunakan di peramban.
 
-By default, Laravel utilizes [Vite](https://vitejs.dev) to bundle your assets. Vite provides lightning-fast build times and near instantaneous Hot Module Replacement (HMR) during local development. In all new Laravel applications, including those using our [starter kits](/docs/{{version}}/starter-kits), you will find a `vite.config.js` file that loads our light-weight Laravel Vite plugin that makes Vite a joy to use with Laravel applications.
+Secara default, Laravel menggunakan [Vite](https://vitejs.dev) untuk memaketkan aset Anda. Vite menyediakan waktu pembuatan secepat kilat dan Penggantian Modul Panas (Hot Module Replacement/HMR) yang hampir seketika selama pengembangan lokal. Di semua aplikasi Laravel baru, termasuk yang menggunakan [starter kits](/docs/{{version}}/starter-kits), Anda akan menemukan file `vite.config.js` yang memuat plugin Laravel Vite kami yang ringan yang membuat Vite sangat mudah digunakan dengan aplikasi Laravel.
 
-The fastest way to get started with Laravel and Vite is by beginning your application's development using [Laravel Breeze](/docs/{{version}}/starter-kits#laravel-breeze), our simplest starter kit that jump-starts your application by providing frontend and backend authentication scaffolding.
+Cara tercepat untuk memulai dengan Laravel dan Vite adalah dengan memulai pengembangan aplikasi Anda menggunakan [Laravel Breeze](/docs/{{version}}/starter-kits#laravel-breeze), starter kit kami yang paling sederhana yang dapat memulai aplikasi Anda dengan menyediakan perancah otentikasi frontend dan backend.
 
-> **Note**  
-> For more detailed documentation on utilizing Vite with Laravel, please see our [dedicated documentation on bundling and compiling your assets](/docs/{{version}}/vite).
+> **Catatan**  
+> Untuk dokumentasi yang lebih mendetail tentang cara menggunakan Vite dengan Laravel, silakan lihat [dokumentasi khusus tentang bundling dan kompilasi aset Anda] (/docs/{{versi}}/vite).
