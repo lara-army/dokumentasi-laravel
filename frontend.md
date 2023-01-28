@@ -24,7 +24,7 @@ Ada dua cara utama untuk menangani pengembangan _frontend_ saat membangun aplika
 <a name="php-and-blade" id="php-and-blade"></a>
 ### PHP and Blade
 
-Di masa lalu, sebagian besar aplikasi PHP menampilkan HTML ke browser menggunakan template HTML sederhana **diselingi** dengan pernyataan PHP `echo` yang menampilkan data yang diambil dari _database_ selama permintaan:
+Di masa lalu, sebagian besar aplikasi PHP menampilkan HTML ke _browser_ menggunakan template HTML sederhana **diselingi** dengan pernyataan PHP `echo` yang menampilkan data yang diambil dari _database_ selama permintaan:
 
 ```blade
 <div>
@@ -34,7 +34,7 @@ Di masa lalu, sebagian besar aplikasi PHP menampilkan HTML ke browser menggunaka
 </div>
 ```
 
-Di Laravel, pendekatan menampilkan HTML ini masih dapat dicapai dengan menggunakan [_views_](/docs/{{version}}/views) dan [_Blade_](/docs/{{version}}/blade). Blade adalah bahasa templating yang sangat ringan yang menyediakan sintaks pendek yang nyaman untuk menampilkan data, mengulangi data, dan banyak lagi:
+Di Laravel, pendekatan menampilkan HTML ini masih dapat dicapai dengan menggunakan [_views_](/docs/{{version}}/views) dan [_Blade_](/docs/{{version}}/blade). _Blade_ adalah bahasa templating yang sangat ringan yang menyediakan sintaks pendek yang nyaman untuk menampilkan data, mengulangi data, dan banyak lagi:
 
 ```blade
 <div>
@@ -49,18 +49,18 @@ Saat membuat aplikasi dengan cara ini, pengiriman formulir dan interaksi halaman
 <a name="growing-expectations" id="growing-expectations"></a>
 #### Tumbuhnya Harapan
 
-Namun, karena ekspektasi pengguna terkait aplikasi web telah matang, banyak developer menemukan kebutuhan untuk membangun frontend yang lebih dinamis dengan interaksi yang terasa lebih halus. Mengingat hal ini, beberapa developer memilih untuk mulai membangun frontend aplikasi mereka menggunakan _framework_ JavaScript seperti Vue dan React.
+Namun, karena ekspektasi pengguna terkait aplikasi web telah matang, banyak developer menemukan kebutuhan untuk membangun _frontend_ yang lebih dinamis dengan interaksi yang terasa lebih halus. Mengingat hal ini, beberapa developer memilih untuk mulai membangun _frontend_ aplikasi mereka menggunakan _framework_ JavaScript seperti Vue dan React.
 
-Lainnya, lebih memilih untuk tetap menggunakan bahasa backend yang mereka sukai, telah mengembangkan solusi yang memungkinkan konstruksi UI aplikasi web modern sambil tetap menggunakan bahasa backend pilihan mereka. Misalnya, di ekosistem [_Rails_](https://rubyonrails.org/), hal ini telah mendorong pembuatan library seperti [_Turbo_](https://turbo.hotwired.dev/) [_Hotwire_](https://hotwired.dev/), dan [_Stimulus_](https://stimulus.hotwired.dev/).
+Lainnya, lebih memilih untuk tetap menggunakan bahasa _backend_ yang mereka sukai, telah mengembangkan solusi yang memungkinkan konstruksi _UI (user interface)_ aplikasi web modern sambil tetap menggunakan bahasa _backend_ pilihan mereka. Misalnya, di ekosistem [_Rails_](https://rubyonrails.org/), hal ini telah mendorong pembuatan _library_ seperti [_Turbo_](https://turbo.hotwired.dev/) [_Hotwire_](https://hotwired.dev/), dan [_Stimulus_](https://stimulus.hotwired.dev/).
 
-Dalam ekosistem Laravel, kebutuhan untuk membuat frontend yang modern dan dinamis terutama dengan menggunakan PHP telah menyebabkan terciptanya [Laravel Livewire](https://laravel-livewire.com) dan [Alpine.js](https://alpinejs.dev/).
+Dalam ekosistem Laravel, kebutuhan untuk membuat _frontend_ yang modern dan dinamis terutama dengan menggunakan PHP telah menyebabkan terciptanya [Laravel Livewire](https://laravel-livewire.com) dan [Alpine.js](https://alpinejs.dev/).
 
 <a name="livewire" id="livewire"></a>
 ### Livewire
 
-[Laravel Livewire](https://laravel-livewire.com) _framework_ untuk membangun frontend bertenaga Laravel yang terasa dinamis, modern, dan hidup seperti frontend yang dibuat dengan _framework_ JavaScript modern seperti Vue dan React.
+[Laravel Livewire](https://laravel-livewire.com) _framework_ untuk membangun _frontend_ bertenaga Laravel yang terasa dinamis, modern, dan hidup seperti _frontend_ yang dibuat dengan _framework_ JavaScript modern seperti Vue dan React.
 
-Saat menggunakan Livewire, Anda akan membuat "komponen" Livewire yang merender bagian terpisah dari UI Anda dan menampilkan metode dan data yang dapat dipanggil dan berinteraksi dari frontend aplikasi Anda. Misalnya, komponen "Penghitung" sederhana mungkin terlihat seperti berikut:
+Saat menggunakan Livewire, Anda akan membuat "komponen" Livewire yang _merender_ bagian terpisah dari _UI (user interface)_ Anda dan menampilkan metode dan data yang dapat dipanggil dan berinteraksi dari _frontend_ aplikasi Anda. Misalnya, komponen "Penghitung" sederhana mungkin terlihat seperti berikut:
 
 ```php
 <?php
@@ -87,39 +87,39 @@ class Counter extends Component
 
 Dan, _template_ penghitung yang sesuai akan ditulis seperti ini:
 
-```html
+```blade
 <div>
     <button wire:click="increment">+</button>
     <h1>{{ $count }}</h1>
 </div>
 ```
 
-Seperti yang Anda lihat, Livewire memungkinkan Anda menulis atribut HTML baru seperti `wire:click` yang menghubungkan frontend dan backend aplikasi Laravel Anda. Selain itu, Anda dapat _merender_ status komponen Anda saat ini menggunakan ekspresi Blade sederhana.
+Seperti yang Anda lihat, Livewire memungkinkan Anda menulis atribut HTML baru seperti `wire:click` yang menghubungkan _frontend_ dan backend aplikasi Laravel Anda. Selain itu, Anda dapat _merender_ status komponen Anda saat ini menggunakan ekspresi _Blade_ sederhana.
 
-Bagi banyak orang, Livewire telah merevolusi pengembangan frontend dengan Laravel, memungkinkan mereka untuk tetap berada dalam kenyamanan Laravel sambil membangun aplikasi web yang modern dan dinamis. Biasanya, developer yang menggunakan Livewire juga akan memanfaatkan [Alpine.js](https://alpinejs.dev/) untuk "memercikan" JavaScript ke frontend mereka hanya jika diperlukan, misalnya untuk _merender_ jendela dialog.
+Bagi banyak orang, Livewire telah berevolusi pengembangan _frontend_ dengan Laravel, memungkinkan mereka untuk tetap berada dalam kenyamanan Laravel sambil membangun aplikasi web yang modern dan dinamis. Biasanya, developer yang menggunakan Livewire juga akan memanfaatkan [Alpine.js](https://alpinejs.dev/) untuk "memercikan" JavaScript ke _frontend_ mereka hanya jika diperlukan, misalnya untuk _merender_ jendela dialog.
 
 Jika Anda baru menggunakan Laravel, sebaiknya pahami penggunaan dasar [views](/docs/{{version}}/views) dan [Blade](/docs/{{version}}/blade). Kemudian, lihat [dokumentasi Laravel Livewire](https://laravel-livewire.com/docs) resmi untuk mempelajari cara membawa aplikasi Anda ke level selanjutnya dengan komponen Livewire interaktif.
 
 <a name="php-starter-kits" id="php-starter-kits"></a>
 ### Kit Pemula PHP
 
-Jika Anda ingin membuat frontend menggunakan PHP dan Livewire, Anda dapat memanfaatkan [starter kit](/docs/{{version}}/starter-kits) Breeze atau Jetstream kami untuk memulai pengembangan aplikasi Anda. Kedua starter kit ini menyusun alur autentikasi backend dan frontend aplikasi Anda menggunakan [Blade](/docs/{{version}}/blade) dan [Tailwind](https://tailwindcss.com) sehingga Anda dapat langsung mulai membangun ide besar berikutnya.
+Jika Anda ingin membuat _frontend_ menggunakan PHP dan Livewire, Anda dapat memanfaatkan [kit pemula](/docs/{{version}}/starter-kits) Breeze atau Jetstream kami untuk memulai pengembangan aplikasi Anda. Kedua starter kit ini menyusun alur autentikasi _backend_ dan _frontend_ aplikasi Anda menggunakan [Blade](/docs/{{version}}/blade) dan [Tailwind](https://tailwindcss.com) sehingga Anda dapat langsung mulai membangun ide besar berikutnya.
 
 <a name="using-vue-react" id="using-vue-react"></a>
 ## Menggunakan Vue / React
 
-Meskipun dimungkinkan untuk membangun frontend modern menggunakan Laravel dan Livewire, banyak pengembang masih lebih memilih untuk memanfaatkan kekuatan kerangka kerja JavaScript seperti Vue atau React. Hal ini memungkinkan para pengembang untuk memanfaatkan ekosistem yang kaya akan paket dan alat JavaScript yang tersedia melalui NPM.
+Meskipun dimungkinkan untuk membangun _frontend_ modern menggunakan Laravel dan Livewire, banyak pengembang masih lebih memilih untuk memanfaatkan kekuatan kerangka kerja JavaScript seperti Vue atau React. Hal ini memungkinkan para pengembang untuk memanfaatkan ekosistem yang kaya akan paket dan alat JavaScript yang tersedia melalui [NPM](https://www.npmjs.com/).
 
-Namun, tanpa alat tambahan, memasangkan Laravel dengan Vue atau React akan membuat kita harus menyelesaikan berbagai masalah rumit seperti rute sisi klien, hidrasi data, dan autentikasi. Rute sisi klien sering disederhanakan dengan menggunakan _framework_ Vue / React yang memiliki opini seperti [Nuxt](https://nuxtjs.org/) dan [Next](https://nextjs.org/); namun, hidrasi dan autentikasi data tetap menjadi masalah yang rumit dan tidak praktis untuk dipecahkan saat memasangkan kerangka kerja backend seperti Laravel dengan kerangka kerja frontend ini.
+Namun, tanpa alat tambahan, memasangkan Laravel dengan Vue atau React akan membuat kita harus menyelesaikan berbagai masalah rumit seperti rute sisi klien, _hydration_ data, dan autentikasi. Rute sisi klien sering disederhanakan dengan menggunakan _framework_ Vue / React yang memiliki opini seperti [Nuxt](https://nuxtjs.org/) dan [Next](https://nextjs.org/); namun, _hydration_ dan autentikasi data tetap menjadi masalah yang rumit dan tidak praktis untuk dipecahkan saat memasangkan kerangka kerja _backend_ seperti Laravel dengan kerangka kerja _frontend_ ini.
 
 Selain itu, pengembang harus mengelola dua repositori kode yang terpisah, dan sering kali harus mengoordinasikan pemeliharaan, rilis, dan penerapan di kedua repositori tersebut. Meskipun masalah-masalah ini bukannya tidak dapat diatasi, kami tidak percaya bahwa ini adalah cara yang produktif atau menyenangkan untuk mengembangkan aplikasi.
 
 <a name="inertia" id="inertia"></a>
 ### Inertia
 
-Untungnya, Laravel menawarkan yang terbaik dari kedua dunia. [Inertia] (https://inertiajs.com) menjembatani celah antara aplikasi Laravel Anda dan frontend Vue atau React modern Anda, memungkinkan Anda untuk membangun frontend modern yang lengkap menggunakan Vue atau React sambil memanfaatkan rute dan pengontrol Laravel untuk perutean, hidrasi data, dan otentikasi - semuanya dalam satu repositori kode. Dengan pendekatan ini, Anda dapat menikmati kekuatan penuh dari Laravel dan Vue / React tanpa melumpuhkan kemampuan salah satu dari keduanya.
+Untungnya, Laravel menawarkan yang terbaik dari kedua dunia. [Inertia](https://inertiajs.com) menjembatani celah antara aplikasi Laravel Anda dan _frontend_ Vue atau React modern Anda, memungkinkan Anda untuk membangun _frontend_ modern yang lengkap menggunakan Vue atau React sambil memanfaatkan rute dan pengontrol Laravel untuk perutean, _hydration_ data, dan otentikasi - semuanya dalam satu repositori kode. Dengan pendekatan ini, Anda dapat menikmati kekuatan penuh dari Laravel dan Vue / React tanpa melumpuhkan kemampuan salah satu dari keduanya.
 
-Setelah menginstal Inertia ke dalam aplikasi Laravel Anda, Anda akan menulis rute dan controller seperti biasa. Namun, alih-alih mengembalikan templat Blade dari controller Anda, Anda akan mengembalikan halaman Inertia:
+Setelah menginstal Inertia ke dalam aplikasi Laravel Anda, Anda akan menulis rute dan _controller_ seperti biasa. Namun, alih-alih mengembalikan templat _Blade_ dari _controller_ Anda, Anda akan mengembalikan halaman Inertia:
 
 ```php
 <?php
@@ -147,9 +147,9 @@ class UserController extends Controller
 }
 ```
 
-Halaman Inertia berhubungan dengan komponen Vue atau React, biasanya disimpan di dalam direktori `resources/js/Pages` pada aplikasi Anda. Data yang diberikan ke halaman melalui metode `Inertia::render` akan digunakan untuk mengisi "props" dari komponen halaman:
+Halaman Inertia berhubungan dengan komponen Vue atau React, biasanya disimpan di dalam direktori `resources/js/Pages` pada aplikasi Anda. Data yang diberikan ke halaman melalui metode `Inertia::render` akan digunakan untuk mengisi "_props_" dari komponen halaman:
 
-```js
+```vue
 <script setup>
 import Layout from '@/Layouts/Authenticated.vue';
 import { Head } from '@inertiajs/inertia-vue3';
@@ -174,25 +174,25 @@ const props = defineProps(['user']);
 </template>
 ```
 
-Seperti yang Anda lihat, Inertia memungkinkan Anda untuk memanfaatkan kekuatan penuh Vue atau React ketika membangun frontend Anda, sambil menyediakan jembatan yang ringan antara backend yang didukung oleh Laravel dengan frontend yang didukung oleh JavaScript.
+Seperti yang Anda lihat, Inertia memungkinkan Anda untuk memanfaatkan kekuatan penuh Vue atau React ketika membangun _frontend_ Anda, sambil menyediakan jembatan yang ringan antara _backend_ yang didukung oleh Laravel dengan _frontend_ yang didukung oleh JavaScript.
 
 #### Rendering Sisi Server
 
-Jika Anda khawatir untuk menyelami Inertia karena aplikasi Anda membutuhkan rendering sisi server, jangan khawatir. Inertia menawarkan [dukungan rendering sisi server](https://inertiajs.com/server-side-rendering). Dan, ketika men-_deploy_ aplikasi Anda melalui [Laravel Forge](https://forge.laravel.com), sangat mudah untuk memastikan bahwa proses rendering sisi server Inertia selalu berjalan.
+Jika Anda khawatir untuk menyelami Inertia karena aplikasi Anda membutuhkan _rendering_ sisi server, jangan khawatir. Inertia menawarkan [dukungan _rendering_ sisi server](https://inertiajs.com/server-side-rendering). Dan, ketika men-_deploy_ aplikasi Anda melalui [Laravel Forge](https://forge.laravel.com), sangat mudah untuk memastikan bahwa proses _rendering_ sisi server Inertia selalu berjalan.
 
 <a name="inertia-starter-kits" id="inertia-starter-kits"></a>
 ### Kit Pemula Inertia
 
-Jika Anda ingin membangun frontend menggunakan Inertia dan Vue / React, Anda dapat memanfaatkan [kit pemula breeze dan inertia](/docs/{{version}}/starter-kits#breeze-dan-inertia) untuk memulai pengembangan aplikasi Anda. Kedua starter kit ini akan membangun alur otentikasi backend dan frontend aplikasi Anda menggunakan Inertia, Vue/React, [Tailwind](https://tailwindcss.com), dan [Vite](https://vitejs.dev) sehingga Anda bisa mulai membangun ide besar Anda berikutnya.
+Jika Anda ingin membangun _frontend_ menggunakan Inertia dan Vue / React, Anda dapat memanfaatkan [kit pemula breeze dan inertia](/docs/{{version}}/starter-kits#breeze-dan-inertia) untuk memulai pengembangan aplikasi Anda. Kedua starter kit ini akan membangun alur otentikasi _backend_ dan _frontend_ aplikasi Anda menggunakan Inertia, Vue/React, [Tailwind](https://tailwindcss.com), dan [Vite](https://vitejs.dev) sehingga Anda bisa mulai membangun ide besar Anda berikutnya.
 
 <a name="bundling-assets" id="bundling-assets"></a>
 ## Aset Bundel
 
-Terlepas dari apakah Anda memilih untuk mengembangkan frontend menggunakan Blade dan Livewire atau Vue / React dan Inertia, Anda mungkin perlu memaketkan CSS aplikasi Anda ke dalam aset yang siap untuk produksi. Tentu saja, jika Anda memilih untuk membangun frontend aplikasi Anda dengan Vue atau React, Anda juga perlu memaketkan komponen-komponen Anda ke dalam aset-aset JavaScript yang siap digunakan di peramban.
+Terlepas dari apakah Anda memilih untuk mengembangkan _frontend_ menggunakan _Blade_ dan Livewire atau Vue / React dan Inertia, Anda mungkin perlu memaketkan CSS aplikasi Anda ke dalam aset yang siap untuk produksi. Tentu saja, jika Anda memilih untuk membangun frontend aplikasi Anda dengan Vue atau React, Anda juga perlu memaketkan komponen-komponen Anda ke dalam aset-aset JavaScript yang siap untuk _browser_.
 
-Secara default, Laravel menggunakan [Vite](https://vitejs.dev) untuk memaketkan aset Anda. Vite menyediakan waktu pembuatan secepat kilat dan Penggantian Modul Panas (Hot Module Replacement/HMR) yang hampir seketika selama pengembangan lokal. Di semua aplikasi Laravel baru, termasuk yang menggunakan [starter kits](/docs/{{version}}/starter-kits), Anda akan menemukan file `vite.config.js` yang memuat plugin Laravel Vite kami yang ringan yang membuat Vite sangat mudah digunakan dengan aplikasi Laravel.
+Secara _default_, Laravel menggunakan [Vite](https://vitejs.dev) untuk memaketkan aset Anda. Vite menyediakan waktu pembuatan secepat kilat dan Penggantian Modul Panas (_Hot Module Replacement/HMR_) yang hampir seketika selama pengembangan lokal. Di semua aplikasi Laravel baru, termasuk yang menggunakan [starter kits](/docs/{{version}}/starter-kits), Anda akan menemukan file `vite.config.js` yang memuat plugin Laravel Vite kami yang ringan yang membuat Vite sangat mudah digunakan dengan aplikasi Laravel.
 
-Cara tercepat untuk memulai dengan Laravel dan Vite adalah dengan memulai pengembangan aplikasi Anda menggunakan [Laravel Breeze](/docs/{{version}}/starter-kits#laravel-breeze), starter kit kami yang paling sederhana yang dapat memulai aplikasi Anda dengan menyediakan perancah otentikasi frontend dan backend.
+Cara tercepat untuk memulai dengan Laravel dan Vite adalah dengan memulai pengembangan aplikasi Anda menggunakan [Laravel Breeze](/docs/{{version}}/starter-kits#laravel-breeze), starter kit kami yang paling sederhana yang dapat memulai aplikasi Anda dengan menyediakan perancah otentikasi _frontend_ dan backend.
 
 > **Catatan**  
-> Untuk dokumentasi yang lebih mendetail tentang cara menggunakan Vite dengan Laravel, silakan lihat [dokumentasi khusus tentang bundling dan kompilasi aset Anda] (/docs/{{versi}}/vite).
+> Untuk dokumentasi yang lebih mendetail tentang cara menggunakan Vite dengan Laravel, silakan lihat [dokumentasi khusus tentang bundel dan kompilasi aset Anda] (/docs/{{versi}}/vite).
