@@ -121,7 +121,7 @@ Atau, Anda dapat menggunakan metode `Route::permanentRedirect` untuk mengembalik
 <a name="view-routes"></a>
 ### Rute _View_
 
-Jika rute Anda hanya perlu mengembalikan [view](/docs/{{version}}/views), Anda dapat menggunakan metode `Rute::view`. Seperti metode `redirect`, metode ini menyediakan jalan pintas sederhana sehingga Anda tidak perlu mendefinisikan rute penuh atau rute _controller_. Metode `view` menerima URI sebagai argumen pertama dan nama _view_ sebagai argumen kedua. Selain itu, Anda dapat menyediakan _array_ data untuk diteruskan ke _view_ sebagai argumen ketiga yang opsional:
+Jika rute Anda hanya perlu mengembalikan [_view_](/docs/{{version}}/views), Anda dapat menggunakan metode `Rute::view`. Seperti metode `redirect`, metode ini menyediakan jalan pintas sederhana sehingga Anda tidak perlu mendefinisikan rute penuh atau rute _controller_. Metode `view` menerima URI sebagai argumen pertama dan nama _view_ sebagai argumen kedua. Selain itu, Anda dapat menyediakan _array_ data untuk diteruskan ke _view_ sebagai argumen ketiga yang opsional:
 
     Route::view('/welcome', 'welcome');
 
