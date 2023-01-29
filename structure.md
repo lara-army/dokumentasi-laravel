@@ -111,7 +111,7 @@ Sebagian besar aplikasi Anda ditempatkan di direktori `app`. Secara _default_ di
 
 Direktori `app` berisi berbagai direktori tambahan seperti `Console`, `Http`, dan `Providers`. Direktori `Console` dan `Http` sebagai penyedia API ke dalam inti aplikasi Anda. Protokol HTTP dan CLI merupakan mekanisme untuk berinteraksi dengan aplikasi Anda, tetapi sebenarnya tidak berisi logika aplikasi. Dengan kata lain, protokol HTTP dan CLI adalah dua cara untuk menerbitkan perintah ke aplikasi Anda. Direktori `Console` berisi semua perintah Artisan Anda, sedangkan direktori `Http` berisi _controller_, _middleware_, dan permintaan (_request_) Anda.
 
-Berbagai direktori lain akan dibuat di dalam direktori `app` saat Anda menggunakan perintah `make` pada perintah Artisan untuk membuat beberapa kelas. Jadi, misalnya, direktori `app/Jobs` tidak akan ada sampai Anda menjalankan perintah Artisan `make:job` untuk menghasilkan kelas `job`.
+Berbagai direktori lain akan dibuat di dalam direktori `app` saat Anda menggunakan perintah `make` pada perintah Artisan untuk membuat beberapa kelas. Jadi, misalnya, direktori `app/Jobs` tidak akan ada sampai Anda menjalankan perintah Artisan `make:job` untuk menghasilkan kelas `Job`.
 
 > **Catatan**  
 > Banyak kelas di direktori `app` dapat dihasilkan oleh Artisan melalui perintahnya. Untuk meninjau perintah yang tersedia, jalankan perintah `php artisan list make` pada terminal Anda.
