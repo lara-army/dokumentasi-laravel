@@ -15,7 +15,7 @@
 
 Laravel adalah _framework backend_ yang menyediakan semua fitur yang Anda perlukan untuk membangun aplikasi web modern, seperti [_route_](/docs/{{version}}/routing), [validasi](/docs/{{version}}/validasi), [_cache_](/docs/{{version}}/cache), [_queues_](/docs/{{version}}/queues), [penyimpanan _file_](/docs/{{version}}/filesystem ), dan masih banyak lagi. Namun, kami yakin penting untuk menawarkan pengalaman _full-stack_ yang indah kepada developer, termasuk pendekatan yang andal untuk membangun aplikasi _frontend_ anda.
 
-Ada dua cara utama untuk mengerjakan pengembangan _frontend_ saat membangun aplikasi dengan Laravel dan cara mana yang Anda pilih yang telah anda tentukan, apakah Anda ingin membuat _frontend_ dengan menggunakan PHP atau dengan menggunakan _framework_ JavaScript seperti Vue atau React. Kami akan membahas kedua opsi tersebut di bawah ini sehingga Anda dapat membuat keputusan berdasarkan informasi mengenai pendekatan terbaik untuk pengembangan _frontend_ untuk aplikasi Anda.
+Terdapat dua cara untuk mengembangkan _frontend_ ketika membangun aplikasi dengan Laravel, dan pendekatan mana yang Anda pilih bergantung pada apakah Anda ingin membangun _frontend_ Anda dengan memanfaatkan PHP atau dengan menggunakan _framework_ JavaScript seperti Vue dan React. Kami akan membahas kedua opsi tersebut sehingga Anda dapat membuat keputusan yang tepat mengenai pendekatan terbaik untuk pengembangan _frontend_ untuk aplikasi Anda.
 
 <a name="using-php"></a>
 ## Menggunakan PHP
@@ -33,7 +33,7 @@ Di masa lalu, sebagian besar aplikasi PHP menampilkan HTML ke _browser_ mengguna
 </div>
 ```
 
-Di Laravel, pendekatan menampilkan HTML ini masih dapat dicapai dengan menggunakan [_view_](/docs/{{version}}/views) dan [_Blade_](/docs/{{version}}/blade). _Blade_ adalah bahasa _templating_ yang sangat ringan yang menyediakan sintaks pendek yang nyaman untuk menampilkan data, mengulangi data, dan banyak lagi:
+Pada Laravel, pendekatan menampilkan HTML ini masih dapat dicapai dengan menggunakan [_view_](/docs/{{version}}/views) dan [_Blade_](/docs/{{version}}/blade). _Blade_ adalah bahasa _templating_ yang sangat ringan yang menyediakan sintaks pendek yang nyaman untuk menampilkan data, mengulangi data, dan banyak lagi:
 
 ```blade
 <div>
