@@ -7,12 +7,12 @@
 <a name="introduction"></a>
 ## Pengantar
 
-Selain menyederhanakan pengujian HTTP, Laravel menyediakan API sederhana untuk menguji dalam aplikasi anda yaitu [perintah konsol khusus](/docs/{{versi}}/artisan).
+Selain menyederhanakan pengujian HTTP, Laravel menyediakan API sederhana untuk menguji perintah konsol kustom milik aplikasi Anda [perintah konsol khusus](/docs/{{versi}}/artisan).
 
 <a name="success-failure-expectations"></a>
 ## Ekspektasi Keberhasilan / Kegagalan
 
-Untuk memulai, mari kita jelajahi bagaimana membuat pernyataan mengenai _exit code_ pada perintah Artisan. Untuk mencapai hal ini, kita akan menggunakan metode `artisan` untuk memanggil perintah Artisan dari pengujian kita. Kemudian, kita akan menggunakan metode `assertExitCode` untuk menyatakan bahwa perintah selesai dengan kode _exit_ sebagai berikut:
+Untuk memulai, mari kita jelajahi bagaimana membuat pernyataan mengenai kode _exit_ pada perintah Artisan. Untuk mencapai hal ini, kita akan menggunakan metode `artisan` untuk memanggil perintah Artisan pada pengujian kita. Kemudian, kita akan menggunakan metode `assertExitCode` untuk menyatakan bahwa perintah selesai dengan kode _exit_ sebagai berikut:
 
     /**
      * Test a console command.
@@ -24,20 +24,20 @@ Untuk memulai, mari kita jelajahi bagaimana membuat pernyataan mengenai _exit co
         $this->artisan('inspire')->assertExitCode(0);
     }
 
-Anda dapat menggunakan metode `assertNotExitCode` untuk menyatakan bahwa perintah tidak berakhir dengan kode akhir yang diberikan:
+Anda dapat menggunakan metode `assertNotExitCode` untuk menyatakan bahwa perintah tidak berakhir dengan kode _exit_ yang ditentukan:
 
     $this->artisan('inspire')->assertNotExitCode(1);
 
-Tentu saja, semua perintah terminal biasanya keluar dengan kode status `0` bila berhasil dan kode keluar bukan nol jika tidak berhasil. Oleh karena itu, untuk memudahkan, Anda dapat menggunakan perintah `assertSuccessful` dan `assertFailed` untuk memberikan pernyataan bahwa perintah yang diberikan berakhir dengan kode keluar yang berhasil atau tidak:
+Tentu saja, semua perintah terminal biasanya keluar dengan kode status `0`  ketika perintah berhasil dijalankan atau ketika perintah yang gagal dijalankan memiliki kode _exit_ bukan `0`. Oleh karena itu, untuk memudahkan, Anda dapat menggunakan perintah `assertSuccessful` dan `assertFailed` untuk memberikan pernyataan bahwa perintah yang diberikan berakhir dengan kode _exit_ yang berhasil atau tidak:
 
     $this->artisan('inspire')->assertSuccessful();
 
     $this->artisan('inspire')->assertFailed();
 
 <a name="input-output-expectations"></a>
-## Ekspektasi Masukan / Keluaran
+## Ekspektasi _Input / Output_
 
-Laravel memungkinkan Anda untuk dengan mudah "menirukan" input pengguna untuk perintah konsol Anda menggunakan metode `expectsQuestion`. Selain itu, Anda dapat menentukan _exit code_ dan teks yang Anda harapkan sebagai output dari perintah konsol menggunakan metode `assertExitCode` dan `expectsOutput`. Sebagai contoh, perhatikan perintah konsol berikut ini:
+Laravel memungkinkan Anda "menirukan" input dari pengguna untuk perintah konsol Anda dengan mudah menggunakan metode `expectsQuestion`. Selain itu, Anda dapat menentukan kode _exit_ dan teks yang Anda harapkan sebagai output dari perintah konsol menggunakan metode `assertExitCode` dan `expectsOutput`. Sebagai contoh, perhatikan perintah konsol berikut ini:
 
     Artisan::command('question', function () {
         $name = $this->ask('What is your name?');
@@ -51,7 +51,7 @@ Laravel memungkinkan Anda untuk dengan mudah "menirukan" input pengguna untuk pe
         $this->line('Your name is '.$name.' and you prefer '.$language.'.');
     });
 
-Anda dapat menguji perintah ini dengan pengujian berikut yang menggunakan metode `expectsQuestion`, `expectsOutput`, `doesn'tExpectOutput`, `expectsOutputToContain`, `doesn'tExpectOutputToContain`, dan `assertExitCode`:
+Anda dapat menguji perintah-perintah tersebut dengan menggunakan metode `expectsQuestion`, `expectsOutput`, `doesntExpectOutput`, `expectsOutputToContain`, `doesntExpectOutputToContain`, dan `assertExitCode`:
 
     /**
      * Test a console command.
@@ -71,9 +71,9 @@ Anda dapat menguji perintah ini dengan pengujian berikut yang menggunakan metode
     }
 
 <a name="confirmation-expectations"></a>
-#### Harapan Konfirmasi
+#### Ekspektasi Konfirmasi
 
-Ketika menulis perintah yang membutuhkan konfirmasi berupa jawaban "ya" atau "tidak", Anda dapat menggunakan metode `expectsConfirmation`:
+Ketika menulis perintah yang membutuhkan konfirmasi berupa jawaban "yes" atau "no" agar sesuai dengan kodenya, Anda dapat menggunakan metode `expectsConfirmation`:
 
     $this->artisan('module:import')
         ->expectsConfirmation('Do you really wish to run this command?', 'no')
@@ -82,7 +82,7 @@ Ketika menulis perintah yang membutuhkan konfirmasi berupa jawaban "ya" atau "ti
 <a name="table-expectations"></a>
 #### Ekspektasi Tabel
 
-Jika perintah Anda menampilkan tabel informasi menggunakan metode `table` pada Artisan, mungkin akan menjadi tidak praktis untuk menulis hasil ekspektasi pada seluruh tabel. Sebagai gantinya, Anda dapat menggunakan metode `expectsTable`. Metode ini menerima header tabel sebagai argumen pertama dan data tabel sebagai argumen kedua:
+Jika perintah Anda menampilkan tabel informasi menggunakan metode `table` pada Artisan, mungkin akan menjadi tidak praktis untuk menulis seluruh tabel pada ekspektasi. Sebagai gantinya, Anda dapat menggunakan metode `expectsTable`. Metode ini menerima kop / kepala tabel sebagai argumen pertama dan data / badan tabel sebagai argumen kedua:
 
     $this->artisan('users:all')
         ->expectsTable([
