@@ -35,20 +35,20 @@ Tentu saja, semua perintah terminal biasanya keluar dengan kode status `0`  keti
     $this->artisan('inspire')->assertFailed();
 
 <a name="input-output-expectations"></a>
-## Ekspektasi _Input / Output_
+## Ekspektasi Input / _Output_
 
 Laravel memungkinkan Anda "menirukan" input dari pengguna untuk perintah konsol Anda dengan mudah menggunakan metode `expectsQuestion`. Selain itu, Anda dapat menentukan kode _exit_ dan teks yang Anda harapkan sebagai output dari perintah konsol menggunakan metode `assertExitCode` dan `expectsOutput`. Sebagai contoh, perhatikan perintah konsol berikut ini:
 
     Artisan::command('question', function () {
-        $name = $this->ask('What is your name?');
+        $name = $this->ask('Siapa nama Anda?');
 
-        $language = $this->choice('Which language do you prefer?', [
+        $language = $this->choice('Bahasa apa yang Anda lebih suka?', [
             'PHP',
             'Ruby',
             'Python',
         ]);
 
-        $this->line('Your name is '.$name.' and you prefer '.$language.'.');
+        $this->line('Nama Anda adalah '.$name.' dan Anda lebih menyukai '.$language.'.');
     });
 
 Anda dapat menguji perintah-perintah tersebut dengan menggunakan metode `expectsQuestion`, `expectsOutput`, `doesntExpectOutput`, `expectsOutputToContain`, `doesntExpectOutputToContain`, dan `assertExitCode`:
@@ -61,22 +61,22 @@ Anda dapat menguji perintah-perintah tersebut dengan menggunakan metode `expects
     public function test_console_command()
     {
         $this->artisan('question')
-             ->expectsQuestion('What is your name?', 'Taylor Otwell')
-             ->expectsQuestion('Which language do you prefer?', 'PHP')
-             ->expectsOutput('Your name is Taylor Otwell and you prefer PHP.')
-             ->doesntExpectOutput('Your name is Taylor Otwell and you prefer Ruby.')
+             ->expectsQuestion('Siapa nama Anda?', 'Taylor Otwell')
+             ->expectsQuestion('Bahasa Apa yang Anda lebih suka?', 'PHP')
+             ->expectsOutput('Nama Anda adalah Taylor Otwell dan Anda lebih menyukai PHP.')
+             ->doesntExpectOutput('Nama Anda adalah Taylor Otwell dan Anda lebih menyukai Ruby.')
              ->expectsOutputToContain('Taylor Otwell')
-             ->doesntExpectOutputToContain('you prefer Ruby')
+             ->doesntExpectOutputToContain('Anda lebih menyukai Ruby')
              ->assertExitCode(0);
     }
 
 <a name="confirmation-expectations"></a>
 #### Ekspektasi Konfirmasi
 
-Ketika menulis perintah yang membutuhkan konfirmasi berupa jawaban "yes" atau "no" agar sesuai dengan kodenya, Anda dapat menggunakan metode `expectsConfirmation`:
+Ketika menulis perintah yang membutuhkan konfirmasi berupa jawaban "_yes_" atau "_no_", Anda dapat menggunakan metode `expectsConfirmation`:
 
     $this->artisan('module:import')
-        ->expectsConfirmation('Do you really wish to run this command?', 'no')
+        ->expectsConfirmation('Apa Anda benar-benar ingin menjalankan perintah tersebut?', 'no')
         ->assertExitCode(1);
 
 <a name="table-expectations"></a>
