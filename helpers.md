@@ -62,6 +62,7 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
 [Arr::set](#method-array-set)
 [Arr::shuffle](#method-array-shuffle)
 [Arr::sort](#method-array-sort)
+[Arr::sortDesc](#method-array-sort-desc)
 [Arr::sortRecursive](#method-array-sort-recursive)
 [Arr::toCssClasses](#method-array-to-css-classes)
 [Arr::undot](#method-array-undot)
@@ -901,6 +902,41 @@ You may also sort the array by the results of a given closure:
             ['name' => 'Chair'],
             ['name' => 'Desk'],
             ['name' => 'Table'],
+        ]
+    */
+
+<a name="method-array-sort-desc"></a>
+#### `Arr::sortDesc()` {.collection-method}
+
+The `Arr::sortDesc` method sorts an array in descending order by its values:
+
+    use Illuminate\Support\Arr;
+
+    $array = ['Desk', 'Table', 'Chair'];
+
+    $sorted = Arr::sortDesc($array);
+
+    // ['Table', 'Desk', 'Chair']
+
+You may also sort the array by the results of a given closure:
+
+    use Illuminate\Support\Arr;
+
+    $array = [
+        ['name' => 'Desk'],
+        ['name' => 'Table'],
+        ['name' => 'Chair'],
+    ];
+
+    $sorted = array_values(Arr::sortDesc($array, function ($value) {
+        return $value['name'];
+    }));
+
+    /*
+        [
+            ['name' => 'Table'],
+            ['name' => 'Desk'],
+            ['name' => 'Chair'],
         ]
     */
 
@@ -4009,6 +4045,14 @@ The `value` function returns the value it is given. However, if you pass a closu
     });
 
     // false
+    
+Additional arguments may be passed to the `value` function. If the first argument is a closure then the additional parameters will be passed to the closure as arguments, otherwise they will be ignored:
+
+    $result = value(function ($name) {
+        return $parameter;
+    }, 'Taylor');
+    
+    // 'Taylor'
 
 <a name="method-view"></a>
 #### `view()` {.collection-method}
