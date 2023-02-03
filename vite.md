@@ -54,7 +54,6 @@ Apakah aplikasi Laravel baru Anda telah menggunakan perancah Vite namun Anda per
 ## Instalasi & Pengaturan Awal
 
 > **Note**  
-
 > Dokumentasi berikut ini membahas cara menginstal dan mengonfigurasi _plugin_ Laravel Vite secara manual. Namun, [_starter kits_] Laravel (/docs/{{version}}/starter-kits) yang merupakan cara tercepat untuk bermain dengan Laravel dan Vite sudah menyertakan semua perancah ini.
 
 <a name="installing-node"></a>
@@ -289,8 +288,7 @@ export default defineConfig({
 
                     // Plugin Vue akan mem-parsing URL absolut dan memperlakukannya
                     // sebagai jalur absolut ke file pada cakram penyimpanan. Atur
-                    // opsi ini menjadi `false` untuk membiarkan URL absolut
-                    tidak tersentuh sehingga mereka
+                    // opsi ini menjadi `false` untuk membiarkan URL absolut tidak tersentuh sehingga mereka
                     // dapat dapat merujuk aset yang berada di direktori publik seperti yang diharapkan.
                     includeAbsolute: false,
                 },
@@ -668,8 +666,6 @@ class AddContentSecurityPolicyHeaders
 
 Setelah memanggil metode `useCspNonce`, Laravel akan menyertakan atribut `nonce` secara otomatis pada semua _tag script_ dan _style_ yang dihasilkan.
 
-Jika Anda perlu menentukan _nonce_ ditempat 
-
 Jika Anda perlu menentukan nonce di tempat lain, termasuk [_directive `@route` Ziggy](https://github.com/tighten/ziggy#using-routes-with-a-content-security-policy) yang disertakan pada [perlengkapan pemula](/docs/{{version}}/starter-kits) milik Laravel, Anda bisa mengambilnya dengan menggunakan metode `cspNonce`:
 
 ```blade
@@ -742,8 +738,6 @@ Vite::useStyleTagAttributes([
 ```
 
 Jika Anda perlu menambahkan atribut secara kondisional, Anda dapat memberikan _callback_ yang akan menerima _path_ sumber aset, URL-nya, potongan manifes, dan seluruh manifes:
-
-If you need to conditionally add attributes, you may pass a callback that will receive the asset source path, its URL, its manifest chunk, and the entire manifest:
 
 ```php
 use Illuminate\Support\Facades\Vite;
