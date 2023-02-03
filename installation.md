@@ -184,13 +184,13 @@ Setelah kontainer Docker aplikasi dijalankan, kamu dapat mengakses aplikasinya p
 <a name="choosing-your-sail-services"></a>
 ### Pilih Layanan Sail Kamu
 
-Saat membuat aplikasi Laravel baru melalui Sail, kamu dapat menggunakan variabel _string_ kueri `with` untuk memilih layanan mana yang harus dikonfigurasikan dalam _file_ `docker-compose.yml` aplikasi barumu. Layanan yang tersedia meliputi `mysql`, `pgsql`, `mariadb`, `redis`, `memcached`, `meilisearch`, `minio`, `selenium`, dan `mailhog`:
+Saat membuat aplikasi Laravel baru melalui Sail, kamu dapat menggunakan variabel _string_ kueri `with` untuk memilih layanan mana yang harus dikonfigurasikan dalam _file_ `docker-compose.yml` aplikasi barumu. Layanan yang tersedia meliputi `mysql`, `pgsql`, `mariadb`, `redis`, `memcached`, `meilisearch`, `minio`, `selenium`, dan `mailpit`:
 
 ```shell
 curl -s "https://laravel.build/example-app?with=mysql,redis" | bash
 ```
 
-Jika kamu tidak menentukan layanan mana yang ingin dikonfigurasi, _stack_ bawaan dari `mysql`, `redis`, `meilisearch`, `mailhog`, dan `selenium` akan dikonfigurasi.
+Jika kamu tidak mendefinisikan layanan mana yang ingin dikonfigurasi, _stack_ bawaan dari `mysql`, `redis`, `meilisearch`, `mailpit`, dan `selenium` yang akan dikonfigurasi.
 
 Kamu dapat menginstruksikan Sail untuk menginstal [Devcontainer](/docs/{{version}}/sail#using-devcontainers) bawaan dengan menambahkan `devcontainer` parameter ke URL:
 

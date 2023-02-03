@@ -18,7 +18,7 @@
   - [Pemrosesan Aset Statis dengan Vite](#blade-processing-static-assets)
   - [Melakukan _Refresh_ saat Menyimpan](#blade-refreshing-on-save)
   - [Alias](#blade-aliases)
-- [URL Dasar yang Kustom](#custom--urls)
+- [URL Dasar yang Kustom](#custom-base-urls)
 - [Variabel _Environment_](#environment-variables)
 - [Menonaktifkan Vite di dalam Pengujian](#disabling-vite-in-tests)
 - [_Server-Side Rendering_ (SSR)](#ssr)
@@ -55,7 +55,7 @@ Apakah aplikasi Laravel baru Anda telah menggunakan perancah Vite namun Anda per
 
 > **Note**  
 
-> Dokumentasi berikut ini membahas cara memasang dan mengonfigurasi _plugin_ Laravel Vite secara manual. Namun, [_starter kits_] Laravel (/docs/{{version}}/starter-kits) yang merupakan cara tercepat untuk bermain dengan Laravel dan Vite sudah menyertakan semua perancah ini.
+> Dokumentasi berikut ini membahas cara menginstal dan mengonfigurasi _plugin_ Laravel Vite secara manual. Namun, [_starter kits_] Laravel (/docs/{{version}}/starter-kits) yang merupakan cara tercepat untuk bermain dengan Laravel dan Vite sudah menyertakan semua perancah ini.
 
 <a name="installing-node"></a>
 ### Menginstal Node
@@ -261,7 +261,13 @@ export default defineConfig({
 <a name="vue"></a>
 ### Vue
 
-Terdapat beberapa opsi tambahan yang perlu Anda sertakan pada _file_ konfigurasi `vite.config.js` ketika menggunakan _plugin_ Vue dengan _plugin_ Laravel:
+Jika Anda ingin membangun _front-end_ Anda dengan menggunakan _framework_ [Vue](https://vuejs.org/), maka Anda juga harus menginstal _plugin_ `@vitejs/plugin-vue`:
+
+```sh
+npm install --save-dev @vitejs/plugin-vue
+```
+
+Anda kemudian dapat memasukkan _plugin_ tersebut di dalam _file_ konfigurasi `vite.config.js`. Ada beberapa opsi tambahan yang Anda perlukan saat menggunakan _plugin_ Vue dengan Laravel:
 
 ```js
 import { defineConfig } from 'vite';
@@ -300,7 +306,30 @@ export default defineConfig({
 <a name="react"></a>
 ### React
 
-Ketika menggunakan Vite dan React, Anda perlu memastikan bahwa semua _file_ yang mengandung JSX telah memiliki eksistensi `.jsx` atau `.tsx`. Jangan lupa juga untuk memperbaharui titik masuk jika diperlukan, seperti yang telah dijelaskan [di atas](#configuring-vite). Anda juga perlu untuk memasuki _directive_ `@viteReactRefresh` blade berdampingan dengan _directive_ `@vite` yang sudah ada.
+Jika Anda ingin membangun _front-end_ Anda menggunakan _framework_ [React](https://reactjs.org/), maka Anda juga harus menginstal _plugin_ `@vitejs/plugin-react`:
+
+```sh
+npm install --save-dev @vitejs/plugin-react
+```
+
+Anda kemudian dapat menyertakan plugin tersebut di dalam _file_ konfigurasi `vite.config.js`:
+
+```js
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+    plugins: [
+        laravel(['resources/js/app.jsx']),
+        react(),
+    ],
+});
+```
+
+Anda perlu memastikan bahwa semua _file_ yang mengandung JSX telah memiliki eksistensi `.jsx` atau `.tsx`. Jangan lupa juga untuk memperbaharui titik masuk jika diperlukan, seperti yang telah dijelaskan [di atas](#configuring-vite).
+
+Anda juga perlu untuk memasukkan _directive_ Blade tambahan `@viteReactRefresh` berdampingan dengan _directive_ `@vite` yang sudah ada.
 
 ```blade
 @viteReactRefresh
@@ -659,7 +688,7 @@ Vite::useCspNonce($nonce);
 Jika manifes Vite Anda disertai dengan _hash_ `integrity` untuk aset Anda, Laravel akan menambahkan atribut `integrity` secara otomatis pada semua _tag script_ dan _style_ yang dihasilkan untuk memberlakukan [_Subresource Integrity_](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity). Secara _default_, Vite tidak menyertakan _hash_ `integrity` dalam manifesnya, tetapi Anda dapat mengaktifkannya dengan menginstal _plugin_ NPM [`vite-plugin-manifest-uri`](https://www.npmjs.com/package/vite-plugin-manifest-sri):
 
 ```shell
-npm install -D vite-plugin-manifest-sri
+npm install --save-dev vite-plugin-manifest-sri
 ```
 
 Anda dapat mengaktifkan _plugin_ tersebut pada _file_ `vite.config.js`:
