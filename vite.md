@@ -51,7 +51,7 @@ Vite juga berfungsi dengan baik pada aplikasi tradisional yang di-_render_ di si
 Apakah aplikasi Laravel baru Anda telah menggunakan perancah Vite namun Anda perlu kembali ke Laravel Mix dan webpack? Tidak masalah. Silakan baca [panduan resmi tentang migrasi dari Vite ke Mix](https://github.com/laravel/vite-plugin/blob/main/UPGRADE.md#migrating-from-vite-to-laravel-mix).
 
 <a name="installation"></a>
-## Instalasi & Pengaturan Awal
+## Instalasi & Pengaturan
 
 > **Note**  
 > Dokumentasi berikut ini membahas cara menginstal dan mengonfigurasi _plugin_ Laravel Vite secara manual. Namun, [_starter kits_] Laravel (/docs/{{version}}/starter-kits) yang merupakan cara tercepat untuk bermain dengan Laravel dan Vite sudah menyertakan semua perancah ini.
