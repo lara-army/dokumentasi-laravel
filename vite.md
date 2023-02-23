@@ -27,6 +27,7 @@
   - [_Subresource Integrity_ (SRI)](#subresource-integrity-sri)
   - [Atribut yang Berubah-ubah](#arbitrary-attributes)
 - [Kustomisasi Tingkat Lanjut](#advanced-customization)
+  - [Correcting Dev Server URLs](#correcting-dev-server-urls)
 
 <a name="introduction"></a>
 ## Pendahuluan 
@@ -681,7 +682,7 @@ Vite::useCspNonce($nonce);
 <a name="subresource-integrity-sri"></a>
 ### _Subresource Integrity_ (SRI)
 
-Jika manifes Vite Anda disertai dengan _hash_ `integrity` untuk aset Anda, Laravel akan menambahkan atribut `integrity` secara otomatis pada semua _tag script_ dan _style_ yang dihasilkan untuk memberlakukan [_Subresource Integrity_](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity). Secara _default_, Vite tidak menyertakan _hash_ `integrity` dalam manifesnya, tetapi Anda dapat mengaktifkannya dengan menginstal _plugin_ NPM [`vite-plugin-manifest-uri`](https://www.npmjs.com/package/vite-plugin-manifest-sri):
+Jika manifes Vite Anda disertai dengan _hash_ `integrity` untuk aset Anda, Laravel akan menambahkan atribut `integrity` secara otomatis pada semua _tag script_ dan _style_ yang dihasilkan untuk memberlakukan [_Subresource Integrity_](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity). Secara _default_, Vite tidak menyertakan _hash_ `integrity` dalam manifesnya, tetapi Anda dapat mengaktifkannya dengan menginstal _plugin_ NPM [`vite-plugin-manifest-sri`](https://www.npmjs.com/package/vite-plugin-manifest-sri):
 
 ```shell
 npm install --save-dev vite-plugin-manifest-sri
@@ -791,4 +792,42 @@ export default defineConfig({
       manifest: 'assets.json', // Mengkustomisasi nama file manifes...
     },
 });
+```
+
+<a name="correcting-dev-server-urls"></a>
+### Mengoreksi URL Server Dev
+
+Beberapa plugin dalam ekosistem Vite mengasumsikan bahwa URL yang dimulai dengan garis miring akan selalu mengarah ke server dev Vite. Namun, karena sifat integrasi alami Laravel, hal tersebut tidak terjadi.
+
+Sebagai contoh, _output_ dari _plugin_ `vite-imagetools` akan mengeluarkan URL seperti berikut ini ketika Vite menayangkan aset Anda:
+
+```html
+<img src="/@imagetools/f0b2f404b13f052c604e632f2fb60381bf61a520">
+```
+
+_Plugin_ `vite-imagetools` mengharapkan bahwa URL keluaran akan dicegat oleh Vite dan _plugin_ tersebut kemudian menangani semua URL yang dimulai dengan `/@imagetools`. Jika Anda menggunakan _plugin_ yang mengharapkan perilaku seperti ini, Anda perlu memperbaiki URL secara manual. Anda dapat melakukannya pada berkas `vite.config.js` dengan menggunakan opsi `transformOnServe`.
+
+Dalam contoh khusus ini, kita akan menambahkan URL server dev ke semua `/@imagetools` yang muncul di dalam kode yang dihasilkan:
+
+```js
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import { imagetools } from 'vite-imagetools';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            // ...
+            transformOnServe: (code, devServerUrl) => code.replaceAll('/@imagetools', devServerUrl+'/@imagetools'),
+        }),
+        imagetools(),
+    ],
+});
+```
+
+Sekarang, saat Vite menayangkan aset-aset tersebut, Vite akan menghasilkan URL yang mengarah ke server dev Vite:
+
+```html
+- <img src="/@imagetools/f0b2f404b13f052c604e632f2fb60381bf61a520"><!-- [tl! remove] -->
++ <img src="http://[::1]:5173/@imagetools/f0b2f404b13f052c604e632f2fb60381bf61a520"><!-- [tl! add] -->
 ```

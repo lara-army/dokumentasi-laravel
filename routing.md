@@ -679,7 +679,23 @@ Dengan menggunakan metode `Route::fallback`, Anda dapat mendefinisikan rute yang
 <a name="defining-rate-limiters"></a>
 ### Defining Rate Limiters
 
-Laravel menyertakan layanan pembatasan _rate_ (laju) yang kuat dan dapat disesuaikan dan dapat Anda manfaatkan untuk membatasi jumlah lalu lintas untuk rute atau grup rute tertentu. Untuk memulai, Anda harus melakukan konfigurasi pembatas _rate_ yang memenuhi kebutuhan aplikasi Anda. Biasanya, ini harus dilakukan dalam metode `configureRateLimiting` dari kelas `App\Providers\RouteServiceProvider` aplikasi Anda.
+Laravel menyertakan layanan pembatasan _rate_ (laju) yang kuat dan dapat disesuaikan yang dapat Anda manfaatkan untuk membatasi jumlah lalu lintas untuk rute atau grup rute tertentu. Untuk memulai, Anda harus mendefinisikan konfigurasi pembatas _rate_ yang memenuhi kebutuhan aplikasi Anda. Biasanya, hal ini harus dilakukan di dalam metode `configureRateLimiting` dari kelas `App\Providers\RouteServiceProvider` aplikasi Anda, yang mana telah tersedia sebuah definisi pembatas laju yang terterapkan pada _file_ `routes/api.php` pada aplikasi Anda:
+
+```php
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+
+/**
+ * Configure the rate limiters for the application.
+ */
+protected function configureRateLimiting(): void
+{
+    RateLimiter::for('api', function (Request $request) {
+        return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+    });
+}
+```
 
 Pembatas _rate_ didefinisikan menggunakan metode `for` facade `RateLimiter`. Metode `for` menerima nama pembatas laju dan _closure_ yang mengembalikan konfigurasi batas yang harus diterapkan ke rute yang ditugaskan ke pembatas laju. Konfigurasi _limit_ adalah _instance_ dari kelas `Illuminate\Cache\RateLimiting\Limit`. Kelas ini berisi metode-metode "builder" yang berguna sehingga Anda dapat dengan cepat mendefinisikan limit Anda. Nama pembatas _rate_ dapat berupa _string_ apa pun yang Anda inginkan:
 

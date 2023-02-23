@@ -56,7 +56,7 @@ Sebelum membuat proyek Laravel pertamamu, kamu sebaiknya memastikan bahwa di per
 Setelah kamu menginstal PHP dan Composer, kamu dapat membuat proyek Laravel melalui perintah Composer `create-project`:
 
 ```nothing
-composer create-project laravel/laravel example-app
+composer create-project laravel/laravel:^9.0 example-app
 ```
 
 Atau, kamu bisa membuat proyek Laravel dengan menginstal _Laravel installer_ secara global melalui Composer:

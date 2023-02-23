@@ -62,6 +62,15 @@ Finally, you may start Sail. To continue learning how to use Sail, please contin
 ./vendor/bin/sail up
 ```
 
+<a name="adding-additional-services"></a>
+#### Adding Additional Services
+
+If you would like to add an additional service to your existing Sail installation, you may run the `sail:add` Artisan command:
+
+```shell
+php artisan sail:add
+```
+
 <a name="using-devcontainers"></a>
 #### Using Devcontainers
 
@@ -210,7 +219,7 @@ In addition, the first time the MySQL container starts, it will create two datab
 
 Once you have started your containers, you may connect to the MySQL instance within your application by setting your `DB_HOST` environment variable within your application's `.env` file to `mysql`.
 
-To connect to your application's MySQL database from your local machine, you may use a graphical database management application such as [TablePlus](https://tableplus.com). By default, the MySQL database is accessible at `localhost` port 3306.
+To connect to your application's MySQL database from your local machine, you may use a graphical database management application such as [TablePlus](https://tableplus.com). By default, the MySQL database is accessible at `localhost` port 3306 and the access credentials correspond to the values of your `DB_USERNAME` and `DB_PASSWORD` environment variables. Or, you may connect as the `root` user, which also utilizes the value of your `DB_PASSWORD` environment variable as its password.
 
 <a name="redis"></a>
 ### Redis
