@@ -274,7 +274,7 @@ In certain cases, you may want to define a specific "key" that makes the job uni
 
     <?php
 
-    use App\Product;
+    use App\Models\Product;
     use Illuminate\Contracts\Queue\ShouldQueue;
     use Illuminate\Contracts\Queue\ShouldBeUnique;
 
@@ -317,7 +317,7 @@ By default, unique jobs are "unlocked" after a job completes processing or fails
 
     <?php
 
-    use App\Product;
+    use App\Models\Product;
     use Illuminate\Contracts\Queue\ShouldQueue;
     use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 
@@ -1003,7 +1003,7 @@ One approach to specifying the maximum number of times a job may be attempted is
 php artisan queue:work --tries=3
 ```
 
-If a job exceeds its maximum number of attempts, it will be considered a "failed" job. For more information on handling failed jobs, consult the [failed job documentation](#dealing-with-failed-jobs). If `--tries=0` is provided to the `queue:work` command, the job will retried indefinitely.
+If a job exceeds its maximum number of attempts, it will be considered a "failed" job. For more information on handling failed jobs, consult the [failed job documentation](#dealing-with-failed-jobs). If `--tries=0` is provided to the `queue:work` command, the job will be retried indefinitely.
 
 You may take a more granular approach by defining the maximum number of times a job may be attempted on the job class itself. If the maximum number of attempts is specified on the job, it will take precedence over the `--tries` value provided on the command line:
 

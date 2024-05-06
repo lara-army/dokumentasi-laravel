@@ -216,17 +216,11 @@ _File_ `.env` jangan dikomit ke _source control_ aplikasimu, karena setiap penge
 > Untuk informasi lebih lanjut mengenai _file_ `.env` dan konfigurasi berbasis _environment_, lihat [dokumentasi lengkap konfigurasi](/docs/{{version}}/configuration#environment-configuration).
 
 <a name="databases-and-migrations"></a>
-### Basis Data & Migrasi
+### Databases & Migrations
 
 Setelah kamu membuat aplikasi Laravelmu, kamu mungkin ingin menyimpan beberapa data di dalam sebuah basis data. Secara _default_, _file_ konfigurasi `.env` aplikasimu menentukan bahwa Laravel akan berinteraksi dengan basis data MySQL dan akan mengakses basis data di `127.0.0.1`. Jika kamu melakukan pengembangan di macOS dan ingin menginstal MySQL, Postgres, atau Redis di lokal, kamu mungkin merasa nyaman menggunakan [DBngin](https://dbngin.com/).
 
-Jika kamu tidak ingin menginstal MySQL atau Postgres di mesin lokalmu, kamu selalu dapat menggunakan basis data [SQLite](https://www.sqlite.org/index.html). SQLite adalah mesin basis data yang kecil, cepat, dan mandiri. Untuk memulai, buat sebuah basis data SQLite dengan membuat sebuah _file_ SQLite kosong. Biasanya, _file_ ini akan berada pada direktori `database` dari aplikasi Laravelmu:
-
-```shell
-touch database/database.sqlite
-```
-
-Selanjutnya, perbarui _file_ konfigurasi `.env` untuk menggunakan _driver_ basis data `sqlite` Laravel. Kamu dapat menghapus opsi-opsi konfigurasi basis data lainnya:
+Jika kamu tidak ingin menginstal MySQL atau Postgres di mesin lokalmu, kamu selalu dapat menggunakan basis data [SQLite](https://www.sqlite.org/index.html). SQLite adalah mesin basis data yang kecil, cepat, dan mandiri. Untuk mulai menggunakannya, perbarui konfigurasi basis data aplikasimu di _file_ `.env` untuk menggunakan _driver_ basis data `sqlite`. Kamu mungkin juga perlu menghapus konfigurasi basis data sebelumnya:
 
 ```ini
 DB_CONNECTION=sqlite # [tl! add]
@@ -243,6 +237,8 @@ Setelah mengonfigurasi basis data SQLitemu, kamu dapat menjalankan [migrasi basi
 ```shell
 php artisan migrate
 ```
+
+If an SQLite database does not exist for your application, Laravel will ask you if you would like the database to be created. Typically, the SQLite database file will be created at `database/database.sqlite`.
 
 <a name="next-steps"></a>
 ## Langkah Selanjutnya
