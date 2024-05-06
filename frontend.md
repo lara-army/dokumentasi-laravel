@@ -105,13 +105,13 @@ Jika Anda baru menggunakan Laravel, sebaiknya pahami penggunaan dasar [_view_](/
 Jika Anda ingin membuat _frontend_ menggunakan PHP dan Livewire, Anda dapat memanfaatkan [kit pemula](/docs/{{version}}/starter-kits) Breeze atau Jetstream kami untuk memulai pengembangan aplikasi Anda. Kedua starter kit ini menyusun alur autentikasi _backend_ dan _frontend_ aplikasi Anda menggunakan [Blade](/docs/{{version}}/blade) dan [Tailwind](https://tailwindcss.com) sehingga Anda dapat langsung mulai membangun ide besar berikutnya.
 
 <a name="using-vue-react"></a>
-## Menggunakan Vue / React
+## Using Vue / React
 
-Meskipun dimungkinkan untuk membangun _frontend_ modern menggunakan Laravel dan Livewire, banyak pengembang masih lebih memilih untuk memanfaatkan kekuatan kerangka kerja JavaScript seperti Vue atau React. Hal ini memungkinkan para pengembang untuk memanfaatkan ekosistem yang kaya akan paket dan alat JavaScript yang tersedia melalui [NPM](https://www.npmjs.com/).
+Although it's possible to build modern frontends using Laravel and Livewire, many developers still prefer to leverage the power of a JavaScript framework like Vue or React. This allows developers to take advantage of the rich ecosystem of JavaScript packages and tools available via NPM.
 
-Namun, tanpa alat tambahan, memadukan Laravel dengan Vue atau React akan membuat kita harus menyelesaikan berbagai masalah rumit seperti rute sisi klien, _hydration_ data, dan autentikasi. Rute sisi klien sering disederhanakan dengan menggunakan _framework_ Vue / React yang memiliki opini seperti [Nuxt](https://nuxtjs.org/) dan [Next](https://nextjs.org/); namun, _hydration_ dan autentikasi data tetap menjadi masalah yang rumit dan tidak praktis untuk dipecahkan saat memadukan kerangka kerja _backend_ seperti Laravel dengan kerangka kerja _frontend_ ini.
+Namun, tanpa alat tambahan, memadukan Laravel dengan Vue atau React akan membuat kita harus menyelesaikan berbagai masalah rumit seperti rute sisi klien, _hydration_ data, dan autentikasi. Rute sisi klien sering disederhanakan dengan menggunakan _framework_ Vue / React yang memiliki opini seperti [Nuxt](https://nuxt.com/) dan [Next](https://nextjs.org/); namun, _hydration_ dan autentikasi data tetap menjadi masalah yang rumit dan tidak praktis untuk dipecahkan saat memadukan kerangka kerja _backend_ seperti Laravel dengan kerangka kerja _frontend_ ini.
 
-Selain itu, pengembang harus mengelola dua repositori kode yang terpisah, dan sering kali harus mengoordinasikan pemeliharaan, rilis, dan penerapan di kedua repositori tersebut. Meskipun masalah-masalah ini bukannya tidak dapat diatasi, kami tidak percaya bahwa ini adalah cara yang produktif atau menyenangkan untuk mengembangkan aplikasi.
+In addition, developers are left maintaining two separate code repositories, often needing to coordinate maintenance, releases, and deployments across both repositories. While these problems are not insurmountable, we don't believe it's a productive or enjoyable way to develop applications.
 
 <a name="inertia"></a>
 ### Inertia
