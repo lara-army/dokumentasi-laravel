@@ -121,7 +121,7 @@ Atau, Anda dapat menggunakan metode `Route::permanentRedirect` untuk mengembalik
 <a name="view-routes"></a>
 ### Rute _View_
 
-Jika rute Anda hanya perlu mengembalikan [view] (/docs/{{version}}/views), Anda dapat menggunakan metode `Rute::view`. Seperti metode `redirect`, metode ini menyediakan jalan pintas sederhana sehingga Anda tidak perlu mendefinisikan rute penuh atau rute _controller_. Metode `view` menerima URI sebagai argumen pertama dan nama _view_ sebagai argumen kedua. Selain itu, Anda dapat menyediakan _array_ data untuk diteruskan ke _view_ sebagai argumen ketiga yang opsional:
+Jika rute Anda hanya perlu mengembalikan [_view_](/docs/{{version}}/views), Anda dapat menggunakan metode `Rute::view`. Seperti metode `redirect`, metode ini menyediakan jalan pintas sederhana sehingga Anda tidak perlu mendefinisikan rute penuh atau rute _controller_. Metode `view` menerima URI sebagai argumen pertama dan nama _view_ sebagai argumen kedua. Selain itu, Anda dapat menyediakan _array_ data untuk diteruskan ke _view_ sebagai argumen ketiga yang opsional:
 
     Route::view('/welcome', 'welcome');
 
@@ -371,7 +371,7 @@ Grup di dalam grup digunakan untuk "mengabungkan" atribut secara cerdas dengan k
 <a name="route-group-middleware"></a>
 ### _Middleware_
 
-Untuk menetapkan [_middleware_](/docs/{{version}}/middleware pada semua rute dalam sebuah grup, Anda dapat menggunakan metode `middleware` sebelum mendefinisikan grup. _Middleware_ dieksekusi dalam urutan yang tercantum dalam _array_:
+Untuk menetapkan [_middleware_](/docs/{{version}}/middleware) pada semua rute dalam sebuah grup, Anda dapat menggunakan metode `middleware` sebelum mendefinisikan grup. _Middleware_ dieksekusi dalam urutan yang tercantum dalam _array_:
 
     Route::middleware(['pertama', 'kedua'])->group(function () {
         Route::get('/', function () {
@@ -474,7 +474,6 @@ Biasanya, _binding_ model implisit tidak akan mengambil model yang telah dihapus
         return $user->email;
     })->withTrashed();
 
-<a name="customizing-the-key"></a>
 <a name="customizing-the-default-key-name"></a>
 #### Kostumisasi Kunci
 
@@ -679,7 +678,23 @@ Dengan menggunakan metode `Route::fallback`, Anda dapat mendefinisikan rute yang
 <a name="defining-rate-limiters"></a>
 ### Defining Rate Limiters
 
-Laravel menyertakan layanan pembatasan _rate_ (laju) yang kuat dan dapat disesuaikan dan dapat Anda manfaatkan untuk membatasi jumlah lalu lintas untuk rute atau grup rute tertentu. Untuk memulai, Anda harus melakukan konfigurasi pembatas _rate_ yang memenuhi kebutuhan aplikasi Anda. Biasanya, ini harus dilakukan dalam metode `configureRateLimiting` dari kelas `App\Providers\RouteServiceProvider` aplikasi Anda.
+Laravel menyertakan layanan pembatasan _rate_ (laju) yang kuat dan dapat disesuaikan yang dapat Anda manfaatkan untuk membatasi jumlah lalu lintas untuk rute atau grup rute tertentu. Untuk memulai, Anda harus mendefinisikan konfigurasi pembatas _rate_ yang memenuhi kebutuhan aplikasi Anda. Biasanya, hal ini harus dilakukan di dalam metode `configureRateLimiting` dari kelas `App\Providers\RouteServiceProvider` aplikasi Anda, yang mana telah tersedia sebuah definisi pembatas laju yang terterapkan pada _file_ `routes/api.php` pada aplikasi Anda:
+
+```php
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+
+/**
+ * Configure the rate limiters for the application.
+ */
+protected function configureRateLimiting(): void
+{
+    RateLimiter::for('api', function (Request $request) {
+        return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+    });
+}
+```
 
 Pembatas _rate_ didefinisikan menggunakan metode `for` facade `RateLimiter`. Metode `for` menerima nama pembatas laju dan _closure_ yang mengembalikan konfigurasi batas yang harus diterapkan ke rute yang ditugaskan ke pembatas laju. Konfigurasi _limit_ adalah _instance_ dari kelas `Illuminate\Cache\RateLimiting\Limit`. Kelas ini berisi metode-metode "builder" yang berguna sehingga Anda dapat dengan cepat mendefinisikan limit Anda. Nama pembatas _rate_ dapat berupa _string_ apa pun yang Anda inginkan:
 

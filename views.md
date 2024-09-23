@@ -1,26 +1,26 @@
-# Views
+# _View_
 
-- [Introduction](#introduction)
-    - [Writing Views In React / Vue](#writing-views-in-react-or-vue)
-- [Creating & Rendering Views](#creating-and-rendering-views)
-    - [Nested View Directories](#nested-view-directories)
-    - [Creating The First Available View](#creating-the-first-available-view)
-    - [Determining If A View Exists](#determining-if-a-view-exists)
-- [Passing Data To Views](#passing-data-to-views)
-    - [Sharing Data With All Views](#sharing-data-with-all-views)
-- [View Composers](#view-composers)
-    - [View Creators](#view-creators)
-- [Optimizing Views](#optimizing-views)
+- [Pendahuluan](#introduction)
+    - [Menulis _View_ dengan React / Vue](#writing-views-in-react-or-vue)
+- [Membuat & Me-_render_ _View_](#creating-and-rendering-views)
+    - [Direktori _View_ yang Bersarang](#nested-view-directories)
+    - [Membuat _View_ yang Tersedia Saat Pertama Kali](#creating-the-first-available-view)
+    - [Penentuan Keberadaan _View_](#determining-if-a-view-exists)
+- [Mengoper Data ke _View_](#passing-data-to-views)
+    - [Berbagi Data dengan Semua _View_](#sharing-data-with-all-views)
+- [Komposer _View_](#view-composers)
+    - [Kreator _View_](#view-creators)
+- [Optimasi _View_](#optimizing-views)
 
 <a name="introduction"></a>
-## Introduction
+## Pendahuluan
 
-Of course, it's not practical to return entire HTML documents strings directly from your routes and controllers. Thankfully, views provide a convenient way to place all of our HTML in separate files.
+Tentu saja, tidak praktis untuk mengembalikan seluruh _string_ dokumen HTML secara langsung dari rute dan _controller_ Anda. Untungnya, _view_ menyediakan cara yang nyaman untuk menempatkan semua HTML kita ke dalam _file_ yang terpisah.
 
-Views separate your controller / application logic from your presentation logic and are stored in the `resources/views` directory. When using Laravel, view templates are usually written using the [Blade templating language](/docs/{{version}}/blade). A simple view might look something like this:
+_View_ memisahkan logika _controller_/aplikasi Anda dari logika tampilan (presentasi) Anda yang disimpan di dalam direktori `resources/views`. Ketika menggunakan Laravel, _template_ view biasanya ditulis menggunakan [bahasa penataan letak bernama Blade](/docs/{{version}}/blade). Tampilan sederhana mungkin terlihat seperti ini:
 
 ```blade
-<!-- View stored in resources/views/greeting.blade.php -->
+<!-- View ini tersimpan di resources/views/greeting.blade.php -->
 
 <html>
     <body>
@@ -29,64 +29,66 @@ Views separate your controller / application logic from your presentation logic 
 </html>
 ```
 
-Since this view is stored at `resources/views/greeting.blade.php`, we may return it using the global `view` helper like so:
+Karena _view_ ini disimpan di `resources/views/greeting.blade.php`, kita dapat mengembalikannya menggunakan _helper_ global `view` seperti ini:
 
     Route::get('/', function () {
         return view('greeting', ['name' => 'James']);
     });
 
-> **Note**  
-> Looking for more information on how to write Blade templates? Check out the full [Blade documentation](/docs/{{version}}/blade) to get started.
+> **Catatan**  
+> Mencari informasi lebih lanjut tentang cara menulis _template_ Blade? Lihat dokumentasi lengkap [Blade](/docs/{{version}}/blade) untuk memulai.
 
 <a name="writing-views-in-react-or-vue"></a>
-### Writing Views In React / Vue
+### Menulis _View_ dengan React / Vue
 
-Instead of writing their frontend templates in PHP via Blade, many developers have begun to prefer to write their templates using React or Vue. Laravel makes this painless thanks to [Inertia](https://inertiajs.com/), a library that makes it a cinch to tie your React / Vue frontend to your Laravel backend without the typical complexities of building an SPA.
+Daripada menulis _template frontend_ di PHP menggunakan Blade, banyak pengembang mulai menyukai menulis _template_ mereka menggunakan React atau Vue. Laravel telah membuat hal ini menjadi mudah berkat [Inertia](https://inertiajs.com/), sebuah _library_ yang memudahkan pengikatan _frontend_ React/Vue Anda ke _backend_ Laravel tanpa kerumitan yang biasanya terjadi pada pembangunan SPA.
 
-Our Breeze and Jetstream [starter kits](/docs/{{version}}/starter-kits) give you a great starting point for your next Laravel application powered by Inertia. In addition, the [Laravel Bootcamp](https://bootcamp.laravel.com) provides a full demonstration of building a Laravel application powered by Inertia, including examples in Vue and React.
+[_Starter kit_](/docs/{{version}}/starter-kits) Breeze dan Jetstream memberikan Anda sebuah permulaan yang baik untuk aplikasi Laravel Anda yang berikutnya dengan bantuan Inertia. Selain itu, [Bootcamp Laravel](https://bootcamp.laravel.com) memberikan demonstrasi lengkap untuk membangun aplikasi Laravel yang didukung oleh Inertia, disertai contoh-contoh dalam Vue dan React.
 
 <a name="creating-and-rendering-views"></a>
-## Creating & Rendering Views
+## Membuat & Me-_render_ _View_
 
-You may create a view by placing a file with the `.blade.php` extension in your application's `resources/views` directory. The `.blade.php` extension informs the framework that the file contains a [Blade template](/docs/{{version}}/blade). Blade templates contain HTML as well as Blade directives that allow you to easily echo values, create "if" statements, iterate over data, and more.
+Anda dapat membuat tampilan dengan menempatkan _file_ dengan ekstensi `.blade.php` di direktori `resources/views` aplikasi Anda. Ekstensi `.blade.php` menginformasikan _framework_ bahwa _file_ tersebut berisi [_template_ Blade](/docs/{{version}}/blade). _Template_ Blade berisi HTML serta _directive_ Blade yang memungkinkan Anda untuk dengan mudah menampilkan nilai, membuat pernyataan "if", melakukan iterasi data, dan banyak lagi.
 
-Once you have created a view, you may return it from one of your application's routes or controllers using the global `view` helper:
+Setelah Anda membuat _view_, Anda dapat mengembalikannya dari salah satu rute atau _controller_ aplikasi Anda menggunakan _helper_ global `view`:
 
     Route::get('/', function () {
         return view('greeting', ['name' => 'James']);
     });
 
-Views may also be returned using the `View` facade:
+_View_ juga dapat dikembalikan menggunakan _facade_ `View`:
 
     use Illuminate\Support\Facades\View;
 
     return View::make('greeting', ['name' => 'James']);
 
-As you can see, the first argument passed to the `view` helper corresponds to the name of the view file in the `resources/views` directory. The second argument is an array of data that should be made available to the view. In this case, we are passing the `name` variable, which is displayed in the view using [Blade syntax](/docs/{{version}}/blade).
+Seperti yang anda lihat, argumen pertama yang dioper ke _helper_ `view` telah sesuai dengan nama _file view_ di direktori `resources/views`. Argumen kedua adalah _array_ data yang harus tersedia untuk _view_. Dalam hal ini, kita mengoper variabel `name`, yang nantinya ditampilkan di dalam _view_ menggunakan [sintaks Blade](/docs/{{version}}/blade).
 
 <a name="nested-view-directories"></a>
-### Nested View Directories
+### Direktori _View_ yang Bersarang
 
-Views may also be nested within subdirectories of the `resources/views` directory. "Dot" notation may be used to reference nested views. For example, if your view is stored at `resources/views/admin/profile.blade.php`, you may return it from one of your application's routes / controllers like so:
+_View_ juga dapat dimasukkan ke dalam subdirektori di dalam `resources/views`. Tanda baca "titik" dapat digunakan untuk mereferensikan _view_ yang bersarang (berada di dalam subdirektori). Misalnya, jika _view_ Anda disimpan di `resources/views/admin/profile.blade.php`, Anda dapat mengembalikannya dari salah satu rute / _controller_ aplikasi Anda seperti ini:
 
     return view('admin.profile', $data);
 
-> **Warning**  
-> View directory names should not contain the `.` character.
+> **Peringatan**  
+> Nama untuk direktori seharusnya tidak mengandung karakter `.` (titik)
 
 <a name="creating-the-first-available-view"></a>
-### Creating The First Available View
+### Membuat _View_ yang Tersedia Saat Pertama Kali
 
-Using the `View` facade's `first` method, you may create the first view that exists in a given array of views. This may be useful if your application or package allows views to be customized or overwritten:
+Dengan menggunakan metode `first` milik _facade_ `View`, Anda dapat membuat prioritas _view_ yang diurutkan di dalam _array_ tampilan. Ini dapat berguna jika aplikasi atau _package_ Anda memungkinkan tampilan untuk dikustomisasi atau ditimpa:
 
     use Illuminate\Support\Facades\View;
 
     return View::first(['custom.admin', 'admin'], $data);
 
-<a name="determining-if-a-view-exists"></a>
-### Determining If A View Exists
+Seperti yang terlihat pada contoh di atas, `return` akan mengembalikan _view_ `admin` jika _file_ `custom.admin` tidak ditemukan. Namun, _view_ `admin` akan ditimpa jika _view_ `custom.admin` telah dibuat pada aplikasi Anda.
 
-If you need to determine if a view exists, you may use the `View` facade. The `exists` method will return `true` if the view exists:
+<a name="determining-if-a-view-exists"></a>
+### Penentuan Keberadaan _View_
+
+Jika Anda perlu menentukan apakah sebuah view telah dibuat, Anda dapat menggunakan _facade_ `View`. Metode `exists` akan mengembalikan `true` jika view berada pada tempatnya:
 
     use Illuminate\Support\Facades\View;
 
@@ -95,24 +97,24 @@ If you need to determine if a view exists, you may use the `View` facade. The `e
     }
 
 <a name="passing-data-to-views"></a>
-## Passing Data To Views
+## Mengoper Data ke _View_
 
-As you saw in the previous examples, you may pass an array of data to views to make that data available to the view:
+Seperti yang Anda lihat dalam contoh-contoh sebelumnya, Anda dapat mengoper _array_ data ke _view_ untuk membuat data tersebut "terbaca" pada _view_:
 
     return view('greetings', ['name' => 'Victoria']);
 
-When passing information in this manner, the data should be an array with key / value pairs. After providing data to a view, you can then access each value within your view using the data's keys, such as `<?php echo $name; ?>`.
+Ketika meneruskan informasi dengan cara ini, data harus berupa _array_ dengan pasangan kunci-nilai. Setelah memberikan data ke _view_, Anda kemudian dapat mengakses setiap nilai dalam _view_ Anda menggunakan kunci (_array_ asosiatif) data, seperti `<?php echo $name; ?>`.
 
-As an alternative to passing a complete array of data to the `view` helper function, you may use the `with` method to add individual pieces of data to the view. The `with` method returns an instance of the view object so that you can continue chaining methods before returning the view:
+Sebagai alternatif untuk mengoper semua _array_ data ke fungsi pembantu `view`, anda dapat menggunakan metode `with` untuk menambahkan potongan-potongan data individual ke _view_. Metode `with` mengembalikan sebuah _instance_ dari objek _view_ sehingga Anda dapat melakukan perantaian metode sebelum mengembalikan _view_:
 
     return view('greeting')
                 ->with('name', 'Victoria')
                 ->with('occupation', 'Astronaut');
 
 <a name="sharing-data-with-all-views"></a>
-### Sharing Data With All Views
+### Berbagi Data dengan Semua _View_
 
-Occasionally, you may need to share data with all views that are rendered by your application. You may do so using the `View` facade's `share` method. Typically, you should place calls to the `share` method within a service provider's `boot` method. You are free to add them to the `App\Providers\AppServiceProvider` class or generate a separate service provider to house them:
+Terkadang, Anda mungkin perlu berbagi data dengan semua _view_ yang di-_render_ oleh aplikasi Anda. Anda dapat melakukannya dengan menggunakan metode `share` milik _facade_ `View`. Biasanya, Anda harus menempatkan pemanggilan metode `share` di dalam metode `boot` milik _service provider_. Anda bebas menambahkan ke kelas `App\Providers\AppServiceProvider` atau membuat _service provider_ lain untuk menampungnya:
 
     <?php
 
@@ -123,7 +125,7 @@ Occasionally, you may need to share data with all views that are rendered by you
     class AppServiceProvider extends ServiceProvider
     {
         /**
-         * Register any application services.
+         * Mendaftarkan service pada aplikasi.
          *
          * @return void
          */
@@ -133,7 +135,7 @@ Occasionally, you may need to share data with all views that are rendered by you
         }
 
         /**
-         * Bootstrap any application services.
+         * Bootstrap service milik aplikasi.
          *
          * @return void
          */
@@ -144,13 +146,13 @@ Occasionally, you may need to share data with all views that are rendered by you
     }
 
 <a name="view-composers"></a>
-## View Composers
+## Komposer _View_
 
-View composers are callbacks or class methods that are called when a view is rendered. If you have data that you want to be bound to a view each time that view is rendered, a view composer can help you organize that logic into a single location. View composers may prove particularly useful if the same view is returned by multiple routes or controllers within your application and always needs a particular piece of data.
+Komposer _view_ adalah _callback_ atau metode kelas yang dipanggil saat tampilan di-_render_. Jika Anda memiliki data yang ingin diikat ke tampilan setiap kali tampilan tersebut di-_render_, komposer _view_ dapat membantu Anda mengatur logika tersebut ke dalam satu lokasi. Komposer _view_ akan sangat berguna jika tampilan yang sama dikembalikan oleh beberapa rute atau _controller_ di dalam aplikasi Anda selalu membutuhkan bagian data tertentu.
 
-Typically, view composers will be registered within one of your application's [service providers](/docs/{{version}}/providers). In this example, we'll assume that we have created a new `App\Providers\ViewServiceProvider` to house this logic.
+Biasanya, komposer _view_ akan didaftarkan dalam salah satu [penyedia layanan](/docs/{{version}}/providers) aplikasi Anda. Dalam contoh ini, kita akan mengasumsikan bahwa kita telah membuat `App\Providers\ViewServiceProvider` baru untuk menampung logika ini.
 
-We'll use the `View` facade's `composer` method to register the view composer. Laravel does not include a default directory for class based view composers, so you are free to organize them however you wish. For example, you could create an `app/View/Composers` directory to house all of your application's view composers:
+Kita akan menggunakan metode `composer` milik _facade_ `View` untuk mendaftarkan komposer _view_. Laravel tidak menyertakan direktori _default_ untuk komposer _view_ berbasis kelas, jadi Anda bebas mengaturnya sesuai keinginan Anda. Sebagai contoh, Anda dapat membuat direktori `App/View/Composers` untuk menampung semua komposer _view_ untuk aplikasi Anda:
 
     <?php
 
@@ -163,7 +165,7 @@ We'll use the `View` facade's `composer` method to register the view composer. L
     class ViewServiceProvider extends ServiceProvider
     {
         /**
-         * Register any application services.
+         * Mendaftarkan service pada aplikasi.
          *
          * @return void
          */
@@ -173,26 +175,26 @@ We'll use the `View` facade's `composer` method to register the view composer. L
         }
 
         /**
-         * Bootstrap any application services.
+         * Bootstrap service milik aplikasi.
          *
          * @return void
          */
         public function boot()
         {
-            // Using class based composers...
+            // Mengunakan komposes berbasis kelas...
             View::composer('profile', ProfileComposer::class);
 
-            // Using closure based composers...
+            // Menggunakan komposer berbasis closure...
             View::composer('dashboard', function ($view) {
                 //
             });
         }
     }
 
-> **Warning**  
-> Remember, if you create a new service provider to contain your view composer registrations, you will need to add the service provider to the `providers` array in the `config/app.php` configuration file.
+> **Peringatan**  
+> Ingat, jika Anda membuat _service provider_ baru yang memuat pendaftaran komposer _view_, Anda perlu menambahkan _service provider_ tersebut ke _array_ `providers` di file konfigurasi `config/app.php`.
 
-Now that we have registered the composer, the `compose` method of the `App\View\Composers\ProfileComposer` class will be executed each time the `profile` view is being rendered. Let's take a look at an example of the composer class:
+Sekarang kita telah mendaftarkan komposer, metode `compose` dari kelas `App\View\Composers\ProfileComposer` akan dieksekusi setiap kali tampilan `profile` di-_render_. Mari kita lihat contoh kelas komposer:
 
     <?php
 
@@ -204,14 +206,14 @@ Now that we have registered the composer, the `compose` method of the `App\View\
     class ProfileComposer
     {
         /**
-         * The user repository implementation.
+         * Implementasi repository user.
          *
          * @var \App\Repositories\UserRepository
          */
         protected $users;
 
         /**
-         * Create a new profile composer.
+         * Membuat profil komposer yang baru.
          *
          * @param  \App\Repositories\UserRepository  $users
          * @return void
@@ -222,7 +224,7 @@ Now that we have registered the composer, the `compose` method of the `App\View\
         }
 
         /**
-         * Bind data to the view.
+         * Mengikat data ke view.
          *
          * @param  \Illuminate\View\View  $view
          * @return void
@@ -233,12 +235,12 @@ Now that we have registered the composer, the `compose` method of the `App\View\
         }
     }
 
-As you can see, all view composers are resolved via the [service container](/docs/{{version}}/container), so you may type-hint any dependencies you need within a composer's constructor.
+Seperti yang Anda lihat, semua komposer _view_ diselesaikan melalui [_service container_](/docs/{{version}}/container), jadi Anda dapat melakukan _type-hint_ dependensi apa pun yang Anda perlukan dalam _constructor_ milik komposer.
 
 <a name="attaching-a-composer-to-multiple-views"></a>
-#### Attaching A Composer To Multiple Views
+#### Menempelkan Komposer pada Beberapa _View_
 
-You may attach a view composer to multiple views at once by passing an array of views as the first argument to the `composer` method:
+Anda dapat menempelkan komposer ke beberapa _view_ sekaligus dengan cara mengoper _array view_ sebagai argumen pertama pada metode `composer`:
 
     use App\Views\Composers\MultiComposer;
 
@@ -247,16 +249,16 @@ You may attach a view composer to multiple views at once by passing an array of 
         MultiComposer::class
     );
 
-The `composer` method also accepts the `*` character as a wildcard, allowing you to attach a composer to all views:
+Metode `composer` juga menerima karakter `*` sebagai _wildcard_, yang memungkinkan Anda untuk melampirkan komposer ke semua _view_:
 
     View::composer('*', function ($view) {
         //
     });
 
 <a name="view-creators"></a>
-### View Creators
+### Kreator _View_
 
-View "creators" are very similar to view composers; however, they are executed immediately after the view is instantiated instead of waiting until the view is about to render. To register a view creator, use the `creator` method:
+"Kreator" _view_ sangat mirip dengan komposer _view_; namun, kreator _view_ dieksekusi segera setelah _view_ diinstansiasi, bukannya menunggu sampai _view_ akan di-_render_ seperti pada komposer. Untuk mendaftarkan kreator _view_, Anda dapat menggunakan metode `creator`:
 
     use App\View\Creators\ProfileCreator;
     use Illuminate\Support\Facades\View;
@@ -264,17 +266,17 @@ View "creators" are very similar to view composers; however, they are executed i
     View::creator('profile', ProfileCreator::class);
 
 <a name="optimizing-views"></a>
-## Optimizing Views
+## Optimasi _View_
 
-By default, Blade template views are compiled on demand. When a request is executed that renders a view, Laravel will determine if a compiled version of the view exists. If the file exists, Laravel will then determine if the uncompiled view has been modified more recently than the compiled view. If the compiled view either does not exist, or the uncompiled view has been modified, Laravel will recompile the view.
+Secara _default_, _view_ yang menggunakan _template_ Blade akan dikompilasi sesuai permintaan. Ketika mengeksekusi _request_ yang me-_render_ tampilan, Laravel akan menentukan apakah versi tampilan yang dikompilasi tersebut sudah ada. Jika _file_ tersebut ada, Laravel kemudian akan menentukan apakah _view_ yang belum dikompilasi telah dimodifikasi (berbeda dengan _view_ yang sudah dikompilasi). Jika tidak ada _view_ yang sudah dikompilasi, atau _view_ yang belum dikompilasi telah dimodifikasi, Laravel akan mengkompilasi ulang _view_ tersebut.
 
-Compiling views during the request may have a small negative impact on performance, so Laravel provides the `view:cache` Artisan command to precompile all of the views utilized by your application. For increased performance, you may wish to run this command as part of your deployment process:
+Mengkompilasi tampilan pada saat melakukan _request_ mungkin memiliki sedikit dampak negatif pada kinerja, sehingga Laravel menyediakan perintah Artisan `view:cache` untuk mengkompilasi semua _view_ yang digunakan oleh aplikasi Anda sebelum melakukan _request_. Untuk meningkatkan kinerja, Anda mungkin ingin menjalankan perintah ini sebagai bagian dari proses _deployment_ Anda:
 
 ```shell
 php artisan view:cache
 ```
 
-You may use the `view:clear` command to clear the view cache:
+Anda bisa menggunakan perintah `view:clear` untuk menghapus _cache view_ yang telah dibuat sebelumnya:
 
 ```shell
 php artisan view:clear

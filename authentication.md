@@ -599,7 +599,7 @@ To get started, call the `Auth::viaRequest` method within the `boot` method of y
         $this->registerPolicies();
 
         Auth::viaRequest('custom-token', function (Request $request) {
-            return User::where('token', $request->token)->first();
+            return User::where('token', (string) $request->token)->first();
         });
     }
 
@@ -610,6 +610,12 @@ Once your custom authentication driver has been defined, you may configure it as
             'driver' => 'custom-token',
         ],
     ],
+
+Finally, you may reference the guard when assigning the authentication middleware to a route:
+
+    Route::middleware('auth:api')->group(function () {
+        // ...
+    }
 
 <a name="adding-custom-user-providers"></a>
 ## Adding Custom User Providers

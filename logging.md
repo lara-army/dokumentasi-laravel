@@ -1,103 +1,103 @@
-# Logging
+# Pencatatan _Log_
 
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-    - [Available Channel Drivers](#available-channel-drivers)
-    - [Channel Prerequisites](#channel-prerequisites)
-    - [Logging Deprecation Warnings](#logging-deprecation-warnings)
-- [Building Log Stacks](#building-log-stacks)
-- [Writing Log Messages](#writing-log-messages)
-    - [Contextual Information](#contextual-information)
-    - [Writing To Specific Channels](#writing-to-specific-channels)
-- [Monolog Channel Customization](#monolog-channel-customization)
-    - [Customizing Monolog For Channels](#customizing-monolog-for-channels)
-    - [Creating Monolog Handler Channels](#creating-monolog-handler-channels)
-    - [Creating Custom Channels Via Factories](#creating-custom-channels-via-factories)
+- [Pendahuluan](#introduction)
+- [Konfigurasi](#configuration)
+    - [_Driver_ Kanal yang Tersedia](#available-channel-drivers)
+    - [Prasyarat Kanal](#channel-prerequisites)
+    - [Pencatatan _Log_ untuk Peringatan Keusangan](#logging-deprecation-warnings)
+- [Membangun Tumpukan _Log_](#building-log-stacks)
+- [Menulis Pesan _Log_](#writing-log-messages)
+    - [Informasi Kontekstual](#contextual-information)
+    - [Menulis pada Kanal Tertentu](#writing-to-specific-channels)
+- [Kustomisasi Kanal Monolog](#monolog-channel-customization)
+    - [Kustomisasi Monolog untuk Kanal](#customizing-monolog-for-channels)
+    - [Membuat Kanal _Handler_ Monolog](#creating-monolog-handler-channels)
+    - [Membuat Kanal Kustom Via _Factory_](#creating-custom-channels-via-factories)
 
 <a name="introduction"></a>
-## Introduction
+## Pendahuluan
 
-To help you learn more about what's happening within your application, Laravel provides robust logging services that allow you to log messages to files, the system error log, and even to Slack to notify your entire team.
+Untuk membantu Anda memahami apa yang terjadi pada aplikasi Anda, Laravel menyediakan layanan pencatatan _Log_ yang tangguh, yang memungkinkan Anda untuk melakukan pencatatan _log_ pada _file_, _log_ eror sistem, dan bahkan untuk melakukan pemberitahuan Slack untuk seluruh tim.
 
-Laravel logging is based on "channels". Each channel represents a specific way of writing log information. For example, the `single` channel writes log files to a single log file, while the `slack` channel sends log messages to Slack. Log messages may be written to multiple channels based on their severity.
+Pencatatan _log_ Laravel berlandaskan pada "kanal". Setiap kanal merepresentasikan sebuah cara tertentu untuk menulis informasi _log_. Sebagai contoh, kanal `single` melakukan penulisan _file log_ yang tunggal, sedangkan kanal `slack` akan mengirimkan pesan _log_ ke Slack. Pesan _log_ juga dapat ditulis pada banyak kanal berdasarkan tingkat keparahannya.
 
-Under the hood, Laravel utilizes the [Monolog](https://github.com/Seldaek/monolog) library, which provides support for a variety of powerful log handlers. Laravel makes it a cinch to configure these handlers, allowing you to mix and match them to customize your application's log handling.
+Di balik layar, Laravel menggunakan pustaka [Monolog](https://github.com/Seldaek/monolog), yang menyediakan dukungan untuk berbagai macam penangan log yang _powerful_. Laravel telah mempermudah Anda untuk mengonfigurasi penangan ini, sehingga Anda dapat melakukan penyesuaian penanganan _log_ untuk aplikasi Anda.
 
 <a name="configuration"></a>
-## Configuration
+## Konfigurasi
 
-All of the configuration options for your application's logging behavior is housed in the `config/logging.php` configuration file. This file allows you to configure your application's log channels, so be sure to review each of the available channels and their options. We'll review a few common options below.
+Semua opsi konfigurasi untuk perilaku pencatatan _log_ milik aplikasi Anda berada pada _file_ `config/logging.php`. _File_ ini mengijinkan Anda untuk mengkonfigurasi kanal _log_ pada aplikasi. Pastikan untuk meninjau semua kanal yang tersedia beserta masing-masing opsinya. Pada bab ini, Kita akan meninjau beberapa opsi yang umum saja.
 
-By default, Laravel will use the `stack` channel when logging messages. The `stack` channel is used to aggregate multiple log channels into a single channel. For more information on building stacks, check out the [documentation below](#building-log-stacks).
+Secara _default_, Laravel akan menggunakan kanal `stack` ketika melakukan pencatatan pesan log. Kanal `stack` digunakan untuk mengagregat beberapa kanal _log_ menjadi kanal tunggal. Informasi lebih lanjut tentang pembangunan _stack_ dapat dilihat pada [paragraf di bawah](#building-log-stacks).
 
 <a name="configuring-the-channel-name"></a>
-#### Configuring The Channel Name
+#### Mengkonfigurasi Nama Kanal
 
-By default, Monolog is instantiated with a "channel name" that matches the current environment, such as `production` or `local`. To change this value, add a `name` option to your channel's configuration:
+Secara _default_, Monolog telah terinstantiasi dengan dengan sebuah "nama kanal" yang sesuai dengan _environtment_ (lingkungan aplikasi) saat ini. Untuk mengganti nilai ini, tambahkan opsi `nama` pada konfigurasi kanal milik Anda:
 
     'stack' => [
         'driver' => 'stack',
-        'name' => 'channel-name',
+        'name' => 'nama-kanal',
         'channels' => ['single', 'slack'],
     ],
 
 <a name="available-channel-drivers"></a>
-### Available Channel Drivers
+### _Driver_ Kanal yang Tersedia
 
-Each log channel is powered by a "driver". The driver determines how and where the log message is actually recorded. The following log channel drivers are available in every Laravel application. An entry for most of these drivers is already present in your application's `config/logging.php` configuration file, so be sure to review this file to become familiar with its contents:
+Setiap kanal _log_ telah ditenagai oleh sebuah "_driver_". _Driver_ tersebut menentukan bagaimana dan di mana pesan _log_ sebenarnya direkam. _Driver_ untuk kanal _log_ di bawah telah tersedia pada setiap aplikasi Laravel. Entri untuk sebagian besar _driver_ ini sudah ada di dalam _file_ konfigurasi `config/logging.php`, jadi pastikan untuk meninjau _file_ ini untuk mengenal isinya:
 
-Name | Description
+Nama | Keterangan
 ------------- | -------------
-`custom` | A driver that calls a specified factory to create a channel
-`daily` | A `RotatingFileHandler` based Monolog driver which rotates daily
-`errorlog` | An `ErrorLogHandler` based Monolog driver
-`monolog` | A Monolog factory driver that may use any supported Monolog handler
-`null` | A driver that discards all log messages
-`papertrail` | A `SyslogUdpHandler` based Monolog driver
-`single` | A single file or path based logger channel (`StreamHandler`)
-`slack` | A `SlackWebhookHandler` based Monolog driver
-`stack` | A wrapper to facilitate creating "multi-channel" channels
-`syslog` | A `SyslogHandler` based Monolog driver
+`custom` | _Driver_ yang memanggil _factory_ tertentu untuk membuat sebuah
+`daily` | _Driver_ Monolog berbasis `RotatingFileHandler` yang berputar setiap hari
+`errorlog` | _Driver_ Monolog berbasis `ErrorLogHandler`
+`monolog` | _Driver factory_ Monolog yang dapat digunakan untuk penangan Monolog yang mendukung
+`null` | _Driver_ yang mengabaikan semua pesan _log_
+`papertrail` | _Driver_ Monolog berbasis `SyslogUdpHandler`
+`single` | Kanal pencatat _log_ berbasis _file_ atau _path_ yang tunggal (`StreamHandler`)
+`slack` | _Driver_ Monolog berbasis `SlackWebhookHandler`
+`stack` | Sebuah pembungkus untuk memfasilitasi pembuatan kanal yang "multi-kanal"
+`syslog` | _Driver_ Monolog berbasis `SyslogHandler`
 
-> **Note**  
-> Check out the documentation on [advanced channel customization](#monolog-channel-customization) to learn more about the `monolog` and `custom` drivers.
+> **Catatan**  
+> Periksalah dokumentasi [penyesuaian kanal tingkat lanjut](#monolog-channel-customization) untuk mempelajari _driver_ `monolog` dan `custom`.
 
 <a name="channel-prerequisites"></a>
-### Channel Prerequisites
+### Prasyarat Kanal
 
 <a name="configuring-the-single-and-daily-channels"></a>
-#### Configuring The Single and Daily Channels
+#### Melakukan Konfigurasi pada Kanal _Single_ dan _Daily_
 
-The `single` and `daily` channels have three optional configuration options: `bubble`, `permission`, and `locking`.
+Kanal `single` dan `daily` memiliki tiga opsi konfigurasi yang opsional: `bubble`, `permission`, dan `locking.`
 
-Name | Description | Default
+Name | Keterangan | _Default_
 ------------- | ------------- | -------------
-`bubble` | Indicates if messages should bubble up to other channels after being handled | `true`
-`locking` | Attempt to lock the log file before writing to it | `false`
-`permission` | The log file's permissions | `0644`
+`bubble` | Mengindikasikan bahwa pesan-pesan harus melayang ("_bubble up_") ke kanal lain setelah ditangani | `true`
+`locking` | Mencoba mengunci _file log_ sebelum menulis ke dalam _file_ tersebut | `false`
+`permission` | _Permission_ untuk _file log_ | `0644`
 
-Additionally, the retention policy for the `daily` channel can be configured via the `days` option:
+Selain itu, kebijakan retensi untuk kanal `daily` dapat dikonfigurasi melalui opsi `days`
 
-Name | Description                                                       | Default
+Nama | Keterangan                                                       | _Default_
 ------------- |-------------------------------------------------------------------| -------------
-`days` | The number of days that daily log files should be retained | `7`
+`days` | Banyaknya hari yang harus dipertahankan oleh _file log_ harian | `7`
 
 <a name="configuring-the-papertrail-channel"></a>
-#### Configuring The Papertrail Channel
+#### Melakukan Konfigurasi pada Kanal Papertrail
 
-The `papertrail` channel requires the `host` and `port` configuration options. You can obtain these values from [Papertrail](https://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-php-apps/#send-events-from-php-app).
+Kanal `pepertrail` mewajibkan opsi konfigurasi untuk `host` dan `port`. Anda dapat mendapatkan nilai-nilai untuk konfigurasi pada [Papertrail](https://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-php-apps/#send-events-from-php-app).
 
 <a name="configuring-the-slack-channel"></a>
-#### Configuring The Slack Channel
+#### Melakukan Konfigurasi pada Kanal Slack
 
-The `slack` channel requires a `url` configuration option. This URL should match a URL for an [incoming webhook](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks) that you have configured for your Slack team.
+Kanal `slack` mewajibkan sebuah opsi konfigurasi untuk `url`. URL tersebut harus sesuai dengan URL untuk [_webhook_ yang masuk](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks) yang telah Anda konfigurasi untuk tim Slack anda.
 
-By default, Slack will only receive logs at the `critical` level and above; however, you can adjust this in your `config/logging.php` configuration file by modifying the `level` configuration option within your Slack log channel's configuration array.
+Secara _default_, Slack hanya akan menerima _log_ yang memiliki level `critical` dan diatasnya; namun, Anda dapat menyelesaikan hal ini pada _file_ konfigurasi `config/logging.php` dengan memodifikasi opsi `level` pada _array_ konfigurasi milik kanal _log_ Slack Anda.
 
 <a name="logging-deprecation-warnings"></a>
-### Logging Deprecation Warnings
+### Pencatatan _Log_ untuk Peringatan Keusangan
 
-PHP, Laravel, and other libraries often notify their users that some of their features have been deprecated and will be removed in a future version. If you would like to log these deprecation warnings, you may specify your preferred `deprecations` log channel in your application's `config/logging.php` configuration file:
+PHP, Laravel, dan pustaka yang lain sering memberitahu pengguna bahwa beberapa fitur milik mereka telah ditinggalkan (_deprecated_) dan akan dihapus pada versi mendatang. Jika Anda ingin melakukan pencatatan _log_ untuk peringatan keusangan (_deprecation_) tersebut, Anda dapat mendefinisikan nama kanal _log_ untuk `deprecations` yang Anda sukai pada _file_ konfigurasi `config/logging.php` untuk aplikasi Anda:
 
     'deprecations' => env('LOG_DEPRECATIONS_CHANNEL', 'null'),
 
@@ -105,7 +105,7 @@ PHP, Laravel, and other libraries often notify their users that some of their fe
         ...
     ]
 
-Or, you may define a log channel named `deprecations`. If a log channel with this name exists, it will always be used to log deprecations:
+Atau, Anda dapat mendefinisikan sebuah kanal _log_ dengan nama `deprecations`. Jika nama kanal tersebut terdapat pada _array_ `channel`, maka kanal tersebut akan selalu digunakan untuk mencatat _log_ peringatan keusangan:
 
     'channels' => [
         'deprecations' => [
@@ -115,9 +115,9 @@ Or, you may define a log channel named `deprecations`. If a log channel with thi
     ],
 
 <a name="building-log-stacks"></a>
-## Building Log Stacks
+## Membangun Tumpukan _Log_
 
-As mentioned previously, the `stack` driver allows you to combine multiple channels into a single log channel for convenience. To illustrate how to use log stacks, let's take a look at an example configuration that you might see in a production application:
+Seperti yang sudah disebutkan sebelumnya, _driver_ `stack` memungkinkan Anda untuk mengkombinasikan beberapa kanal menjadi satu kanal untuk mempermudah. Untuk mengilustrasikan bagaimana cara "menumpuk" _log_, mari kita sebuah contoh konfigurasi yang mungkin akan Anda lihat pada aplikasi tahap _production_:
 
     'channels' => [
         'stack' => [
@@ -139,25 +139,25 @@ As mentioned previously, the `stack` driver allows you to combine multiple chann
         ],
     ],
 
-Let's dissect this configuration. First, notice our `stack` channel aggregates two other channels via its `channels` option: `syslog` and `slack`. So, when logging messages, both of these channels will have the opportunity to log the message. However, as we will see below, whether these channels actually log the message may be determined by the message's severity / "level".
+Mari kita bedah konfigurasi tersebut. Pertama, perhatikan saluran `stack` kita yang menggabungkan dua saluran lain melalui opsi `channels`: `syslog` dan `slack`. Jadi, ketika mencatat pesan _log_, kedua saluran ini akan memiliki kesempatan untuk mencatat pesan _log_. Namun, seperti yang akan kita lihat di bawahnya, kanal-kanal tersebut hanya mencatat pesan _log_ untuk tingkat keparahan / "level" yang sudah ditentukan.
 
 <a name="log-levels"></a>
-#### Log Levels
+#### Tingkatan _Log_
 
-Take note of the `level` configuration option present on the `syslog` and `slack` channel configurations in the example above. This option determines the minimum "level" a message must be in order to be logged by the channel. Monolog, which powers Laravel's logging services, offers all of the log levels defined in the [RFC 5424 specification](https://tools.ietf.org/html/rfc5424). In descending order of severity, these log levels are: **emergency**, **alert**, **critical**, **error**, **warning**, **notice**, **info**, and **debug**.
+Perhatikan opsi konfigurasi `level` yang ada pada konfigurasi kanal `syslog` dan `slack` pada contoh di atas. Opsi ini menentukan "level" minimum yang harus dimiliki sebuah pesan agar dapat dicatat oleh kanal. Monolog, yang mendukung layanan pencatatan Laravel, menawarkan semua level _log_ yang didefinisikan pada [spesifikasi RFC 5424](https://tools.ietf.org/html/rfc5424). Diurutkan dari tingkat keparahan yang paling tinggi, adapun level-level _log_ yang terdaftar adalah: **emergency**, **alert**, **critical**, **error**, **warning**, **notice**, **info**, dan **debug**.
 
-So, imagine we log a message using the `debug` method:
+Jadi, bayangkan kita mencatat pesan _log_ menggunakan metode `debug`:
 
-    Log::debug('An informational message.');
+    Log::debug('Pesan log tercatat.');
 
-Given our configuration, the `syslog` channel will write the message to the system log; however, since the error message is not `critical` or above, it will not be sent to Slack. However, if we log an `emergency` message, it will be sent to both the system log and Slack since the `emergency` level is above our minimum level threshold for both channels:
+Berdasarkan konfigurasi yang sudah dijelaskan di atas, kanal `syslog` akan menulis pesan ke _log_ sistem; namun, karena pesan kesalahan tidak `critical` atau lebih tinggi, pesan tersebut tidak akan dikirim ke Slack. Namun, jika kita mencatat pesan `emergency`, pesan tersebut akan dikirim ke _log_ sistem dan Slack karena tingkat `emergency` lebih tinggi dari ambang batas minimum untuk kedua kanal:
 
-    Log::emergency('The system is down!');
+    Log::emergency('Sistem sedang down!');
 
 <a name="writing-log-messages"></a>
-## Writing Log Messages
+## Menulis Pesan _Log_
 
-You may write information to the logs using the `Log` [facade](/docs/{{version}}/facades). As previously mentioned, the logger provides the eight logging levels defined in the [RFC 5424 specification](https://tools.ietf.org/html/rfc5424): **emergency**, **alert**, **critical**, **error**, **warning**, **notice**, **info** and **debug**:
+Anda dapat menulis sebuah informasi ke _log_ menggunakan [_facade_](/docs/{{version}}/facades) `Log`. Seperti yang sudah disebutkan sebelumnya, pencatat _log_ menyediakan delapan level _log_ yang didefinisikan pada [spesifikasi RFC 5424](https://tools.ietf.org/html/rfc5424): **emergency**, **alert**, **critical**, **error**, **warning**, **notice**, **info** dan **debug**:
 
     use Illuminate\Support\Facades\Log;
 
@@ -170,7 +170,7 @@ You may write information to the logs using the `Log` [facade](/docs/{{version}}
     Log::info($message);
     Log::debug($message);
 
-You may call any of these methods to log a message for the corresponding level. By default, the message will be written to the default log channel as configured by your `logging` configuration file:
+Anda dapat menggunakan metode-metode ini untuk melakukan pencatatan _log_ dengan level yg sesuai. Secara _default_, pesan akan dituliskan pada kanal _log_ yang _default_ yang telah diatur pada _file_ konfigurasi untuk `logging`:
 
     <?php
 
@@ -183,14 +183,14 @@ You may call any of these methods to log a message for the corresponding level. 
     class UserController extends Controller
     {
         /**
-         * Show the profile for the given user.
+         * Menampilkan profil untuk pengguna yang telah ditentukan.
          *
          * @param  int  $id
          * @return \Illuminate\Http\Response
          */
         public function show($id)
         {
-            Log::info('Showing the user profile for user: '.$id);
+            Log::info('Menampilkan profil pengguna dengan ID: '.$id);
 
             return view('user.profile', [
                 'user' => User::findOrFail($id)
@@ -199,15 +199,15 @@ You may call any of these methods to log a message for the corresponding level. 
     }
 
 <a name="contextual-information"></a>
-### Contextual Information
+### Informasi Kontekstual
 
-An array of contextual data may be passed to the log methods. This contextual data will be formatted and displayed with the log message:
+Sebuah _array_ untuk data kontekstual dapat dioper kepada metode-metode _log_. Data kontekstual ini akan diformat dan ditampilkan pada pesan _log_:
 
     use Illuminate\Support\Facades\Log;
 
-    Log::info('User failed to login.', ['id' => $user->id]);
+    Log::info('Pengguna gagal melakukan login.', ['id' => $user->id]);
 
-Occasionally, you may wish to specify some contextual information that should be included with all subsequent log entries in a particular channel. For example, you may wish to log a request ID that is associated with each incoming request to your application. To accomplish this, you may call the `Log` facade's `withContext` method:
+Terkadang, Anda mungkin ingin menentukan beberapa informasi kontekstual yang harus disertakan pada semua entri _log_ pada kanal tertentu. Sebagai contoh, Anda mungkin ingin mencatat ID permintaan (_request_) yang terasosiasi dengan setiap permintaan yang masuk ke aplikasi Anda. Untuk mencapai hal ini, Anda dapat memanggil metode `withContext` milik _facade_ `Log`:
 
     <?php
 
@@ -220,7 +220,7 @@ Occasionally, you may wish to specify some contextual information that should be
     class AssignRequestId
     {
         /**
-         * Handle an incoming request.
+         * Menangani permintaan yang masuk.
          *
          * @param  \Illuminate\Http\Request  $request
          * @param  \Closure  $next
@@ -238,7 +238,7 @@ Occasionally, you may wish to specify some contextual information that should be
         }
     }
 
-If you would like to share contextual information across _all_ logging channels, you may call the `Log::shareContext()` method. This method will provide the contextual information to all created channels and any channels that are created subsequently. Typically, the `shareContext` method should be called from the `boot` method of an application service provider:
+Jika Anda ingin berbagi informasi kontekstual dengan semua kanal pecatat _log_, Anda dapat memanggil metode `Log::shareContext()`. Metode ini akan memberikan informasi kontekstual ke semua kanal yang sudah dibuat dan semua kanal yang dibuat setelahnya. Biasanya, metode `shareContext` harus dipanggil dari metode `boot` dari penyedia layanan aplikasi:
 
     use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Str;
@@ -246,7 +246,7 @@ If you would like to share contextual information across _all_ logging channels,
     class AppServiceProvider
     {
         /**
-         * Bootstrap any application services.
+         * Bootstrap layanan untuk aplikasi.
          *
          * @return void
          */
@@ -259,31 +259,31 @@ If you would like to share contextual information across _all_ logging channels,
     }
 
 <a name="writing-to-specific-channels"></a>
-### Writing To Specific Channels
+### Menulis ke Kanal Tertentu
 
-Sometimes you may wish to log a message to a channel other than your application's default channel. You may use the `channel` method on the `Log` facade to retrieve and log to any channel defined in your configuration file:
+Terkadang Anda mungkin ingin mencatat pesan ke kanal selain kanal _default_. Anda dapat menggunakan metode `channel` pada _facade_ `Log` untuk mengambil dan mencatat ke kanal lain yang yang sudah ditentukan dalam _file_ konfigurasi Anda:
 
     use Illuminate\Support\Facades\Log;
 
     Log::channel('slack')->info('Something happened!');
 
-If you would like to create an on-demand logging stack consisting of multiple channels, you may use the `stack` method:
+Jika Anda ingin membuat tumpukan pencatatan _log_—yang bersifat _on-demand_ (berjalan saat _runtime_)—yang terdiri dari beberapa kanal, Anda dapat menggunakan metode `stack`:
 
-    Log::stack(['single', 'slack'])->info('Something happened!');
+    Log::stack(['single', 'slack'])->info('Sesuatu terjadi!');
 
 <a name="on-demand-channels"></a>
-#### On-Demand Channels
+#### Kanal _On-Demand_
 
-It is also possible to create an on-demand channel by providing the configuration at runtime without that configuration being present in your application's `logging` configuration file. To accomplish this, you may pass a configuration array to the `Log` facade's `build` method:
+Anda juga dapat membuat kanal _on-demand_ dengan memberikan konfigurasi kanal pada saat _runtime_ walau konfigurasi tersebut tidak terdapat terdapat pada _file_ konfigurasi `logging` aplikasi Anda. Untuk mencapai hal ini, Anda dapat mengoper _array_ yang berisi konfigurasi kanal ke metode `build` milik _facade_ `Log`:
 
     use Illuminate\Support\Facades\Log;
 
     Log::build([
       'driver' => 'single',
       'path' => storage_path('logs/custom.log'),
-    ])->info('Something happened!');
+    ])->info('Sesuat terjadi!');
 
-You may also wish to include an on-demand channel in an on-demand logging stack. This can be achieved by including your on-demand channel instance in the array passed to the `stack` method:
+Anda mungkin juga ingin menyertakan kanal _on-demand_ dalam tumpukan yang _on-demand_ juga. Hal ini dapat dicapai dengan menyertakan _instance_ dari kanal _on-demand_ Anda dalam _array_ yang dioper ke metode `stack`:
 
     use Illuminate\Support\Facades\Log;
 
@@ -292,17 +292,17 @@ You may also wish to include an on-demand channel in an on-demand logging stack.
       'path' => storage_path('logs/custom.log'),
     ]);
 
-    Log::stack(['slack', $channel])->info('Something happened!');
+    Log::stack(['slack', $channel])->info('Sesuatu terjadi!');
 
 <a name="monolog-channel-customization"></a>
-## Monolog Channel Customization
+## Kustomisasi Kanal Monolog
 
 <a name="customizing-monolog-for-channels"></a>
-### Customizing Monolog For Channels
+### Kustomisasi Monolog untuk Kanal
 
-Sometimes you may need complete control over how Monolog is configured for an existing channel. For example, you may want to configure a custom Monolog `FormatterInterface` implementation for Laravel's built-in `single` channel.
+Terkadang Anda mungkin membutuhkan kontrol penuh atas bagaimana Monolog dikonfigurasi untuk kanal yang sudah ada. Sebagai contoh, Anda mungkin ingin mengonfigurasi implementasi `FormatterInterface` Monolog yang kustom untuk kanal `single` bawaan Laravel.
 
-To get started, define a `tap` array on the channel's configuration. The `tap` array should contain a list of classes that should have an opportunity to customize (or "tap" into) the Monolog instance after it is created. There is no conventional location where these classes should be placed, so you are free to create a directory within your application to contain these classes:
+Untuk memulainya, definisikan _array_ `tap` pada konfigurasi kanal. _Array_ `tap` harus berisi daftar kelas yang memiliki kesempatan untuk menyesuaikan (atau "mengetuk" ke dalam) _instance_ Monolog setelah dibuat. Tidak ada direktori yang konvensional untuk penempatan kelas-kelas ini, jadi Anda bebas membuat direktori pada aplikasi Anda untuk menampung kelas-kelas ini:
 
     'single' => [
         'driver' => 'single',
@@ -311,7 +311,7 @@ To get started, define a `tap` array on the channel's configuration. The `tap` a
         'level' => 'debug',
     ],
 
-Once you have configured the `tap` option on your channel, you're ready to define the class that will customize your Monolog instance. This class only needs a single method: `__invoke`, which receives an `Illuminate\Log\Logger` instance. The `Illuminate\Log\Logger` instance proxies all method calls to the underlying Monolog instance:
+Setelah Anda mengonfigurasi opsi `tap` pada kanal Anda, Anda siap untuk mendefinisikan kelas yang akan mengkustom _instance_ Monolog Anda. Kelas ini hanya membutuhkan satu metode: `__invoke`, yang menerima _instance_ `Illuminate\Log\Logger`. _Instance_ `Illuminate\Log\Logger` memproksikan semua pemanggilan metode ke _instance_ Monolog yang mendasarinya:
 
     <?php
 
@@ -322,7 +322,7 @@ Once you have configured the `tap` option on your channel, you're ready to defin
     class CustomizeFormatter
     {
         /**
-         * Customize the given logger instance.
+         * Mengkustom instance Monolog yang ditentukan.
          *
          * @param  \Illuminate\Log\Logger  $logger
          * @return void
@@ -337,15 +337,15 @@ Once you have configured the `tap` option on your channel, you're ready to defin
         }
     }
 
-> **Note**  
-> All of your "tap" classes are resolved by the [service container](/docs/{{version}}/container), so any constructor dependencies they require will automatically be injected.
+> **Catatan**  
+> Semua kelas-kelas "tap" telah di-_resolve_ oleh [_service container_](/docs/{{version}}/container), maka semua dependensi pada _constructor_ yang diwajibkan akan diinjeksikan secara otomatis.
 
 <a name="creating-monolog-handler-channels"></a>
-### Creating Monolog Handler Channels
+### Membuat Kanal _Handler_ Monolog
 
-Monolog has a variety of [available handlers](https://github.com/Seldaek/monolog/tree/main/src/Monolog/Handler) and Laravel does not include a built-in channel for each one. In some cases, you may wish to create a custom channel that is merely an instance of a specific Monolog handler that does not have a corresponding Laravel log driver.  These channels can be easily created using the `monolog` driver.
+Monolog memiliki berbagai macam [_handler_] (https://github.com/Seldaek/monolog/tree/main/src/Monolog/Handler) dan Laravel tidak menyertakan kanal bawaan untuk _handler_-_handler_ tersebut. Dalam beberapa kasus, Anda mungkin ingin membuat kanal kustom yang mana merupakan sebuah _instance_ dari _handler_ Monolog tertentu yang tidak terdapat pada daftar _driver log_ Laravel bawaan. Kanal-kanal ini dapat dengan mudah dibuat menggunakan _driver_ `monolog`.
 
-When using the `monolog` driver, the `handler` configuration option is used to specify which handler will be instantiated. Optionally, any constructor parameters the handler needs may be specified using the `with` configuration option:
+Ketika menggunakan _driver_ `monolog`, opsi konfigurasi `handler` digunakan untuk menentukan _handler_ mana yang akan di-instansiasi. Secara opsional, parameter-parameter _constructor_ yang dibutuhkan oleh _handler_ dapat ditentukan dengan menggunakan opsi konfigurasi `with`:
 
     'logentries' => [
         'driver'  => 'monolog',
@@ -357,9 +357,9 @@ When using the `monolog` driver, the `handler` configuration option is used to s
     ],
 
 <a name="monolog-formatters"></a>
-#### Monolog Formatters
+#### Pemformat Monolog
 
-When using the `monolog` driver, the Monolog `LineFormatter` will be used as the default formatter. However, you may customize the type of formatter passed to the handler using the `formatter` and `formatter_with` configuration options:
+Saat menggunakan _driver_ `monolog`, `LineFormatter` Monolog akan digunakan sebagai pemformat yang _default_. Namun, Anda dapat menyesuaikan jenis pemformat yang dioper ke _handler_ menggunakan opsi konfigurasi `formatter` dan `formatter_with`:
 
     'browser' => [
         'driver' => 'monolog',
@@ -370,7 +370,7 @@ When using the `monolog` driver, the Monolog `LineFormatter` will be used as the
         ],
     ],
 
-If you are using a Monolog handler that is capable of providing its own formatter, you may set the value of the `formatter` configuration option to `default`:
+Jika Anda menggunakan _handler_ Monolog yang mampu menyediakan pemformatnya sendiri, Anda dapat mengatur nilai opsi konfigurasi `formatter` ke `default`:
 
     'newrelic' => [
         'driver' => 'monolog',
@@ -379,9 +379,9 @@ If you are using a Monolog handler that is capable of providing its own formatte
     ],
 
 <a name="creating-custom-channels-via-factories"></a>
-### Creating Custom Channels Via Factories
+### Membuat Kanal Kustom Via _Factory_
 
-If you would like to define an entirely custom channel in which you have full control over Monolog's instantiation and configuration, you may specify a `custom` driver type in your `config/logging.php` configuration file. Your configuration should include a `via` option that contains the name of the factory class which will be invoked to create the Monolog instance:
+Jika Anda ingin mendefinisikan sebuah kanal yang sepenuhnya kustom di mana Anda memiliki kendali penuh atas instansasi dan konfigurasi Monolog, Anda dapat menentukan tipe _driver_ `custom` dalam _file_ konfigurasi `config/logging.php`. Konfigurasi Anda harus menyertakan opsi `via` yang berisi nama kelas _factory_ yang akan dipanggil untuk membuat _instance_ Monolog:
 
     'channels' => [
         'example-custom-channel' => [
@@ -390,7 +390,7 @@ If you would like to define an entirely custom channel in which you have full co
         ],
     ],
 
-Once you have configured the `custom` driver channel, you're ready to define the class that will create your Monolog instance. This class only needs a single `__invoke` method which should return the Monolog logger instance. The method will receive the channels configuration array as its only argument:
+Setelah Anda mengkonfigurasi saluran _driver_ `custom`, Anda siap mendefinisikan kelas yang akan membuat _instance_ Monolog. Kelas ini hanya membutuhkan satu metode `__invoke` yang akan mengembalikan _instance_ pencatat _log_ Monolog. Metode ini akan menerima _array_ konfigurasi kanal sebagai satu-satunya argumen:
 
     <?php
 
@@ -401,7 +401,7 @@ Once you have configured the `custom` driver channel, you're ready to define the
     class CreateCustomLogger
     {
         /**
-         * Create a custom Monolog instance.
+         * Membuat sebuah instance Monolog kustom.
          *
          * @param  array  $config
          * @return \Monolog\Logger
