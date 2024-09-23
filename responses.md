@@ -1,58 +1,60 @@
-# HTTP Responses
+# Respons HTTP
 
-- [Creating Responses](#creating-responses)
-    - [Attaching Headers To Responses](#attaching-headers-to-responses)
-    - [Attaching Cookies To Responses](#attaching-cookies-to-responses)
-    - [Cookies & Encryption](#cookies-and-encryption)
-- [Redirects](#redirects)
-    - [Redirecting To Named Routes](#redirecting-named-routes)
-    - [Redirecting To Controller Actions](#redirecting-controller-actions)
-    - [Redirecting To External Domains](#redirecting-external-domains)
-    - [Redirecting With Flashed Session Data](#redirecting-with-flashed-session-data)
-- [Other Response Types](#other-response-types)
-    - [View Responses](#view-responses)
-    - [JSON Responses](#json-responses)
-    - [File Downloads](#file-downloads)
-    - [File Responses](#file-responses)
-- [Response Macros](#response-macros)
+- [Membuat Respons](#creating-responses)
+    - [Melampirkan _Header_ pada Respons](#attaching-headers-to-responses)
+    - [Melampirkan _Cookie_ pada Respons](#attaching-cookies-to-responses)
+    - [_Cookie_ & Enkripsi](#cookies-and-encryption)
+- [_Redirect_](#redirects)
+    - [Melakukan _Redirect_ ke _Named Route_](#redirecting-named-routes)
+    - [Melakukan _Redirect_ ke Aksi _Controller_](#redirecting-controller-actions)
+    - [Melakukan ke Domain Eksternal](#redirecting-external-domains)
+    - [Melakukan _Redirect_ dengan Data _Session_ yang Di-_flash_](#redirecting-with-flashed-session-data)
+- [Jenis _Respons_ Lain](#other-response-types)
+    - [Respons _View_](#view-responses)
+    - [Respons JSON](#json-responses)
+    - [Unduhan _File_](#file-downloads)
+    - [Respons _File_](#file-responses)
+- [_Macro_ Respons](#response-macros)
 
 <a name="creating-responses"></a>
-## Creating Responses
+## Membuat Respons
 
 <a name="strings-arrays"></a>
-#### Strings & Arrays
+#### _String_ & _Array_
 
-All routes and controllers should return a response to be sent back to the user's browser. Laravel provides several different ways to return responses. The most basic response is returning a string from a route or controller. The framework will automatically convert the string into a full HTTP response:
+Semua _route_ dan _controller_ seharusnya mengembalikan sebuah respons yang akan dikirimkan ke _browser_ milik pengguna. Laravel menyediakan beragam cara yang berbeda untuk mengembalikan respons. Respons yang paling dasar adalah mengembalikan sebuah _string_ dari _route_ atau _controller_. _Framework_ Laravel secara otomatis akan mengkonversi _string_ tersebut menjadi respons HTTP yang utuh:
 
     Route::get('/', function () {
-        return 'Hello World';
+        return 'Halo Dunia';
     });
 
 In addition to returning strings from your routes and controllers, you may also return arrays. The framework will automatically convert the array into a JSON response:
+
+Selain mengembalikan _string_ dari _route_ dan _controller_, Anda juga bisa mengembalikan _array_. Laravel secara otomatis akan mengubah _array_ menjadi respons JSON:
 
     Route::get('/', function () {
         return [1, 2, 3];
     });
 
-> **Note**  
-> Did you know you can also return [Eloquent collections](/docs/{{version}}/eloquent-collections) from your routes or controllers? They will automatically be converted to JSON. Give it a shot!
+> **Catatan**  
+> Apa Anda tau bahwa Anda juga bisa mengembalikan sebuah [_collection_ Eloquent](/docs/{{version}}/eloquent-collections) dari _route_ atau _controller_? _Collection_ tersebut akan dikonversi menjadi JSON secara otomatis. Cobalah sekarang!
 
 <a name="response-objects"></a>
-#### Response Objects
+#### Objek Respons
 
-Typically, you won't just be returning simple strings or arrays from your route actions. Instead, you will be returning full `Illuminate\Http\Response` instances or [views](/docs/{{version}}/views).
+Biasanya, Anda tidak hanya mengembalikan _string_ atau _array_ yang polos dari _route_ atau aksi _controller_. Sebaliknya, Anda akan mengembalikan sebuah [_view_](/docs/{{version}}/views) atau sebuah _instance_ dari `Illuminate\Http\Response` secara lengkap.
 
-Returning a full `Response` instance allows you to customize the response's HTTP status code and headers. A `Response` instance inherits from the `Symfony\Component\HttpFoundation\Response` class, which provides a variety of methods for building HTTP responses:
+Mengembalikan sebuah _instance_ `Response` yang lengkap memungkinkan Anda untuk menyesuaikan kode status dan _header_ milik respons HTTP. Sebuah _instance_ `Response` merupakan turunan dari kelas `Symfony\Component\HttpFoundation\Response`, yang menyediakan berbagai metode untuk membangun respons HTTP:
 
     Route::get('/home', function () {
-        return response('Hello World', 200)
+        return response('Halo Dunia', 200)
                       ->header('Content-Type', 'text/plain');
     });
 
 <a name="eloquent-models-and-collections"></a>
-#### Eloquent Models & Collections
+#### Model & _Collection_ Eloquent
 
-You may also return [Eloquent ORM](/docs/{{version}}/eloquent) models and collections directly from your routes and controllers. When you do, Laravel will automatically convert the models and collections to JSON responses while respecting the model's [hidden attributes](/docs/{{version}}/eloquent-serialization#hiding-attributes-from-json):
+Anda juga dapat mengembalikan model [ORM Eloquent](/docs/{{version}}/eloquent) dan _collection_ secara langsung dari _route_ dan _controller_. Ketika Anda melakukan hal tersebut, Laravel secara otomatis akan mengkonversi model dan _collection_ menjadi respons JSON yang tetap mengindahkan [atribut tersembunyi](/docs/{{version}}/eloquent-serialization#hiding-attributes-from-json) milik model:
 
     use App\Models\User;
 
@@ -61,28 +63,28 @@ You may also return [Eloquent ORM](/docs/{{version}}/eloquent) models and collec
     });
 
 <a name="attaching-headers-to-responses"></a>
-### Attaching Headers To Responses
+### Melampirkan _Header_ pada Respons
 
-Keep in mind that most response methods are chainable, allowing for the fluent construction of response instances. For example, you may use the `header` method to add a series of headers to the response before sending it back to the user:
+Perlu diingat bahwa kebanyakan metode respons merupakan _chainable_ (dapat dirantaikan), hal tersebut untuk mewujudkan pembangunan _instance_ respons yang _fluent_ (lancar/fasih). Sebagai contoh, Anda dapat menggunakan metode `header` untuk menambahkan serangkaian _header_ pada respons sebelum mengirimkan balik kepada pengguna:
 
     return response($content)
                 ->header('Content-Type', $type)
-                ->header('X-Header-One', 'Header Value')
-                ->header('X-Header-Two', 'Header Value');
+                ->header('X-Header-Satu', 'Nilai Header')
+                ->header('X-Header-Dua', 'Nilai Header');
 
-Or, you may use the `withHeaders` method to specify an array of headers to be added to the response:
+Atau, Anda dapat menggunakan metode `withHeaders` untuk menentukan _header_ yang akan ditambahkan ke respons dalam bentuk _array_:
 
     return response($content)
                 ->withHeaders([
                     'Content-Type' => $type,
-                    'X-Header-One' => 'Header Value',
-                    'X-Header-Two' => 'Header Value',
+                    'X-Header-Satu' => 'Nilai Header',
+                    'X-Header-Dua' => 'Nilai Header',
                 ]);
 
 <a name="cache-control-middleware"></a>
-#### Cache Control Middleware
+#### _Middleware Cache-Control_
 
-Laravel includes a `cache.headers` middleware, which may be used to quickly set the `Cache-Control` header for a group of routes. Directives should be provided using the "snake case" equivalent of the corresponding cache-control directive and should be separated by a semicolon. If `etag` is specified in the list of directives, an MD5 hash of the response content will automatically be set as the ETag identifier:
+Laravel menyertakan sebuah _middleware_ bernama `cache.headers` yang dapat digunakan untuk mengatur _header_ `Cache-Control` pada sekumpulan _route_ dengan singkat. _Directive_ harus disediakan menggunakan "_snake case_" yang setara _directive cache-control_ dan harus dipisahkan dengan tanda titk koma (`;`). Jika `etag` telah dimasukkan ke dalam daftar _directive_, Sebuah _hash_ MD5 dari konten respons akan mengatur ETag secara otomatis:
 
     Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function () {
         Route::get('/privacy', function () {
@@ -95,103 +97,105 @@ Laravel includes a `cache.headers` middleware, which may be used to quickly set 
     });
 
 <a name="attaching-cookies-to-responses"></a>
-### Attaching Cookies To Responses
+### Melampirkan _Cookie_ pada Respons
 
-You may attach a cookie to an outgoing `Illuminate\Http\Response` instance using the `cookie` method. You should pass the name, value, and the number of minutes the cookie should be considered valid to this method:
+Anda mungkin ingin melampirkan sebuah _cookie_ pada _instance_ `Illuminate\Http\Response` yang dikirimkan menggunakan metode `cookie`. Anda harus mengoper nama, nilai, dan durasi kadaluarsa _cookie_ dalam satuan menit pada metode tersebut.
 
-    return response('Hello World')->cookie(
-        'name', 'value', $minutes
+    return response('Halo Dunia')->cookie(
+        'nama', 'nilai', $durasi
     );
 
-The `cookie` method also accepts a few more arguments which are used less frequently. Generally, these arguments have the same purpose and meaning as the arguments that would be given to PHP's native [setcookie](https://secure.php.net/manual/en/function.setcookie.php) method:
+Metode `cookie` juga menerima beberapa argumen lain yang jarang sekali digunakan. Umumnya, argumen-argumen ini memiliki tujuan dan arti yang sama dengan argumen yang akan diberikan ke metode _native_ [setcookie](https://secure.php.net/manual/en/function.setcookie.php) milik PHP:
 
     return response('Hello World')->cookie(
         'name', 'value', $minutes, $path, $domain, $secure, $httpOnly
     );
 
-If you would like to ensure that a cookie is sent with the outgoing response but you do not yet have an instance of that response, you can use the `Cookie` facade to "queue" cookies for attachment to the response when it is sent. The `queue` method accepts the arguments needed to create a cookie instance. These cookies will be attached to the outgoing response before it is sent to the browser:
+Jika Anda ingin melampirkan _cookie_ pada respons yang keluar (dikirimkan ke _browser_ pengguna) tetapi Anda tidak memiliki _instance_ dari respons tersebut, Anda dapat menggunakan _facade_ `Cookie` untuk "mengantrikan" _cookie_ tersebut untuk dilampirkan ke respons ketika dikirim. Metode `queue` menerima argumen yang diperlukan untuk membuat _instance cookie_. _Cookie_ ini akan dilampirkan ke respons keluar sebelum dikirim ke _browser_:
 
     use Illuminate\Support\Facades\Cookie;
 
-    Cookie::queue('name', 'value', $minutes);
+    Cookie::queue('nama', 'nilai', $durasi);
 
 <a name="generating-cookie-instances"></a>
-#### Generating Cookie Instances
+#### Menghasilkan _Instance Cookie_
 
-If you would like to generate a `Symfony\Component\HttpFoundation\Cookie` instance that can be attached to a response instance at a later time, you may use the global `cookie` helper. This cookie will not be sent back to the client unless it is attached to a response instance:
+Jika Anda ingin membuat _instance_ dari `Symfony\Component\HttpFoundation\Cookie` yang bisa dilampirkan pada sebuah _instance_ respons nantinya, Anda dapat menggunakan _helper_ global `cookie`. _Cookie_ tersebut tidak akan dikirim balik kepada klien kecuali telah dilampirkan pada _instance_ respons.
 
-    $cookie = cookie('name', 'value', $minutes);
+    $cookie = cookie('nama', 'nilai', $durasi);
 
-    return response('Hello World')->cookie($cookie);
+    return response('Halo Dunia')->cookie($cookie);
 
 <a name="expiring-cookies-early"></a>
-#### Expiring Cookies Early
+#### Membuat _Cookie_ Kedaluwarsa Lebih Awal
 
-You may remove a cookie by expiring it via the `withoutCookie` method of an outgoing response:
+Anda dapat menghapus sebuah _cookie_ dengan cara membuatnya kedaluwarsa melalui metode `withoutCookie` pada sebuah respons yang dikembalikan:
 
-    return response('Hello World')->withoutCookie('name');
+    return response('Halo Dunia')->withoutCookie('nama');
 
-If you do not yet have an instance of the outgoing response, you may use the `Cookie` facade's `expire` method to expire a cookie:
+Jika Anda tidak memiliki _instance_ untuk respons yang akan dikeluarkan, Anda dapat menggunakan metode `expire` milik _facade_ `Cookie` untuk membuat _cookie_ tersebut kedaluwarsa:
 
-    Cookie::expire('name');
+    Cookie::expire('nama');
 
 <a name="cookies-and-encryption"></a>
-### Cookies & Encryption
+### _Cookie_ & Enkripsi
 
-By default, all cookies generated by Laravel are encrypted and signed so that they can't be modified or read by the client. If you would like to disable encryption for a subset of cookies generated by your application, you may use the `$except` property of the `App\Http\Middleware\EncryptCookies` middleware, which is located in the `app/Http/Middleware` directory:
+Secara _default_, semua _cookie_ yang dihasilkan oleh Laravel telah dienkripsi dan ditandatangani sehingga _cookie_ tersebut tidak dapat dimodifikasi atau dibaca oleh klien. Jika Anda ingin menonaktifkan enkripsi untuk sebuah bagian dari _cookie_ yang telah dihasilkan oleh aplikasi Anda, Anda dapat menggunakan properti `$except` pada _middleware_ `App\Http\Middleware\EncryptCookies`, yang berlokasi pada direktori `app/Http/Middleware`:
 
     /**
-     * The names of the cookies that should not be encrypted.
+     * Nama-nama _cookie_ yang seharusnya tidak dienkripsi.
      *
      * @var array
      */
     protected $except = [
-        'cookie_name',
+        'nama_cookie',
     ];
 
 <a name="redirects"></a>
-## Redirects
+## _Redirect_
 
-Redirect responses are instances of the `Illuminate\Http\RedirectResponse` class, and contain the proper headers needed to redirect the user to another URL. There are several ways to generate a `RedirectResponse` instance. The simplest method is to use the global `redirect` helper:
+Respons _Redirect_ merupakan _instance_ dari kelas `Illuminate\Http\RedirectResponse`, yang mengandung _header_ yang layak untuk melakukan pengalihan (_redirect_) pengguna ke URL lain. Terdapat beberapa cara untuk membuat sebuah _instance_ `RedirectResponse`. Cara yang paling sederhana adalah menggunakan _helper_ global `redirect`:
 
-    Route::get('/dashboard', function () {
-        return redirect('home/dashboard');
+    Route::get('/dasbor', function () {
+        return redirect('beranda/dasbor');
     });
 
-Sometimes you may wish to redirect the user to their previous location, such as when a submitted form is invalid. You may do so by using the global `back` helper function. Since this feature utilizes the [session](/docs/{{version}}/session), make sure the route calling the `back` function is using the `web` middleware group:
+Terkadang Anda ingin mengalihkan pengguna ke lokasi mereka yang sebelumnya, seperti ketika mereka mengirimkan _form_ yang tidak valid. Anda dapat melakukan hal tersebut dengan menggunakan fungsi _helper_ global bernama `back`. Karena fitur ini telah menggunakan [_session_](/docs/{{version}}/session), pastikan _route_ yang memanggil fungsi `back` telah menggunakan grup _middleware_ `web`: 
 
-    Route::post('/user/profile', function () {
-        // Validate the request...
+    Route::post('/pengguna/profil', function () {
+        // Validasi request...
 
         return back()->withInput();
     });
 
 <a name="redirecting-named-routes"></a>
-### Redirecting To Named Routes
+### Melakukan _Redirect_ ke _Named Route_
 
-When you call the `redirect` helper with no parameters, an instance of `Illuminate\Routing\Redirector` is returned, allowing you to call any method on the `Redirector` instance. For example, to generate a `RedirectResponse` to a named route, you may use the `route` method:
+Ketika Anda memanggil _helper_ `redirect` tanpa parameter, sebuah _instance_ dari `Illuminate\Routing\Redirector` akan dikembalikan, memungkinkan Anda untuk memanggil metode apa saja yang terdapat pada _instance_ `Redirector` tersebut. Sebagai contoh, untuk menghasilkan sebuah `RedirectResponse` ke sebuah _named route_, Anda dapat menggunakan metode `route`:
 
     return redirect()->route('login');
 
 If your route has parameters, you may pass them as the second argument to the `route` method:
 
-    // For a route with the following URI: /profile/{id}
+Jika _route_ Anda memiliki parameter, Anda dapat mengopernya pada argumen kedua pada metode `route`:
 
-    return redirect()->route('profile', ['id' => 1]);
+    // Untuk route yang memiliki URI seperti berikut: /profil/{id}
+
+    return redirect()->route('profil', ['id' => 1]);
 
 <a name="populating-parameters-via-eloquent-models"></a>
-#### Populating Parameters Via Eloquent Models
+#### Mengisi Parameter dengan Model Eloquent
 
-If you are redirecting to a route with an "ID" parameter that is being populated from an Eloquent model, you may pass the model itself. The ID will be extracted automatically:
+Jika Anda melakukan _redirect_ ke _route_ yang memiliki sebuah "ID" sebagai parameter yang diperoleh dari sebuah model Eloquent, Anda dapat mengoper model itu sendiri. ID dari model tersebut akan diekstraksi secara otomatis:
 
-    // For a route with the following URI: /profile/{id}
+    // Untuk route yang memiliki URI seperti berikut: /profil/{id}
 
-    return redirect()->route('profile', [$user]);
+    return redirect()->route('profil', [$pengguna]);
 
-If you would like to customize the value that is placed in the route parameter, you can specify the column in the route parameter definition (`/profile/{id:slug}`) or you can override the `getRouteKey` method on your Eloquent model:
+Jika Anda ingin melakukan kustomisasi nilai yang ingin ditempatkan pada parameter _route_, Anda dapat menetapkan nama kolom pada definisi parameter untuk _route_ tersebut (`/profil/{id:slug}`) atau Anda dapat melakukan _override_ metode `getRouteKey` pada model Eloquent Anda:
 
     /**
-     * Get the value of the model's route key.
+     * Mengambil nilai "route key" milik model.
      *
      * @return mixed
      */
@@ -201,39 +205,39 @@ If you would like to customize the value that is placed in the route parameter, 
     }
 
 <a name="redirecting-controller-actions"></a>
-### Redirecting To Controller Actions
+### Melakukan _Redirect_ ke Aksi _Controller_
 
-You may also generate redirects to [controller actions](/docs/{{version}}/controllers). To do so, pass the controller and action name to the `action` method:
+Anda juga dapat melakukan _redirect_ ke [aksi _Controller_](/docs/{{version}}/controllers). Untuk melakukan hal tersebut, Anda harus mengoper nama _controller_ dan aksinya pada metode _action_:
 
     use App\Http\Controllers\UserController;
 
     return redirect()->action([UserController::class, 'index']);
 
-If your controller route requires parameters, you may pass them as the second argument to the `action` method:
+Jika _route controller_ Anda memerlukan parameter, Anda dapat mengopernya pada argumen kedua metode `action`:
 
     return redirect()->action(
-        [UserController::class, 'profile'], ['id' => 1]
+        [UserController::class, 'profil'], ['id' => 1]
     );
 
 <a name="redirecting-external-domains"></a>
-### Redirecting To External Domains
+### Melakukan _Redirect_ ke Domain Eksternal
 
-Sometimes you may need to redirect to a domain outside of your application. You may do so by calling the `away` method, which creates a `RedirectResponse` without any additional URL encoding, validation, or verification:
+Terkadang Anda butuh melakukan _redirect_ ke domain di luar aplikasi Anda. Anda dapat melakukannya dengan memanggil metode `away` yang akan membuat sebuah `RedirectResponse` tanpa pengkodean URL, validasi, atau verifikasi tambahan:
 
     return redirect()->away('https://www.google.com');
 
 <a name="redirecting-with-flashed-session-data"></a>
-### Redirecting With Flashed Session Data
+### Melakukan _Redirect_ dengan Data _Session_ yang Di-_flash_
 
-Redirecting to a new URL and [flashing data to the session](/docs/{{version}}/session#flash-data) are usually done at the same time. Typically, this is done after successfully performing an action when you flash a success message to the session. For convenience, you may create a `RedirectResponse` instance and flash data to the session in a single, fluent method chain:
+Melakukan _redirect_ ke URL lain dan melakukan [_flash_ data pada _session_](/docs/{{version}}/session#flash-data) biasanya dilakukan pada saat yang bersamaan. Umumnya, hal tersebut dilakukan setelah berhasil melakukan sebuah aksi, Anda akan melakukan _flash_ sebuah pesan keberhasilan ke dalam _session_. Untuk kenyamanan, Anda dapat membuat sebuah _instance_ `RedirectResponse` dan melakukan _flash_ data ke _session_ dalam satu rantai metode yang _fluent_:
 
-    Route::post('/user/profile', function () {
+    Route::post('/pengguna/profil', function () {
         // ...
 
-        return redirect('dashboard')->with('status', 'Profile updated!');
+        return redirect('dasbor')->with('status', 'Profil berhasil diperbaharui!');
     });
 
-After the user is redirected, you may display the flashed message from the [session](/docs/{{version}}/session). For example, using [Blade syntax](/docs/{{version}}/blade):
+Setelah pengguna berhasil dialihkan, Anda dapat menampilkan pesan yang telah di-_flash_ melalui [_session_](/docs/{{version}}/session). Sebagai contoh, dengan menggunakan [sintaks Blade](/docs/{{version}}/blade):
 
     @if (session('status'))
         <div class="alert alert-success">
@@ -242,60 +246,62 @@ After the user is redirected, you may display the flashed message from the [sess
     @endif
 
 <a name="redirecting-with-input"></a>
-#### Redirecting With Input
+#### Melakukan _Redirect_ dengan _Input_
 
-You may use the `withInput` method provided by the `RedirectResponse` instance to flash the current request's input data to the session before redirecting the user to a new location. This is typically done if the user has encountered a validation error. Once the input has been flashed to the session, you may easily [retrieve it](/docs/{{version}}/requests#retrieving-old-input) during the next request to repopulate the form:
+Anda dapat menggunakan metode `withInput` yang disediakan oleh _instance_ `RedirectResponse` untuk melakukan _flash_ data input yang terdapat pada _request_ saat ini ke _session_ sebelum mengalihkan pengguna ke lokasi (URL) yang baru. Hal ini biasanya dilakukan jika pengguna harus menghadapi (halaman) kegagalan validasi. Setelah _input_ di-_flash_ ke _session_, Anda dapat dengan mudah [melakukan _retrieve_](/docs/{{version}}/requests#retrieving-old-input) pada _request_ selanjutnya untuk mengisi ulang formulir (HTML):
 
     return back()->withInput();
 
 <a name="other-response-types"></a>
-## Other Response Types
+## Jenis _Response_ Lainnya
 
-The `response` helper may be used to generate other types of response instances. When the `response` helper is called without arguments, an implementation of the `Illuminate\Contracts\Routing\ResponseFactory` [contract](/docs/{{version}}/contracts) is returned. This contract provides several helpful methods for generating responses.
+_Helper_ `response` dapat digunakan untuk menghasilkan _instance_ _response_, ketika _helper_ `response` dipanggil tanpa argumen, sebuah implementasi dari `Illuminate\Contracts\Routing\ResponseFactory` akan dikembalikan. _Contract_ ini menyediakan beberapa metode yang berguna untuk melakukan _generate response_.
 
 <a name="view-responses"></a>
-### View Responses
+### Respons _View_
 
-If you need control over the response's status and headers but also need to return a [view](/docs/{{version}}/views) as the response's content, you should use the `view` method:
+Jika anda membutuhkan kendali atas status respons dan _header_ namun tetap harus mengembalikan sebuah [_view_](/docs/{{version}}/views) sebagai konten respons, Anda harus menggunakan metode `view`:
 
     return response()
-                ->view('hello', $data, 200)
+                ->view('halo', $data, 200)
                 ->header('Content-Type', $type);
 
-Of course, if you do not need to pass a custom HTTP status code or custom headers, you may use the global `view` helper function.
+Tentu saja, jika Anda tidak memerlukan pengoperan kode status HTTP atau _header_ yang _custom_, Anda dapat menggunakan fungsi _helper_ global bernama `view`.
 
 <a name="json-responses"></a>
-### JSON Responses
+### Respons JSON
 
-The `json` method will automatically set the `Content-Type` header to `application/json`, as well as convert the given array to JSON using the `json_encode` PHP function:
+Metode `json` secara otomatis akan menetapkan _header_ `Content-Type` bernilai `application/json`, serta mengonversi _array_ yang diberikan menjado JSON dengan menggunakan fungsi PHP bernama `json_encode`:
 
     return response()->json([
-        'name' => 'Abigail',
-        'state' => 'CA',
+        'nama' => 'Zain',
+        'kota' => 'Surabaya',
     ]);
 
-If you would like to create a JSONP response, you may use the `json` method in combination with the `withCallback` method:
+Jik
+
+Jika Anda ingin membuat respons JSONP, Anda dapat menggunakan metode `json` dengan kombinasi metode `withCallback`:
 
     return response()
-                ->json(['name' => 'Abigail', 'state' => 'CA'])
+                ->json(['nama' => 'Zain', 'kota' => 'Surabaya'])
                 ->withCallback($request->input('callback'));
 
 <a name="file-downloads"></a>
-### File Downloads
+### Unduhan _File_
 
-The `download` method may be used to generate a response that forces the user's browser to download the file at the given path. The `download` method accepts a filename as the second argument to the method, which will determine the filename that is seen by the user downloading the file. Finally, you may pass an array of HTTP headers as the third argument to the method:
+Metode `download` dapat digunakan untuk menghasilkan respons yang memaksa _browser_ pengguna untuk mengunduh _file_ pada _path_ yang ditentukan. Metode `download` menerima nama _file_ sebagai argumen kedua yang akan menentukan nama _file_ yang akan dilihat pada unduhan _file_ pengguna. Terakhir, Anda dapat mengoper sebuah _array_ dari _header_ HTTP sebagai argumen ketiga pada metode tersebut:
 
     return response()->download($pathToFile);
 
     return response()->download($pathToFile, $name, $headers);
 
-> **Warning**  
-> Symfony HttpFoundation, which manages file downloads, requires the file being downloaded to have an ASCII filename.
+> **Peringatan**  
+> HttpFoundation milik Symfony yang mengelola pengunduhan _file_ dan memerlukan sebuah _file_ untuk diunduh dengan nama _file_ dalam karakter ASCII.
 
 <a name="streamed-downloads"></a>
-#### Streamed Downloads
+#### Unduhan yang Di-_stream_
 
-Sometimes you may wish to turn the string response of a given operation into a downloadable response without having to write the contents of the operation to disk. You may use the `streamDownload` method in this scenario. This method accepts a callback, filename, and an optional array of headers as its arguments:
+Terkadang Anda ingin mengubah respons _string_ dari operasi yang ditentukan menjadi respons yang bisa diunduh tanpa harus menuliskan konten tersebut ke dalam _disk_ (menyimpannya dalam bentuk _file_). Anda dapat menggunakan metode `streamDownload` untuk skenario ini. Metode ini menerima _callback_, nama _file_, dan sebuah _array header_ yang opsional sebagai argumennya:
 
     use App\Services\GitHub;
 
@@ -306,18 +312,18 @@ Sometimes you may wish to turn the string response of a given operation into a d
     }, 'laravel-readme.md');
 
 <a name="file-responses"></a>
-### File Responses
+### Respons _File_
 
-The `file` method may be used to display a file, such as an image or PDF, directly in the user's browser instead of initiating a download. This method accepts the path to the file as its first argument and an array of headers as its second argument:
+Metode `file` dapat digunakan untuk menampilkan _file_ seperti gambar atau PDF secara langsung pada _browser_ pengguna daripada harus mengunduhnya. Metode ini menerima _path_ untuk _file_ sebagai argumen pertama dan sebuah _array_ untuk _header_ untuk argumen kedua:
 
     return response()->file($pathToFile);
 
     return response()->file($pathToFile, $headers);
 
 <a name="response-macros"></a>
-## Response Macros
+## _Macro_ Respons
 
-If you would like to define a custom response that you can re-use in a variety of your routes and controllers, you may use the `macro` method on the `Response` facade. Typically, you should call this method from the `boot` method of one of your application's [service providers](/docs/{{version}}/providers), such as the `App\Providers\AppServiceProvider` service provider:
+Jika Anda ingin mendefinisikan respons _costum_ yang dapat Anda gunakan kembali pada berbagai _route_ dan _controller_, Anda dapat menggunakan metode `macro` pada facade `Response`. Umumnya, Anda harus memanggil metode ini dalam metode `boot` pada salah satu [_service providers_](/docs/{{version}}/providers) milik aplikasi, seperti `App\Providers\AppServiceProvider`:
 
     <?php
 
@@ -329,18 +335,18 @@ If you would like to define a custom response that you can re-use in a variety o
     class AppServiceProvider extends ServiceProvider
     {
         /**
-         * Bootstrap any application services.
+         * Bootstrap service untuk aplikasi.
          *
          * @return void
          */
         public function boot()
         {
-            Response::macro('caps', function ($value) {
+            Response::macro('kapital', function ($value) {
                 return Response::make(strtoupper($value));
             });
         }
     }
 
-The `macro` function accepts a name as its first argument and a closure as its second argument. The macro's closure will be executed when calling the macro name from a `ResponseFactory` implementation or the `response` helper:
+Fungsi `macro` menerima sebuah nama sebagai argumen pertama dan sebuah _closure_ sebagai argumen kedua. _Closure_ tersebut akan dieksekusi ketika memanggil nama _macro_ dari sebuah implementasi `ResponseFactory` atau dari _helper_ `response`:
 
-    return response()->caps('foo');
+    return response()->kapital('foo');

@@ -1,18 +1,18 @@
-# Console Tests
+# Pengujian Konsol
 
-- [Introduction](#introduction)
-- [Success / Failure Expectations](#success-failure-expectations)
-- [Input / Output Expectations](#input-output-expectations)
+- [Pengantar](#introduction)
+- [Ekspektasi Keberhasilan / Kegagalan](#success-failure-expectations)
+- [Ekspektasi Masukan / Keluaran](#input-output-expectations)
 
 <a name="introduction"></a>
-## Introduction
+## Pengantar
 
-In addition to simplifying HTTP testing, Laravel provides a simple API for testing your application's [custom console commands](/docs/{{version}}/artisan).
+Selain menyederhanakan pengujian HTTP, Laravel menyediakan API sederhana untuk menguji perintah konsol kustom milik aplikasi Anda [perintah konsol khusus](/docs/{{versi}}/artisan).
 
 <a name="success-failure-expectations"></a>
-## Success / Failure Expectations
+## Ekspektasi Keberhasilan / Kegagalan
 
-To get started, let's explore how to make assertions regarding an Artisan command's exit code. To accomplish this, we will use the `artisan` method to invoke an Artisan command from our test. Then, we will use the `assertExitCode` method to assert that the command completed with a given exit code:
+Untuk memulai, mari kita jelajahi bagaimana membuat pernyataan mengenai kode _exit_ pada perintah Artisan. Untuk mencapai hal ini, kita akan menggunakan metode `artisan` untuk memanggil perintah Artisan pada pengujian kita. Kemudian, kita akan menggunakan metode `assertExitCode` untuk menyatakan bahwa perintah selesai dengan kode _exit_ sebagai berikut:
 
     /**
      * Test a console command.
@@ -24,34 +24,34 @@ To get started, let's explore how to make assertions regarding an Artisan comman
         $this->artisan('inspire')->assertExitCode(0);
     }
 
-You may use the `assertNotExitCode` method to assert that the command did not exit with a given exit code:
+Anda dapat menggunakan metode `assertNotExitCode` untuk menyatakan bahwa perintah tidak berakhir dengan kode _exit_ yang ditentukan:
 
     $this->artisan('inspire')->assertNotExitCode(1);
 
-Of course, all terminal commands typically exit with a status code of `0` when they are successful and a non-zero exit code when they are not successful. Therefore, for convenience, you may utilize the `assertSuccessful` and `assertFailed` assertions to assert that a given command exited with a successful exit code or not:
+Tentu saja, semua perintah terminal biasanya keluar dengan kode status `0`  ketika perintah berhasil dijalankan atau ketika perintah yang gagal dijalankan memiliki kode _exit_ bukan `0`. Oleh karena itu, untuk memudahkan, Anda dapat menggunakan perintah `assertSuccessful` dan `assertFailed` untuk memberikan pernyataan bahwa perintah yang diberikan berakhir dengan kode _exit_ yang berhasil atau tidak:
 
     $this->artisan('inspire')->assertSuccessful();
 
     $this->artisan('inspire')->assertFailed();
 
 <a name="input-output-expectations"></a>
-## Input / Output Expectations
+## Ekspektasi Input / _Output_
 
-Laravel allows you to easily "mock" user input for your console commands using the `expectsQuestion` method. In addition, you may specify the exit code and text that you expect to be output by the console command using the `assertExitCode` and `expectsOutput` methods. For example, consider the following console command:
+Laravel memungkinkan Anda "menirukan" input dari pengguna untuk perintah konsol Anda dengan mudah menggunakan metode `expectsQuestion`. Selain itu, Anda dapat menentukan kode _exit_ dan teks yang Anda harapkan sebagai output dari perintah konsol menggunakan metode `assertExitCode` dan `expectsOutput`. Sebagai contoh, perhatikan perintah konsol berikut ini:
 
     Artisan::command('question', function () {
-        $name = $this->ask('What is your name?');
+        $name = $this->ask('Siapa nama Anda?');
 
-        $language = $this->choice('Which language do you prefer?', [
+        $language = $this->choice('Bahasa apa yang Anda lebih suka?', [
             'PHP',
             'Ruby',
             'Python',
         ]);
 
-        $this->line('Your name is '.$name.' and you prefer '.$language.'.');
+        $this->line('Nama Anda adalah '.$name.' dan Anda lebih menyukai '.$language.'.');
     });
 
-You may test this command with the following test which utilizes the `expectsQuestion`, `expectsOutput`, `doesntExpectOutput`, `expectsOutputToContain`, `doesntExpectOutputToContain`, and `assertExitCode` methods:
+Anda dapat menguji perintah-perintah tersebut dengan menggunakan metode `expectsQuestion`, `expectsOutput`, `doesntExpectOutput`, `expectsOutputToContain`, `doesntExpectOutputToContain`, dan `assertExitCode`:
 
     /**
      * Test a console command.
@@ -61,28 +61,28 @@ You may test this command with the following test which utilizes the `expectsQue
     public function test_console_command()
     {
         $this->artisan('question')
-             ->expectsQuestion('What is your name?', 'Taylor Otwell')
-             ->expectsQuestion('Which language do you prefer?', 'PHP')
-             ->expectsOutput('Your name is Taylor Otwell and you prefer PHP.')
-             ->doesntExpectOutput('Your name is Taylor Otwell and you prefer Ruby.')
+             ->expectsQuestion('Siapa nama Anda?', 'Taylor Otwell')
+             ->expectsQuestion('Bahasa Apa yang Anda lebih suka?', 'PHP')
+             ->expectsOutput('Nama Anda adalah Taylor Otwell dan Anda lebih menyukai PHP.')
+             ->doesntExpectOutput('Nama Anda adalah Taylor Otwell dan Anda lebih menyukai Ruby.')
              ->expectsOutputToContain('Taylor Otwell')
-             ->doesntExpectOutputToContain('you prefer Ruby')
+             ->doesntExpectOutputToContain('Anda lebih menyukai Ruby')
              ->assertExitCode(0);
     }
 
 <a name="confirmation-expectations"></a>
-#### Confirmation Expectations
+#### Ekspektasi Konfirmasi
 
-When writing a command which expects confirmation in the form of a "yes" or "no" answer, you may utilize the `expectsConfirmation` method:
+Ketika menulis perintah yang membutuhkan konfirmasi berupa jawaban "_yes_" atau "_no_", Anda dapat menggunakan metode `expectsConfirmation`:
 
     $this->artisan('module:import')
-        ->expectsConfirmation('Do you really wish to run this command?', 'no')
+        ->expectsConfirmation('Apa Anda benar-benar ingin menjalankan perintah tersebut?', 'no')
         ->assertExitCode(1);
 
 <a name="table-expectations"></a>
-#### Table Expectations
+#### Ekspektasi Tabel
 
-If your command displays a table of information using Artisan's `table` method, it can be cumbersome to write output expectations for the entire table. Instead, you may use the `expectsTable` method. This method accepts the table's headers as its first argument and the table's data as its second argument:
+Jika perintah Anda menampilkan tabel informasi menggunakan metode `table` pada Artisan, mungkin akan menjadi tidak praktis untuk menulis seluruh tabel pada ekspektasi. Sebagai gantinya, Anda dapat menggunakan metode `expectsTable`. Metode ini menerima kop / kepala tabel sebagai argumen pertama dan data / badan tabel sebagai argumen kedua:
 
     $this->artisan('users:all')
         ->expectsTable([

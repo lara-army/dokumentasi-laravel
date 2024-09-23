@@ -1,73 +1,73 @@
-# Asset Bundling (Vite)
+# Membundel Aset (Vite)
 
-- [Introduction](#introduction)
-- [Installation & Setup](#installation)
-  - [Installing Node](#installing-node)
-  - [Installing Vite And The Laravel Plugin](#installing-vite-and-laravel-plugin)
-  - [Configuring Vite](#configuring-vite)
-  - [Loading Your Scripts And Styles](#loading-your-scripts-and-styles)
-- [Running Vite](#running-vite)
-- [Working With JavaScript](#working-with-scripts)
-  - [Aliases](#aliases)
+- [Pendahuluan](#introduction)
+- [Instalasi & Pengaturan](#installation)
+  - [Menginstal Node](#installing-node)
+  - [Menginstal Vite dan _Plugin_ Laravel](#installing-vite-and-laravel-plugin)
+  - [Mengkonfigurasi Vite](#configuring-vite)
+  - [Memuat _Script_ dan _Style_](#loading-your-scripts-and-styles)
+- [Menjalankan Vite](#running-vite)
+- [Bekerja dengan JavaScript](#working-with-scripts)
+  - [Alias](#aliases)
   - [Vue](#vue)
   - [React](#react)
   - [Inertia](#inertia)
-  - [URL Processing](#url-processing)
-- [Working With Stylesheets](#working-with-stylesheets)
-- [Working With Blade & Routes](#working-with-blade-and-routes)
-  - [Processing Static Assets With Vite](#blade-processing-static-assets)
-  - [Refreshing On Save](#blade-refreshing-on-save)
-  - [Aliases](#blade-aliases)
-- [Custom Base URLs](#custom-base-urls)
-- [Environment Variables](#environment-variables)
-- [Disabling Vite In Tests](#disabling-vite-in-tests)
-- [Server-Side Rendering (SSR)](#ssr)
-- [Script & Style Tag Attributes](#script-and-style-attributes)
-  - [Content Security Policy (CSP) Nonce](#content-security-policy-csp-nonce)
-  - [Subresource Integrity (SRI)](#subresource-integrity-sri)
-  - [Arbitrary Attributes](#arbitrary-attributes)
-- [Advanced Customization](#advanced-customization)
+  - [Pemrosesan URL](#url-processing)
+- [Bekerja dengan _Stylesheet_](#working-with-stylesheets)
+- [Bekerja dengan Blade & Rute](#working-with-blade-and-routes)
+  - [Pemrosesan Aset Statis dengan Vite](#blade-processing-static-assets)
+  - [Melakukan _Refresh_ saat Menyimpan](#blade-refreshing-on-save)
+  - [Alias](#blade-aliases)
+- [URL Dasar yang Kustom](#custom-base-urls)
+- [Variabel _Environment_](#environment-variables)
+- [Menonaktifkan Vite di dalam Pengujian](#disabling-vite-in-tests)
+- [_Server-Side Rendering_ (SSR)](#ssr)
+- [Atribut _Tag Script_ & _Style_](#script-and-style-attributes)
+  - [_Nonce Content Security Policy_ (CSP)](#content-security-policy-csp-nonce)
+  - [_Subresource Integrity_ (SRI)](#subresource-integrity-sri)
+  - [Atribut yang Berubah-ubah](#arbitrary-attributes)
+- [Kustomisasi Tingkat Lanjut](#advanced-customization)
   - [Correcting Dev Server URLs](#correcting-dev-server-urls)
 
 <a name="introduction"></a>
-## Introduction
+## Pendahuluan 
 
-[Vite](https://vitejs.dev) is a modern frontend build tool that provides an extremely fast development environment and bundles your code for production. When building applications with Laravel, you will typically use Vite to bundle your application's CSS and JavaScript files into production ready assets.
+[Vite](https://vitejs.dev) merupakan alat pembuat _frontend_ modern yang menyediakan kecepatan yang ekstrim untuk lingkungan pengembangan dan pembundelan kode untuk _production_. Ketika membangun aplikasi menggunakan Laravel, umumnya Anda akan menggunakan Vite untuk membundel _file_-_file_ CSS dan Javascript pada aplikasi Anda menjadi aset yang siap untuk _production_.
 
-Laravel integrates seamlessly with Vite by providing an official plugin and Blade directive to load your assets for development and production.
+Laravel terintegrasi secara mulus dengan Vite dengan menyediakan _plugin_ resmi dan _directive_ Blade untuk memuat aset Anda pada lingkungan pengembangan dan _production_.
 
 > **Note**  
-> Are you running Laravel Mix? Vite has replaced Laravel Mix in new Laravel installations. For Mix documentation, please visit the [Laravel Mix](https://laravel-mix.com/) website. If you would like to switch to Vite, please see our [migration guide](https://github.com/laravel/vite-plugin/blob/main/UPGRADE.md#migrating-from-laravel-mix-to-vite).
+> Apakah Anda menggunakan Laravel Mix? Vite telah menggantikan Laravel Mix pada instalasi Laravel yang baru. Untuk dokumentasi Mix, silakan mengunjungi laman web [Laravel Mix](https://laravel-mix.com/). Jika Anda ingin beralih ke Vite. silakan lihat [panduan migrasi](https://github.com/laravel/vite-plugin/blob/main/UPGRADE.md#migrating-from-laravel-mix-to-vite) dari kami.
 
 <a name="vite-or-mix"></a>
-#### Choosing Between Vite And Laravel Mix
+#### Memilih Antara Vite dan Laravel Mix
 
-Before transitioning to Vite, new Laravel applications utilized [Mix](https://laravel-mix.com/), which is powered by [webpack](https://webpack.js.org/), when bundling assets. Vite focuses on providing a faster and more productive experience when building rich JavaScript applications. If you are developing a Single Page Application (SPA), including those developed with tools like [Inertia](https://inertiajs.com), Vite will be the perfect fit.
+Sebelum beralih ke Vite, aplikasi Laravel yang baru diinstal menggunakan [Mix] (https://laravel-mix.com/), yang didukung oleh [webpack] (https://webpack.js.org/) untuk membundel aset. Vite berfokus untuk memberikan pengalaman yang lebih cepat dan lebih produktif ketika membangun aplikasi yang kaya akan JavaScript. Jika Anda mengembangkan _Single Page Application_ (SPA) dan aplikasi yang dikembangkan dengan alat seperti [Inertia](https://inertiajs.com), Vite akan menjadi perkakas yang tepat.
 
-Vite also works well with traditional server-side rendered applications with JavaScript "sprinkles", including those using [Livewire](https://laravel-livewire.com). However, it lacks some features that Laravel Mix supports, such as the ability to copy arbitrary assets into the build that are not referenced directly in your JavaScript application.
+Vite juga berfungsi dengan baik pada aplikasi tradisional yang di-_render_ di sisi server yang memiliki "taburan" JavaScript, termasuk yang menggunakan [Livewire](https://laravel-livewire.com). Namun, Vite tidak memiliki beberapa fitur yang didukung oleh Laravel Mix, seperti kemampuan untuk menyalin aset sembarang ke dalam build yang tidak tereferensi secara langsung dalam aplikasi JavaScript Anda.
 
 <a name="migrating-back-to-mix"></a>
-#### Migrating Back To Mix
+#### Migrasi Kembali ke Mix
 
-Have you started a new Laravel application using our Vite scaffolding but need to move back to Laravel Mix and webpack? No problem. Please consult our [official guide on migrating from Vite to Mix](https://github.com/laravel/vite-plugin/blob/main/UPGRADE.md#migrating-from-vite-to-laravel-mix).
+Apakah aplikasi Laravel baru Anda telah menggunakan perancah Vite namun Anda perlu kembali ke Laravel Mix dan webpack? Tidak masalah. Silakan baca [panduan resmi tentang migrasi dari Vite ke Mix](https://github.com/laravel/vite-plugin/blob/main/UPGRADE.md#migrating-from-vite-to-laravel-mix).
 
 <a name="installation"></a>
-## Installation & Setup
+## Instalasi & Pengaturan
 
 > **Note**  
-> The following documentation discusses how to manually install and configure the Laravel Vite plugin. However, Laravel's [starter kits](/docs/{{version}}/starter-kits) already include all of this scaffolding and are the fastest way to get started with Laravel and Vite.
+> Dokumentasi berikut ini membahas cara menginstal dan mengonfigurasi _plugin_ Laravel Vite secara manual. Namun, [_starter kits_] Laravel (/docs/{{version}}/starter-kits) yang merupakan cara tercepat untuk bermain dengan Laravel dan Vite sudah menyertakan semua perancah ini.
 
 <a name="installing-node"></a>
-### Installing Node
+### Menginstal Node
 
-You must ensure that Node.js (16+) and NPM are installed before running Vite and the Laravel plugin:
+Anda harus memastikan bahwa Node.js (16+) dan NPM telah terinstal sebelum menjalankan Vite dan _plugin_ Laravel.
 
 ```sh
 node -v
 npm -v
 ```
 
-You can easily install the latest version of Node and NPM using simple graphical installers from [the official Node website](https://nodejs.org/en/download/). Or, if you are using [Laravel Sail](https://laravel.com/docs/{{version}}/sail), you may invoke Node and NPM through Sail:
+Anda dapat menginstal versi mutakhir dari Node dan NPM secara mudah dengan menggunakan penginstal grafis yang sederhana dari [laman resmi Node](https://nodejs.org/en/download/). Atau, jika Anda menggunakan [Laravel Sail](https://laravel.com/docs/{{version}}/sail), Anda dapat memanggil Node dan NPM langsung dari Sail:
 
 ```sh
 ./vendor/bin/sail node -v
@@ -75,20 +75,20 @@ You can easily install the latest version of Node and NPM using simple graphical
 ```
 
 <a name="installing-vite-and-laravel-plugin"></a>
-### Installing Vite And The Laravel Plugin
+### Menginstal Vite dan _Plugin_ Laravel
 
-Within a fresh installation of Laravel, you will find a `package.json` file in the root of your application's directory structure. The default `package.json` file already includes everything you need to get started using Vite and the Laravel plugin. You may install your application's frontend dependencies via NPM:
+Pada instalasi Laravel yang _fresh_, Anda akan menemukan _file_ `package.json` pada _root_ dari struktur direktori aplikasi Anda. _File_ `package.json` yang _default_ telah mencakup semua yang Anda perlukan untuk mulai menggunakan Vite dan _plugin_ laravel. Anda dapat menginstal dependensi _frontend_ untuk aplikasi Anda melalui NPM:
 
 ```sh
 npm install
 ```
 
 <a name="configuring-vite"></a>
-### Configuring Vite
+### Mengkonfigurasi Vite
 
-Vite is configured via a `vite.config.js` file in the root of your project. You are free to customize this file based on your needs, and you may also install any other plugins your application requires, such as `@vitejs/plugin-vue` or `@vitejs/plugin-react`.
+Vite dikonfigurasi pada _file_ `vite.config.js` pada _root_ proyek Anda. Anda bebas melakukan kustomisasi pada _file_ tersebut sesuai dengan kebutuhan Anda, dan Anda juga dapat menginstal _plugin_-_plugin_ lain yang dibutuhkan oleh aplikasi Anda, seperti `@vitejs/plugin-vue` atau `@vitejs/plugin-react`.
 
-The Laravel Vite plugin requires you to specify the entry points for your application. These may be JavaScript or CSS files, and include preprocessed languages such as TypeScript, JSX, TSX, and Sass.
+_Plugin_ Vite Laravel mewajibkan Anda untuk menentukan beberapa titik masuk (_entry points_) untuk aplikasi Anda. Titik masuk tersebut dapat berupa _file_ JavaScript atau CSS, juga termasuk bahasa praproses seperti TypeScript, JSX, TSX, dan Sass.
 
 ```js
 import { defineConfig } from 'vite';
@@ -104,7 +104,7 @@ export default defineConfig({
 });
 ```
 
-If you are building an SPA, including applications built using Inertia, Vite works best without CSS entry points:
+Jika Anda sedang membangun sebuah SPA, termasuk aplikasi yang dibangun menggunakan Inertia, Vite dapat berfungsi maksimal tanpa titik masuk CSS:
 
 ```js
 import { defineConfig } from 'vite';
@@ -120,21 +120,21 @@ export default defineConfig({
 });
 ```
 
-Instead, you should import your CSS via JavaScript. Typically, this would be done in your application's `resources/js/app.js` file:
+Sebagai gantinya, Anda harus mengimpor CSS melalui JavaScript. Biasanya, hal ini akan dilakukan pada _file_ `resources/js/app.js` milik aplikasi Anda:
 
 ```js
 import './bootstrap';
 import '../css/app.css'; // [tl! add]
 ```
 
-The Laravel plugin also supports multiple entry points and advanced configuration options such as [SSR entry points](#ssr).
+_Plugin_ Laravel juga mendukung titik masuk yang jamak dan opsi konfigurasi tingkat lanjut seperti [titik masuk SSR](#ssr).
 
 <a name="working-with-a-secure-development-server"></a>
-#### Working With A Secure Development Server
+#### Bekerja dengan Server Pengembangan yang Aman
 
-If your local development web server is serving your application via HTTPS, you may run into issues connecting to the Vite development server.
+Jika server web untuk pengembangan lokal Anda menyajikan aplikasi anda melalui HTTPS, Anda mungkin akan mengalami masalah untuk menghubungkannya dengan server pengembangan Vite.
 
-If you are using [Laravel Valet](/docs/{{version}}/valet) for local development and have run the [secure command](/docs/{{version}}/valet#securing-sites) against your application, you may configure the Vite development server to automatically use Valet's generated TLS certificates:
+Jika Anda menggunakan [Laravel Valet](/docs/{{version}}/valet) untuk pengembangan lokal dan harus menjalankan [perintah yang aman](/docs/{{version}}/valet#securing-sites) untuk aplikasi Anda, Anda dapat mengonfigurasi server pengembangan Vite untuk menggunakan sertifikat TLS yang dihasilkan oleh Valet secara otomatis:
 
 ```js
 import { defineConfig } from 'vite';
@@ -150,7 +150,7 @@ export default defineConfig({
 });
 ```
 
-When using another web server, you should generate a trusted certificate and manually configure Vite to use the generated certificates:
+Ketika menggunakan server web yang lain, Anda harus membuat sertifikat kepercayaan (_trusted certificate_) dan mengonfigurasi Vite secara manual untuk menggunakan sertifikat-sertifikat tersebut: 
 
 ```js
 // ...
@@ -171,12 +171,12 @@ export default defineConfig({
 });
 ```
 
-If you are unable to generate a trusted certificate for your system, you may install and configure the [`@vitejs/plugin-basic-ssl` plugin](https://github.com/vitejs/vite-plugin-basic-ssl). When using untrusted certificates, you will need to accept the certificate warning for Vite's development server in your browser by following the "Local" link in your console when running the `npm run dev` command.
+Jika tidak memungkinkan untuk membuat sertifikat kepercayaan untuk sistem Anda. Anda dapat menginstal dan mengonfigurasi [_plugin_ `@vitejs/plugin-basic-ssl`](https://github.com/vitejs/vite-plugin-basic-ssl). Ketika menggunakan sertifikat kepercayaan yang imitasi, anda perlu menerima peringatan sertifikat untuk server pengembangan Vite pada _browser_ Anda yang disertai dengan pranala "lokal" pada konsol Anda ketika menjalankan perintah `npm run dev`.
 
 <a name="loading-your-scripts-and-styles"></a>
-### Loading Your Scripts And Styles
+### Memuat _Script_ dan _Style_ milik Anda
 
-With your Vite entry points configured, you only need reference them in a `@vite()` Blade directive that you add to the `<head>` of your application's root template:
+Dengan titik masuk yang telah terkonfigurasi pada Vite, Anda hanya perlu mereferensikan _file_-_file_ tersebut dengan _directive_ `@vite()` milik Blade di dalam elemen `<head>` pada _template_ yang digunakan sebagai pondasi untuk tampilan pada aplikasi Anda:
 
 ```blade
 <!doctype html>
@@ -187,7 +187,7 @@ With your Vite entry points configured, you only need reference them in a `@vite
 </head>
 ```
 
-If you're importing your CSS via JavaScript, you only need to include the JavaScript entry point:
+Jika Anda telah mengimpor CSS via JavaScript, Anda hanya perlu untuk menambahkan titik masuk untuk JavaScript saja:
 
 ```blade
 <!doctype html>
@@ -198,41 +198,41 @@ If you're importing your CSS via JavaScript, you only need to include the JavaSc
 </head>
 ```
 
-The `@vite` directive will automatically detect the Vite development server and inject the Vite client to enable Hot Module Replacement. In build mode, the directive will load your compiled and versioned assets, including any imported CSS.
+_Directive_ `@vite` secara otomatis akan mendeteksi server pengembangan Vite dan menginjeksikan klien Vite untuk mengaktifkan Hot Module Replacement. Pada mode _build_, _directive_ tersebut akan memuat aset-aset Anda yang sudah terkompilasi dan diberi versi, termasuk semua CSS yang telah Anda impor.
 
-If needed, you may also specify the build path of your compiled assets when invoking the `@vite` directive:
+Jika diperlukan, Anda juga dapat menentukan lokasi tempat peletakan aset-aset yang sudah dikompilasi saat memanggil _directive_ `@vite`:
 
 ```blade
 <!doctype html>
 <head>
-    {{-- Given build path is relative to public path. --}}
+    {{-- Lokasi peletakan aset merupakan lokasi relatif dari direktori publik. --}}
 
     @vite('resources/js/app.js', 'vendor/courier/build')
 </head>
 ```
 
 <a name="running-vite"></a>
-## Running Vite
+## Menjalankan Vite
 
-There are two ways you can run Vite. You may run the development server via the `dev` command, which is useful while developing locally. The development server will automatically detect changes to your files and instantly reflect them in any open browser windows.
+Terdapat dua cara untuk menjalankan Vite. Anda dapat menjalankan server pengembangan dengan perintah `dev`, yang sangat berguna saat mengembangkan aplikasi secara lokal. Server pengembangan akan mendeteksi perubahan _file_ yang terjadi secara otomatis dan perubahan tersebut akan terefleksi pada jendela _browser_ yang sedang terbuka secara instan.
 
-Or, running the `build` command will version and bundle your application's assets and get them ready for you to deploy to production:
+atau, jalankan perintah `build` yang akan memberikan bundel beserta versi dari aset-aset yang terdapat pada aplikasi anda sehingga siap untuk di-_deploy_ pada _production_.
 
 ```shell
-# Run the Vite development server...
+# Menjalankan server pengembangan Vite...
 npm run dev
 
-# Build and version the assets for production...
+# Membentuk dan memberi versi aset-aset untuk production...
 npm run build
 ```
 
 <a name="working-with-scripts"></a>
-## Working With JavaScript
+## Bekerja dengan JavaScript
 
 <a name="aliases"></a>
-### Aliases
+### Alias
 
-By default, The Laravel plugin provides a common alias to help you hit the ground running and conveniently import your application's assets:
+Secara _default_, _plugin_ Laravel menyediakan alias yang umum untuk membantu Anda untuk memulai dan mengimpor aset-aset pada aplikasi Anda secara mudah:
 
 ```js
 {
@@ -240,7 +240,7 @@ By default, The Laravel plugin provides a common alias to help you hit the groun
 }
 ```
 
-You may overwrite the `'@'` alias by adding your own to the `vite.config.js` configuration file:
+Anda dapat menimpa alias `'@'` dengan menambahkan alias Anda sendiri pada _file_ konfigurasi `vite.config.js`:
 
 ```js
 import { defineConfig } from 'vite';
@@ -261,13 +261,13 @@ export default defineConfig({
 <a name="vue"></a>
 ### Vue
 
-If you would like to build your front-end using the [Vue](https://vuejs.org/) framework, then you will also need to install the `@vitejs/plugin-vue` plugin:
+Jika Anda ingin membangun _front-end_ Anda dengan menggunakan _framework_ [Vue](https://vuejs.org/), maka Anda juga harus menginstal _plugin_ `@vitejs/plugin-vue`:
 
 ```sh
 npm install --save-dev @vitejs/plugin-vue
 ```
 
-You may then include the plugin in your `vite.config.js` configuration file. There are a few additional options you will need when using the Vue plugin with Laravel:
+Anda kemudian dapat memasukkan _plugin_ tersebut di dalam _file_ konfigurasi `vite.config.js`. Ada beberapa opsi tambahan yang Anda perlukan saat menggunakan _plugin_ Vue dengan Laravel:
 
 ```js
 import { defineConfig } from 'vite';
@@ -280,17 +280,17 @@ export default defineConfig({
         vue({
             template: {
                 transformAssetUrls: {
-                    // The Vue plugin will re-write asset URLs, when referenced
-                    // in Single File Components, to point to the Laravel web
-                    // server. Setting this to `null` allows the Laravel plugin
-                    // to instead re-write asset URLs to point to the Vite
-                    // server instead.
+                    // Plugin Vue akan menulis ulang URL aset, ketika direferensikan
+                    // pada Single File Component, untuk mengarah ke server web
+                    // Laravel. Atur opsi ini menjadi `null` memungkinkan
+                    // plugin Laravel untuk menulis ulang URL aset untuk mengarah ke
+                    // server Vite sebagai gantinya.
                     base: null,
 
-                    // The Vue plugin will parse absolute URLs and treat them
-                    // as absolute paths to files on disk. Setting this to
-                    // `false` will leave absolute URLs un-touched so they can
-                    // reference assets in the public directory as expected.
+                    // Plugin Vue akan mem-parsing URL absolut dan memperlakukannya
+                    // sebagai jalur absolut ke file pada cakram penyimpanan. Atur
+                    // opsi ini menjadi `false` untuk membiarkan URL absolut tidak tersentuh sehingga mereka
+                    // dapat dapat merujuk aset yang berada di direktori publik seperti yang diharapkan.
                     includeAbsolute: false,
                 },
             },
@@ -300,18 +300,18 @@ export default defineConfig({
 ```
 
 > **Note**  
-> Laravel's [starter kits](/docs/{{version}}/starter-kits) already include the proper Laravel, Vue, and Vite configuration. Check out [Laravel Breeze](/docs/{{version}}/starter-kits#breeze-and-inertia) for the fastest way to get started with Laravel, Vue, and Vite.
+> [Perlengkapan untuk pemula](/docs/{{version}}/starter-kits) milik Laravel sudah disertai dengan konfigurasi Laravel, Vue, dan Vite yang efektif. Periksa [Laravel Breeze](/docs/{{version}}/starter-kits#breeze-and-inertia) yang merupakan cara tercepat untuk memulai mengembangkan aplikasi dengan Laravel, Vue dan Vite.
 
 <a name="react"></a>
 ### React
 
-If you would like to build your front-end using the [React](https://reactjs.org/) framework, then you will also need to install the `@vitejs/plugin-react` plugin:
+Jika Anda ingin membangun _front-end_ Anda menggunakan _framework_ [React](https://reactjs.org/), maka Anda juga harus menginstal _plugin_ `@vitejs/plugin-react`:
 
 ```sh
 npm install --save-dev @vitejs/plugin-react
 ```
 
-You may then include the plugin in your `vite.config.js` configuration file:
+Anda kemudian dapat menyertakan plugin tersebut di dalam _file_ konfigurasi `vite.config.js`:
 
 ```js
 import { defineConfig } from 'vite';
@@ -326,24 +326,24 @@ export default defineConfig({
 });
 ```
 
-You will need to ensure that any files containing JSX have a `.jsx` or `.tsx` extension, remembering to update your entry point, if required, as [shown above](#configuring-vite).
+Anda perlu memastikan bahwa semua _file_ yang mengandung JSX telah memiliki eksistensi `.jsx` atau `.tsx`. Jangan lupa juga untuk memperbaharui titik masuk jika diperlukan, seperti yang telah dijelaskan [di atas](#configuring-vite).
 
-You will also need to include the additional `@viteReactRefresh` Blade directive alongside your existing `@vite` directive.
+Anda juga perlu untuk memasukkan _directive_ Blade tambahan `@viteReactRefresh` berdampingan dengan _directive_ `@vite` yang sudah ada.
 
 ```blade
 @viteReactRefresh
 @vite('resources/js/app.jsx')
 ```
 
-The `@viteReactRefresh` directive must be called before the `@vite` directive.
+_Directive_ `@viteReactRefresh` harus dipanggil sebelum _directive_ `@vite`.
 
 > **Note**  
-> Laravel's [starter kits](/docs/{{version}}/starter-kits) already include the proper Laravel, React, and Vite configuration. Check out [Laravel Breeze](/docs/{{version}}/starter-kits#breeze-and-inertia) for the fastest way to get started with Laravel, React, and Vite.
+> [Perlengkapan untuk pemula](/docs/{{version}}/starter-kits) milik Laravel sudah disertai dengan konfigurasi Laravel, React, dan Vite yang efektif. Periksa [Laravel Breeze](/docs/{{version}}/starter-kits#breeze-and-inertia) yang merupakan cara tercepat untuk memulai mengembangkan aplikasi dengan Laravel, Vue dan Vite.
 
 <a name="inertia"></a>
 ### Inertia
 
-The Laravel Vite plugin provides a convenient `resolvePageComponent` function to help you resolve your Inertia page components. Below is an example of the helper in use with Vue 3; however, you may also utilize the function in other frameworks such as React:
+_Plugin_ Laravel Vite menyediakan fungsi `resolvePageComponent` yang nyaman untuk membantu Anda melakukan _resolve_ pada komponen halaman Inertia Anda. Di Bawah ini merupakan contoh penggunaan _helper_ pada Vue 3; bagaimanapun, Anda juga dapat menggunakan fungsi ini pada _framework_ yang lain misalnya React:
 
 ```js
 import { createApp, h } from 'vue';
@@ -361,16 +361,16 @@ createInertiaApp({
 ```
 
 > **Note**  
-> Laravel's [starter kits](/docs/{{version}}/starter-kits) already include the proper Laravel, Inertia, and Vite configuration. Check out [Laravel Breeze](/docs/{{version}}/starter-kits#breeze-and-inertia) for the fastest way to get started with Laravel, Inertia, and Vite.
+> [Perlengkapan untuk pemula](/docs/{{version}}/starter-kits) milik Laravel sudah disertai dengan konfigurasi Laravel, Inertia, dan Vite yang efektif. Periksa [Laravel Breeze](/docs/{{version}}/starter-kits#breeze-and-inertia) yang merupakan cara tercepat untuk memulai mengembangkan aplikasi dengan Laravel, Inertia dan Vite.
 
 <a name="url-processing"></a>
-### URL Processing
+### Pemrosesan URL
 
-When using Vite and referencing assets in your application's HTML, CSS, or JS, there are a couple of caveats to consider. First, if you reference assets with an absolute path, Vite will not include the asset in the build; therefore, you should ensure that the asset is available in your public directory.
+Ketika menggunakan Vite kemudian mereferensikan aset-aset pada HTML, CSS, atau JS milik aplikasi Anda, terdapat beberapa peringatan yang perlu diperhatikan. Pertama, jika Anda mereferensikan aset menggunakan _path_ absolut, Vite tidak akan memasukkan aset tersebut ke dalam hasil _build_; oleh karena itu, Anda harus memastikan bahwa aset tersebut tersedia di dalam direktori publik Anda.
 
-When referencing relative asset paths, you should remember that the paths are relative to the file where they are referenced. Any assets referenced via a relative path will be re-written, versioned, and bundled by Vite.
+Ketika mereferensikan aset menggunakan _path_ yang relatif, Anda harus ingat bahwa _path_ tersebut bersifat relatif terhadap lokasi _file_ yang mereferensikannya. Aset-aset yang direferensikan menggunakan _path_ relatif akan ditulis ulang, diberi versi, dan dibundel oleh Vite.
 
-Consider the following project structure:
+Pertimbangan struktur direktori proyek:
 
 ```nothing
 public/
@@ -383,20 +383,20 @@ resources/
     abigail.png
 ```
 
-The following example demonstrates how Vite will treat relative and absolute URLs:
+Contoh berikut akan mendemonstrasikan bagaimana Vite memperlakukan URL relatif dan absolut:
 
 ```html
-<!-- This asset is not handled by Vite and will not be included in the build -->
+<!-- Aset ini tidak diurus oleh Vite dan tidak akan disertakan ke dalam hasil build -->
 <img src="/taylor.png">
 
-<!-- This asset will be re-written, versioned, and bundled by Vite -->
+<!-- Aset ini akan ditulis ulang, diberi versi, dan dibundel oleh Vite -->
 <img src="../../images/abigail.png">
 ```
 
 <a name="working-with-stylesheets"></a>
-## Working With Stylesheets
+## Bekerja dengan _Stylesheet_
 
-You can learn more about Vite's CSS support within the [Vite documentation](https://vitejs.dev/guide/features.html#css). If you are using PostCSS plugins such as [Tailwind](https://tailwindcss.com), you may create a `postcss.config.js` file in the root of your project and Vite will automatically apply it:
+Anda dapat mempelajari lebih lanjut tentang dukungan CSS milik Vite pada [dokumentasi Vite](https://vitejs.dev/guide/features.html#css). Jika Anda menggunakan _plugin_ PostCSS seperti [Tailwind](https://tailwindcss.com), Anda dapat membuat _file_ `postcss.config.js` di dalam _root_ proyek Anda dan Vite akan menerapkan pengaturan tersebut secara otomatis:
 
 ```js
 module.exports = {
@@ -408,14 +408,14 @@ module.exports = {
 ```
 
 <a name="working-with-blade-and-routes"></a>
-## Working With Blade & Routes
+## Bekerja dengan Blade & Rute
 
 <a name="blade-processing-static-assets"></a>
-### Processing Static Assets With Vite
+### Memproses Aset Statis dengan Vite
 
-When referencing assets in your JavaScript or CSS, Vite automatically processes and versions them. In addition, when building Blade based applications, Vite can also process and version static assets that you reference solely in Blade templates.
+Ketika mereferensikan aset-aset pada JavaScript atau CSS milik Anda, Vite memproses dan memberi versi pada aset tersebut secara otomatis. Selain itu, ketika membangun aplikasi berbasis Blade, Vite juga dapat memproses dan membuat versi aset statis yang Anda rujuk pada _template_ Blade.
 
-However, in order to accomplish this, you need to make Vite aware of your assets by importing the static assets into the application's entry point. For example, if you want to process and version all images stored in `resources/images` and all fonts stored in `resources/fonts`, you should add the following in your application's `resources/js/app.js` entry point:
+Namun, untuk mencapai hal ini, Anda perlu membuat Vite untuk mengawasi aset Anda dengan cara mengimpor aset statis tersebut ke dalam titik masuk aplikasi. Sebagai contoh, jika Anda ingin memproses dan memberi versi semua gambar yang disimpan di dalam `resources/images` dan semua fon yang disimpan di `resources/fonts`, Anda harus menambahkan direktori-direktori tersebut ke dalam titik masuk `resources/js/app.js` aplikasi Anda seperti contoh di bawah ini:
 
 ```js
 import.meta.glob([
@@ -424,16 +424,16 @@ import.meta.glob([
 ]);
 ```
 
-These assets will now be processed by Vite when running `npm run build`. You can then reference these assets in Blade templates using the `Vite::asset` method, which will return the versioned URL for a given asset:
+Aset-aset tersebut akan diproses oleh Vite ketika menjalankan `npm run build`. Kemudian Anda dapat mereferensikan aset-aset ini pada _template_ Blade menggunakan metode `Vite::asset`, yang akan mengembalikan URL berversi untuk aset yang sudah ditambahkan:
 
 ```blade
 <img src="{{ Vite::asset('resources/images/logo.png') }}">
 ```
 
 <a name="blade-refreshing-on-save"></a>
-### Refreshing On Save
+### Me-_refresh_ saat Disimpan
 
-When your application is built using traditional server-side rendering with Blade, Vite can improve your development workflow by automatically refreshing the browser when you make changes to view files in your application. To get started, you can simply specify the `refresh` option as `true`.
+Ketika aplikasi Anda dibuat menggunakan _server-side rendering_ yang tradisional dengan Blade, Vite dapat meningkatkan alur kerja pengembangan Anda dengan cara me-_refresh browser_ Anda secara otomatis ketika Anda membuat perubahan pada _file view_ milik aplikasi Anda. Untuk memulai, Anda cukup menambahkan opsi `refresh` dengan nilai `true`.
 
 ```js
 import { defineConfig } from 'vite';
@@ -449,7 +449,7 @@ export default defineConfig({
 });
 ```
 
-When the `refresh` option is `true`, saving files in the following directories will trigger the browser to perform a full page refresh while you are running `npm run dev`:
+Ketika opsi `refresh` bernilai `true`, melakukan penyimpanan perubahan pada _file_-_file_ yang terdapat pada direktori yang terdaftar akan memicu _browser_ untuk me-_refresh_ halaman secara penuh saat `npm run dev` sedang berjalan:
 
 - `app/View/Components/**`
 - `lang/**`
@@ -457,9 +457,9 @@ When the `refresh` option is `true`, saving files in the following directories w
 - `resources/views/**`
 - `routes/**`
 
-Watching the `routes/**` directory is useful if you are utilizing [Ziggy](https://github.com/tighten/ziggy) to generate route links within your application's frontend.
+Mengamati direktori `routes/**` akan berguna jika Anda menggunakan [Ziggy](https://github.com/tighten/ziggy) untuk membuat tautan rute pada _frontend_ milik aplikasi Anda.
 
-If these default paths do not suit your needs, you can specify your own list of paths to watch:
+Jika _path_-_path_ di atas tidak sesuai dengan  Anda, Anda dapat menentukan daftar _path_ yang lain untuk diawasi:
 
 ```js
 import { defineConfig } from 'vite';
@@ -475,7 +475,7 @@ export default defineConfig({
 });
 ```
 
-Under the hood, the Laravel Vite plugin uses the [`vite-plugin-full-reload`](https://github.com/ElMassimo/vite-plugin-full-reload) package, which offers some advanced configuration options to fine-tune this feature's behavior. If you need this level of customization, you may provide a `config` definition:
+Di balik layar, _plugin_ Laravel Vite menggunakan _package_ [`vite-plugin-full-reload`](https://github.com/ElMassimo/vite-plugin-full-reload), yang menawarkan beberapa konfigurasi tingkat lanjut untuk menyempurnakan perilaku dari fitur tersebut. Jika Anda memerlukan kustomisasi pada tingkat ini, Anda dapat mendefinisikan sebuah `config`:
 
 ```js
 import { defineConfig } from 'vite';
@@ -495,64 +495,64 @@ export default defineConfig({
 ```
 
 <a name="blade-aliases"></a>
-### Aliases
+### Alias
 
-It is common in JavaScript applications to [create aliases](#aliases) to regularly referenced directories. But, you may also create aliases to use in Blade by using the `macro` method on the `Illuminate\Support\Facades\Vite` class. Typically, "macros" should be defined within the `boot` method of a [service provider](/docs/{{version}}/providers):
+Sudah menjadi hal yang umum dalam aplikasi JavaScript untuk [membuat alias](#aliases) yang mereferensikan direktori secara berkala. Namun, Anda juga dapat membuat alias yang dapat digunakan pada Blade dengan menggunakan metode `macro` pada kelas `Illuminate\Support\Facades\Vite`. Biasanya, "_macro_" harus didefinisikan dalam metode `boot` pada [_service provider_](/docs/{{version}}/providers):
 
     /**
-     * Bootstrap any application services.
+     * Melakukan bootstrap layanan aplikasi.
      *
      * @return void
      */
     public function boot()
     {
-        Vite::macro('image', fn ($asset) => $this->asset("resources/images/{$asset}"));
+        Vite::macro('gambar', fn ($aset) => $this->asset("resources/images/{$aset}"));
     }
 
-Once a macro has been defined, it can be invoked within your templates. For example, we can use the `image` macro defined above to reference an asset located at `resources/images/logo.png`:
+Setelah _macro_ didefinisikan, _macro_ dapat dipanggil pada _template_ Anda. Sebagai contoh, kita dapat menggunakan _macro_ `gambar` yang sudah didefinisikan di atas untuk mereferensikan sebuah aset yang berlokasi di `resources/images/logo.png`:
 
 ```blade
-<img src="{{ Vite::image('logo.png') }}" alt="Laravel Logo">
+<img src="{{ Vite::gambar('logo.png') }}" alt="Logo Laravel">
 ```
 
 <a name="custom-base-urls"></a>
-## Custom Base URLs
+## URL Dasar yang Kustom
 
-If your Vite compiled assets are deployed to a domain separate from your application, such as via a CDN, you must specify the `ASSET_URL` environment variable within your application's `.env` file:
+Jika aset-aset yang telah dikompilasi oleh Vite di-_deploy_ pada domain yang terpisah dengan aplikasi Anda, seperti melalui CDN, Anda harus mendefinisikan variabel _environment_ `ASEET_URL` pada _file_ `.env` milik aplikasi Anda:
 
 ```env
 ASSET_URL=https://cdn.example.com
 ```
 
-After configuring the asset URL, all re-written URLs to your assets will be prefixed with the configured value:
+Setelah mengkonfigurasi URL aset, semua URL yang ditulis ulang ke aset-aset Anda akan ditambahkan prefiks yakni nilai `ASSET_URL` yang telah dikonfigurasi:
 
 ```nothing
 https://cdn.example.com/build/assets/app.9dce8d17.js
 ```
 
-Remember that [absolute URLs are not re-written by Vite](#url-processing), so they will not be prefixed.
+Perlu diingat bahwa [URL absolut tidak akan ditulis ulang oleh Vite](#url-processing), sehingga URL-URL tersebut tidak akan diberi prefiks.
 
 <a name="environment-variables"></a>
-## Environment Variables
+## Variabel _Environment_
 
-You may inject environment variables into your JavaScript by prefixing them with `VITE_` in your application's `.env` file:
+Anda dapat menginjeksikan variabel _environment_ ke dalam JavaScript dengan menambahkan prefiks `VITE_` pada _file_ `.env` milik aplikasi:
 
 ```env
 VITE_SENTRY_DSN_PUBLIC=http://example.com
 ```
 
-You may access injected environment variables via the `import.meta.env` object:
+Anda dapat mengakses variabel-variabel yang telah diinjeksikan sebelumnya melalui objek `import.meta.env`:
 
 ```js
 import.meta.env.VITE_SENTRY_DSN_PUBLIC
 ```
 
 <a name="disabling-vite-in-tests"></a>
-## Disabling Vite In Tests
+## Menonaktifkan Vite di dalam Pengujian
 
-Laravel's Vite integration will attempt to resolve your assets while running your tests, which requires you to either run the Vite development server or build your assets.
+Integrasi Vite milik Laravel akan mencoba untuk me-_resolve_ aset-aset Anda ketika melakukan pengujian, yang mengharuskan Anda untuk menjalankan server pengembangan Vite atau melakukan _build_ terhadap aset Anda.
 
-If you would prefer to mock Vite during testing, you may call the `withoutVite` method, which is is available for any tests that extend Laravel's `TestCase` class:
+Jika Anda lebih memilih untuk tidak menggunakan Vite selama pengujian, Anda dapat memanggil metode `withoutVite`, yang tersedia untuk semua kelas pengujian yang melakukan _extend_ terhadap kelas `TestCase` milik Laravel:
 
 ```php
 use Tests\TestCase;
@@ -568,7 +568,7 @@ class ExampleTest extends TestCase
 }
 ```
 
-If you would like to disable Vite for all tests, you may call the `withoutVite` method from the `setUp` method on your base `TestCase` class:
+Jika Anda ingin menonaktifkan Vite untuk semua pengujian, Anda dapat memanggil metode `withoutVite` di dalam metode `setUp` pada kelas `TestCase`:
 
 ```php
 <?php
@@ -591,9 +591,9 @@ abstract class TestCase extends BaseTestCase
 ```
 
 <a name="ssr"></a>
-## Server-Side Rendering (SSR)
+## _Server-Side Rendering_ (SSR)
 
-The Laravel Vite plugin makes it painless to set up server-side rendering with Vite. To get started, create an SSR entry point at `resources/js/ssr.js` and specify the entry point by passing a configuration option to the Laravel plugin:
+_Plugin_ Laravel Vite memudahkan Anda untuk menyiapkan _server-side rendering_ dengan Vite. Untuk memulai, buatlah titik masuk SSR di `resources/js/ssr.js` dan tentukan titik masuknya dengan mengoper opsi konfigurasi ke _plugin_ Laravel:
 
 ```js
 import { defineConfig } from 'vite';
@@ -609,7 +609,7 @@ export default defineConfig({
 });
 ```
 
-To ensure you don't forget to rebuild the SSR entry point, we recommend augmenting the "build" script in your application's `package.json` to create your SSR build:
+Untuk memastikan bahwa Anda tidak lupa melakukan _build_ ulang untuk titik masuk SSR, kami sarankan untuk menambahkan skrip "build" di `package.json` milik aplikasi Anda untuk mem-_build_ SSR:
 
 ```json
 "scripts": {
@@ -619,7 +619,7 @@ To ensure you don't forget to rebuild the SSR entry point, we recommend augmenti
 }
 ```
 
-Then, to build and start the SSR server, you may run the following commands:
+Kemudian, untuk melakukan _build_ dan menjalankan server SSR, Anda dapat menggunakan perintah:
 
 ```sh
 npm run build
@@ -627,15 +627,15 @@ node bootstrap/ssr/ssr.mjs
 ```
 
 > **Note**  
-> Laravel's [starter kits](/docs/{{version}}/starter-kits) already include the proper Laravel, Inertia SSR, and Vite configuration. Check out [Laravel Breeze](/docs/{{version}}/starter-kits#breeze-and-inertia) for the fastest way to get started with Laravel, Inertia SSR, and Vite.
+> [Perlengkapan untuk pemula](/docs/{{version}}/starter-kits) milik Laravel sudah disertai dengan konfigurasi Laravel, SSR Inertia, dan Vite. Periksa [Laravel Breeze](/docs/{{version}}/starter-kits#breeze-and-inertia) yang merupakan cara tercepat untuk memulai mengembangkan aplikasi dengan Laravel, SSR Inertia dan Vite.
 
 <a name="script-and-style-attributes"></a>
-## Script & Style Tag Attributes
+## Atribut pada _Tag Script_ & _Style_
 
 <a name="content-security-policy-csp-nonce"></a>
-### Content Security Policy (CSP) Nonce
+### _Nonce Content Security Policy_ (CSP)
 
-If you wish to include a [`nonce` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) on your script and style tags as part of your [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), you may generate or specify a nonce using the `useCspNonce` method within a custom [middleware](/docs/{{version}}/middleware):
+Jika Anda ingin menyertakan [atribut `nonce` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) pada _tag script_ dan _style_ Anda sebagai bagian dari [_Content Security Policy_](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), Anda dapat menghasilkan atau menentukan sebuah _nonce_ menggunakan metode `useCspNonce` pada sebuah [_middleware_](/docs/{{version}}/middleware) kustom:
 
 ```php
 <?php
@@ -648,7 +648,7 @@ use Illuminate\Support\Facades\Vite;
 class AddContentSecurityPolicyHeaders
 {
     /**
-     * Handle an incoming request.
+     * Menangani permintaan yang masuk.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -665,30 +665,30 @@ class AddContentSecurityPolicyHeaders
 }
 ```
 
-After invoking the `useCspNonce` method, Laravel will automatically include the `nonce` attributes on all generated script and style tags.
+Setelah memanggil metode `useCspNonce`, Laravel akan menyertakan atribut `nonce` secara otomatis pada semua _tag script_ dan _style_ yang dihasilkan.
 
-If you need to specify the nonce elsewhere, including the [Ziggy `@route` directive](https://github.com/tighten/ziggy#using-routes-with-a-content-security-policy) included with Laravel's [starter kits](/docs/{{version}}/starter-kits), you may retrieve it using the `cspNonce` method:
+Jika Anda perlu menentukan nonce di tempat lain, termasuk [_directive `@route` Ziggy](https://github.com/tighten/ziggy#using-routes-with-a-content-security-policy) yang disertakan pada [perlengkapan pemula](/docs/{{version}}/starter-kits) milik Laravel, Anda bisa mengambilnya dengan menggunakan metode `cspNonce`:
 
 ```blade
 @routes(nonce: Vite::cspNonce())
 ```
 
-If you already have a nonce that you would like to instruct Laravel to use, you may pass the nonce to the `useCspNonce` method:
+Jika Anda telah memiliki sebuah _nonce_ dan Anda ingin menginstruksikan Laravel untuk menggunakannya, Anda dapat mengoper _nonce_ tersebut pada metode `useCspNonce`:
 
 ```php
 Vite::useCspNonce($nonce);
 ```
 
 <a name="subresource-integrity-sri"></a>
-### Subresource Integrity (SRI)
+### _Subresource Integrity_ (SRI)
 
-If your Vite manifest includes `integrity` hashes for your assets, Laravel will automatically add the `integrity` attribute on any script and style tags it generates in order to enforce [Subresource Integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity). By default, Vite does not include the `integrity` hash in its manifest, but you may enable it by installing the [`vite-plugin-manifest-sri`](https://www.npmjs.com/package/vite-plugin-manifest-sri) NPM plugin:
+Jika manifes Vite Anda disertai dengan _hash_ `integrity` untuk aset Anda, Laravel akan menambahkan atribut `integrity` secara otomatis pada semua _tag script_ dan _style_ yang dihasilkan untuk memberlakukan [_Subresource Integrity_](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity). Secara _default_, Vite tidak menyertakan _hash_ `integrity` dalam manifesnya, tetapi Anda dapat mengaktifkannya dengan menginstal _plugin_ NPM [`vite-plugin-manifest-sri`](https://www.npmjs.com/package/vite-plugin-manifest-sri):
 
 ```shell
 npm install --save-dev vite-plugin-manifest-sri
 ```
 
-You may then enable this plugin in your `vite.config.js` file:
+Anda dapat mengaktifkan _plugin_ tersebut pada _file_ `vite.config.js`:
 
 ```js
 import { defineConfig } from 'vite';
@@ -705,32 +705,32 @@ export default defineConfig({
 });
 ```
 
-If required, you may also customize the manifest key where the integrity hash can be found:
+Jika diperlukan, Anda juga dapat melakukan kustomisasi kunci manifes di mana _hash integrity_ dapat ditemukan:
 
 ```php
 use Illuminate\Support\Facades\Vite;
 
-Vite::useIntegrityKey('custom-integrity-key');
+Vite::useIntegrityKey('kunci-integrity-kustom');
 ```
 
-If you would like to disable this auto-detection completely, you may pass `false` to the `useIntegrityKey` method:
+Jika Anda ingin menonaktifkan deteksi otomatis ini sepenuhnya, Anda dapat mengoper nilai `false` ke metode `useIntegrityKey`:
 
 ```php
 Vite::useIntegrityKey(false);
 ```
 
 <a name="arbitrary-attributes"></a>
-### Arbitrary Attributes
+### Atribut yang Berubah-ubah
 
-If you need to include additional attributes on your script and style tags, such as the [`data-turbo-track`](https://turbo.hotwired.dev/handbook/drive#reloading-when-assets-change) attribute, you may specify them via the `useScriptTagAttributes` and `useStyleTagAttributes` methods. Typically, this methods should be invoked from a [service provider](/docs/{{version}}/providers):
+Jika Anda perlu menyertakan atribut tambahan pada _tag script_ dan _style_ Anda, seperti atribut [`data-turbo-track`](https://turbo.hotwired.dev/handbook/drive#reloading-when-assets-change), Anda melakukannya menggunakan metode `useScriptTagAttributes` dan `useStyleTagAttributes`. Biasanya, metode ini harus dipanggil dari sebuah [_service provider_](/docs/{{version}}/providers):
 
 ```php
 use Illuminate\Support\Facades\Vite;
 
 Vite::useScriptTagAttributes([
-    'data-turbo-track' => 'reload', // Specify a value for the attribute...
-    'async' => true, // Specify an attribute without a value...
-    'integrity' => false, // Exclude an attribute that would otherwise be included...
+    'data-turbo-track' => 'reload', // Menentukan nilai untuk atribut...
+    'async' => true, // Menentukan sebuah atribut tanpa nilai...
+    'integrity' => false, // Mengecualikan atribut yang seharusnya disertakan...
 ]);
 
 Vite::useStyleTagAttributes([
@@ -738,7 +738,7 @@ Vite::useStyleTagAttributes([
 ]);
 ```
 
-If you need to conditionally add attributes, you may pass a callback that will receive the asset source path, its URL, its manifest chunk, and the entire manifest:
+Jika Anda perlu menambahkan atribut secara kondisional, Anda dapat memberikan _callback_ yang akan menerima _path_ sumber aset, URL-nya, potongan manifes, dan seluruh manifes:
 
 ```php
 use Illuminate\Support\Facades\Vite;
@@ -753,12 +753,12 @@ Vite::useStyleTagAttributes(fn (string $src, string $url, array|null $chunk, arr
 ```
 
 > **Warning**  
-> The `$chunk` and `$manifest` arguments will be `null` while the Vite development server is running.
+> Argumen `$chunk` and `$manifest` akan berisi `null` ketika server pengembangan Vite dijalankan.
 
 <a name="advanced-customization"></a>
-## Advanced Customization
+## Kustomisasi Tingkat Lanjut
 
-Out of the box, Laravel's Vite plugin uses sensible conventions that should work for the majority of applications; however, sometimes you may need to customize Vite's behavior. To enable additional customization options, we offer the following methods and options which can be used in place of the `@vite` Blade directive:
+_Plugin_ Vite Laravel disertai dengan konvensi yang masuk akal yang seharusnya dapat digunakan untuk sebagian besar aplikasi; namun, terkadang Anda mungkin perlu menyesuaikan perilaku Vite. Untuk mengaktifkan opsi kustomisasi tambahan, kami menawarkan metode dan opsi berikut yang dapat digunakan sebagai pengganti _directive_ `@vite` pada Blade:
 
 ```blade
 <!doctype html>
@@ -766,15 +766,15 @@ Out of the box, Laravel's Vite plugin uses sensible conventions that should work
     {{-- ... --}}
 
     {{
-        Vite::useHotFile(storage_path('vite.hot')) // Customize the "hot" file...
-            ->useBuildDirectory('bundle') // Customize the build directory...
-            ->useManifestFilename('assets.json') // Customize the manifest filename...
-            ->withEntryPoints(['resources/js/app.js']) // Specify the entry points...
+        Vite::useHotFile(storage_path('vite.hot')) // Mengkustomisasi file "hot"...
+            ->useBuildDirectory('bundle') // Mengkustomisasi direktori build...
+            ->useManifestFilename('assets.json') // Mengkustomisasi nama file manifes...
+            ->withEntryPoints(['resources/js/app.js']) // Mendefinisikan titik masuk...
     }}
 </head>
 ```
 
-Within the `vite.config.js` file, you should then specify the same configuration:
+Di dalam berkas `vite.config.js`, Anda harus menentukan konfigurasi yang sama:
 
 ```js
 import { defineConfig } from 'vite';
@@ -783,31 +783,31 @@ import laravel from 'laravel-vite-plugin';
 export default defineConfig({
     plugins: [
         laravel({
-            hotFile: 'storage/vite.hot', // Customize the "hot" file...
-            buildDirectory: 'bundle', // Customize the build directory...
-            input: ['resources/js/app.js'], // Specify the entry points...
+            hotFile: 'storage/vite.hot', // Mengkustomisasi file "hot"...
+            buildDirectory: 'bundle', // Mengkustomisasi direktori build...
+            input: ['resources/js/app.js'], // Mendefinisikan titik masuk...
         }),
     ],
     build: {
-      manifest: 'assets.json', // Customize the manifest filename...
+      manifest: 'assets.json', // Mengkustomisasi nama file manifes...
     },
 });
 ```
 
 <a name="correcting-dev-server-urls"></a>
-### Correcting Dev Server URLs
+### Mengoreksi URL Server Dev
 
-Some plugins within the Vite ecosystem assume that URLs which begin with a forward-slash will always point to the Vite dev server. However, due to the nature of the Laravel integration, this is not the case.
+Beberapa plugin dalam ekosistem Vite mengasumsikan bahwa URL yang dimulai dengan garis miring akan selalu mengarah ke server dev Vite. Namun, karena sifat integrasi alami Laravel, hal tersebut tidak terjadi.
 
-For example, the `vite-imagetools` plugin outputs URLs like the following while Vite is serving your assets:
+Sebagai contoh, _output_ dari _plugin_ `vite-imagetools` akan mengeluarkan URL seperti berikut ini ketika Vite menayangkan aset Anda:
 
 ```html
 <img src="/@imagetools/f0b2f404b13f052c604e632f2fb60381bf61a520">
 ```
 
-The `vite-imagetools` plugin is expecting that the output URL will be intercepted by Vite and the plugin may then handle all URLs that start with `/@imagetools`. If you are using plugins that are expecting this behaviour, you will need to manually correct the URLs. You can do this in your `vite.config.js` file by using the `transformOnServe` option. 
+_Plugin_ `vite-imagetools` mengharapkan bahwa URL keluaran akan dicegat oleh Vite dan _plugin_ tersebut kemudian menangani semua URL yang dimulai dengan `/@imagetools`. Jika Anda menggunakan _plugin_ yang mengharapkan perilaku seperti ini, Anda perlu memperbaiki URL secara manual. Anda dapat melakukannya pada berkas `vite.config.js` dengan menggunakan opsi `transformOnServe`.
 
-In this particular example, we will append the dev server URL to all occurrences of `/@imagetools` within the generated code:
+Dalam contoh khusus ini, kita akan menambahkan URL server dev ke semua `/@imagetools` yang muncul di dalam kode yang dihasilkan:
 
 ```js
 import { defineConfig } from 'vite';
@@ -825,10 +825,9 @@ export default defineConfig({
 });
 ```
 
-Now, while Vite is serving Assets, it will output URLs that point to the Vite dev server:
+Sekarang, saat Vite menayangkan aset-aset tersebut, Vite akan menghasilkan URL yang mengarah ke server dev Vite:
 
 ```html
 - <img src="/@imagetools/f0b2f404b13f052c604e632f2fb60381bf61a520"><!-- [tl! remove] -->
 + <img src="http://[::1]:5173/@imagetools/f0b2f404b13f052c604e632f2fb60381bf61a520"><!-- [tl! add] -->
 ```
-
