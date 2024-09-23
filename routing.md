@@ -474,7 +474,6 @@ Biasanya, _binding_ model implisit tidak akan mengambil model yang telah dihapus
         return $user->email;
     })->withTrashed();
 
-<a name="customizing-the-key"></a>
 <a name="customizing-the-default-key-name"></a>
 #### Kostumisasi Kunci
 

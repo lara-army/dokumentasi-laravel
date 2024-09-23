@@ -60,7 +60,6 @@ Untuk lebih mudah memahaminya, Anda dapat membayangkan _middleware_ sebagai sera
 > **Catatan**  
 > Semua _middleware_ dideklarasikan melalui [_service container_](/docs/{{version}}/container), jadi Anda dapat melakukan _type-hint_ dependensi apa pun yang Anda perlukan di dalam _constructor_ milik _middleware_.
 
-<a name="before-after-middleware"></a>
 <a name="middleware-and-responses"></a>
 #### Sebelum-sesudah _Middleware_
 

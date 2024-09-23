@@ -187,7 +187,7 @@ Metode `pull` akan mengambil dan menghapus sebuah _item_ pada _session_ dengan s
 
     $value = $request->session()->pull('key', 'default');
 
-<a name="#incrementing-and-decrementing-session-values"></a>
+<a name="incrementing-and-decrementing-session-values"></a>
 #### Menambah & Mengurangi Nilai dalam _Session_
 
 Jika terdapat data berjenis _integer_ pada _session_ Anda yang nilainya ingin ditambah atau dikurangi, Anda dapat menggunakan metode `increment` dan `decrement`:
