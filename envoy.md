@@ -1,56 +1,51 @@
 # Laravel Envoy
 
-- [Perkenalan](#introduction)
+- [Pengantar](#introduction)
 - [Instalasi](#installation)
-- [Menulis _Tasks_](#writing-tasks)
-  - [Mendefinisikan _Task_](#defining-tasks)
-  - [Beberapa _Servers_](#completion-servers)
-  - [_Setup_](#setup)
-  - [_Variables_](#variables)
-  - [_Stories_](#stories)
-  - [_Hooks_](#completion-hooks)
-- [Menjalankan _Tasks_](#running-tasks)
-  - [Mengonfirmasi Eksekusi _Task_](#confirming-task-execution)
-- [Pemberitahuan](#notifications)
+- [Menulis Tugas](#writing-tasks)
+  - [Mendefinisikan Tugas](#defining-tasks)
+  - [Multi Server](#completion-servers)
+  - [Pengaturan](#setup)
+  - [Variabel](#variables)
+  - [Cerita](#stories)
+  - [_Hook_](#completion-hooks)
+- [Menjalankan Tugas](#running-tasks)
+  - [Mengonfirmasi Eksekusi Tugas](#confirming-task-execution)
+- [Notifikasi](#notifications)
   - [Slack](#slack)
   - [Discord](#discord)
   - [Telegram](#telegram)
   - [Microsoft Teams](#microsoft-teams)
 
 <a name="introduction"></a>
+## Pengantar
 
-## Introduction
-
-[Laravel Envoy](https://github.com/laravel/envoy) adalah alat untuk menjalankan tugas-tugas umum yang Anda jalankan di server jarak jauh Anda. Menggunakan sintaks gaya [Blade](/docs/{{version}}/blade), Anda dapat dengan mudah mengatur tugas untuk _deployment_, perintah Artisan, dan lainnya. Saat ini, Envoy hanya mendukung sistem operasi Mac dan Linux. Namun, dukungan untuk Windows dapat dicapai menggunakan [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+[Laravel Envoy](https://github.com/laravel/envoy) merupakan sebuah alat untuk menjalankan tugas-tugas (_task_) umum yang Anda jalankan pada server jarak jauh milik Anda. Dengan menggunakan sintaks bergaya [Blade](/docs/{{version}}/blade), Anda dapat dengan mudah mengatur tugas-tugas untuk _deployment_, perintah Artisan, dan lainnya. Saat ini, Envoy hanya mendukung sistem operasi Mac dan Linux. Namun, dukungan untuk Windows dapat dicapai menggunakan [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 
 <a name="installation"></a>
-
 ## Instalasi
 
 Pertama, instal Envoy ke dalam proyek Anda menggunakan manajer paket Composer:
 
 ```shell
 composer require laravel/envoy --dev
-
 ```
 
-Setelah Envoy diinstal, biner Envoy akan tersedia di direktori `vendor/bin` aplikasi Anda:
+Setelah Envoy diinstal, _binary_ Envoy akan tersedia pada direktori `vendor/bin` milik aplikasi Anda:
 
 ```shell
 php vendor/bin/envoy
 ```
 
 <a name="writing-tasks"></a>
-
-## Menulis _Tasks_
+## Menulis Tugas
 
 <a name="defining-tasks"></a>
+### Mendefinsikan Tugas
 
-### Mendefinsikan _Tasks_
+Tugas (_task_) adalah blok penyusun dasar dari Envoy. Tugas tersebut mendefinisikan perintah shell yang harus dijalankan pada server jarak jauh milik Anda ketika tugas tersebut dipanggil. Misalnya, Anda dapat mendefinisikan tugas yang menjalankan perintah `php artisan queue:restart` pada semua server pekerja antrian (_queue worker_) milik aplikasi Anda.
 
-_Task_ adalah blok penyusun dasar dari Envoy. _Task_ mendefinisikan perintah shell yang harus dijalankan di server jarak jauh Anda ketika _task_ tersebut dipanggil. Misalnya, Anda dapat mendefinisikan _task_ yang menjalankan perintah `php artisan queue:restart` pada semua server pekerja antrian aplikasi Anda.
-
-Semua _task_ Envoy Anda harus didefinisikan dalam file 'Envoy.blade.php' di root aplikasi Anda. Berikut adalah contoh untuk membantu Anda memulai:
+Semua tugas Envoy Anda harus didefinisikan dalam _file_ 'Envoy.blade.php' pad _root_ aplikasi Anda. Berikut adalah contoh untuk membantu Anda memulai:
 
 ```blade
 @servers(['web' => ['user@192.168.1.1'], 'workers' => ['user@192.168.1.2']])
@@ -61,33 +56,30 @@ Semua _task_ Envoy Anda harus didefinisikan dalam file 'Envoy.blade.php' di root
 @endtask
 ```
 
-Seperti yang Anda lihat, array `@servers` didefinisikan di bagian atas file, memungkinkan Anda untuk mereferensikan server ini melalui opsi `on` dari deklarasi _task_ Anda. Deklarasi `@servers` harus selalu ditempatkan pada satu baris. Dalam deklarasi `@task` Anda, Anda harus menempatkan perintah shell yang harus dijalankan di server Anda saat _task_ dipanggil.
+Seperti yang Anda lihat, larik pada `@servers` didefinisikan pada bagian atas _file_, memungkinkan Anda untuk mereferensikan server-server tersebut melalui opsi `on` dari deklarasi tugas Anda. Deklarasi `@servers` harus selalu ditempatkan pada satu baris. Dalam deklarasi `@task` Anda, Anda harus menempatkan perintah shell yang perlu dijalankan pada server Anda saat tugas dipanggil.
 
 <a name="local-tasks"></a>
+#### Tugas Lokal
 
-#### Lokal Tasks
-
-Anda dapat memaksa _script_ untuk dijalankan di komputer lokal Anda dengan menentukan alamat IP server sebagai `127.0.0.1`:
+Anda dapat memaksa sebuah skrip untuk dijalankan pada komputer lokal Anda dengan menentukan alamat IP server menjadi `127.0.0.1`:
 
 ```blade
 @servers(['localhost' => '127.0.0.1'])
 ```
 
 <a name="importing-envoy-tasks"></a>
+#### Mengimpor Tugas Envoy
 
-#### Mengimpor Envoy _Tasks_
-
-Dengan menggunakan direktif `@import`, Anda dapat mengimpor file Envoy lain sehingga _stories_ dan _tasks_ mereka ditambahkan ke file Anda. Setelah file-file tersebut diimpor, Anda dapat menjalankan _tasks_ yang ada di dalamnya seolah-olah _tasks_ tersebut didefinisikan dalam file Envoy Anda sendiri:
+Dengan menggunakan direktif `@import`, Anda dapat mengimpor _file_ Envoy lain sehingga cerita (_story_) dan tugas (_task_) lain tersebut ditambahkan pada Envoy milik Anda. Setelah _file_-_file_ tersebut diimpor, Anda dapat menjalankan tugas-tugas yang ada di dalamnya seolah-olah tugas-tugas tersebut telah didefinisikan di dalam _file_ Envoy milik Anda sendiri:
 
 ```blade
 @import('vendor/package/Envoy.blade.php')
 ```
 
-<a name="completion-servers"></a>
+<a name="multiple-servers"></a>
+### Multi Servers
 
-### Beberapa Servers
-
-Envoy memungkinkan Anda menjalankan _task_ dengan mudah di beberapa _servers_. Pertama, tambahkan _servers_ tambahan pada deklarasi `@servers`. Setiap _server_ harus diberi nama yang unik. Setelah Anda mendefinisikan _server_ tambahan, Anda dapat mendaftarkan setiap _server_ dalam _array_ `on` _task_:
+Envoy memungkinkan Anda untuk menjalankan tugas dengan mudah pada beberapa server. Pertama, masukkan server tambahan pada deklarasi `@servers`. Setiap server harus diberi nama yang unik. Setelah Anda mendefinisikan server tambahan, Anda dapat mendaftarkan setiap server dalam larik `on` milik tugas:
 
 ```blade
 @servers(['web-1' => '192.168.1.1', 'web-2' => '192.168.1.2'])
@@ -100,10 +92,9 @@ Envoy memungkinkan Anda menjalankan _task_ dengan mudah di beberapa _servers_. P
 ```
 
 <a name="parallel-execution"></a>
+#### Eksekusi Paralel
 
-#### Eksekusi _parallel_
-
-Secara bawaan, _tasks_ akan dijalankan di setiap _server_ secara serial. Dengan kata lain, _task_ akan selesai berjalan di _server_ pertama sebelum melanjutkan untuk dijalankan di _server_ kedua. Jika Anda ingin menjalankan _task_ di beberapa _servers_ secara _parallel_, tambahkan opsi `parallel` ke deklarasi _task_ Anda:
+Secara _default_, tugas-tugas akan dijalankan pada setiap _server_ secara serial. Dengan kata lain, tugas akan selesai berjalan pada server pertama sebelum melanjutkan untuk dijalankan pada server ke-dua. Jika Anda ingin menjalankan tugas pada beberapa server secara paralel, tambahkan opsi `parallel` pada deklarasi tugas Anda:
 
 ```blade
 @servers(['web-1' => '192.168.1.1', 'web-2' => '192.168.1.2'])
@@ -116,10 +107,9 @@ Secara bawaan, _tasks_ akan dijalankan di setiap _server_ secara serial. Dengan 
 ```
 
 <a name="setup"></a>
+### Pengaturan
 
-### _Setup_
-
-Terkadang, Anda mungkin perlu mengeksekusi kode PHP sewenang-wenang sebelum menjalankan _tasks_ Envoy Anda. Anda dapat menggunakan direktif `@setup` untuk mendefinisikan blok kode PHP yang harus dieksekusi sebelum _tasks_ Anda:
+Terkadang, Anda mungkin perlu mengeksekusi kode PHP secara bebas (_arbitrary_) sebelum menjalankan tugas Envoy milik Anda. Anda dapat menggunakan direktif `@setup` untuk mendefinisikan blok kode PHP yang harus dieksekusi sebelum mengeksekusi tugas milik Anda:
 
 ```php
 @setup
@@ -127,7 +117,7 @@ Terkadang, Anda mungkin perlu mengeksekusi kode PHP sewenang-wenang sebelum menj
 @endsetup
 ```
 
-Jika Anda perlu memerlukan file PHP lain sebelum _task_ Anda dijalankan, Anda dapat menggunakan direktif `@include` di bagian atas file `Envoy.blade.php` Anda:
+Jika Anda perlu memasukkan _file_ PHP lain sebelum tugas Anda dijalankan, Anda dapat menggunakan direktif `@include` pada bagian atas _file_ `Envoy.blade.php` milik Anda:
 
 ```blade
 @include('vendor/autoload.php')
@@ -138,16 +128,15 @@ Jika Anda perlu memerlukan file PHP lain sebelum _task_ Anda dijalankan, Anda da
 ```
 
 <a name="variables"></a>
+### Variabel
 
-### Variables
-
-Jika perlu, Anda dapat meneruskan argumen ke _tasks_ Envoy dengan menentukannya pada baris perintah saat memanggil Envoy:
+Jika diperlukan, Anda dapat menyertakan argumen ke tugas Envoy dengan menuliskannya pada baris perintah saat memanggil Envoy:
 
 ```shell
 php vendor/bin/envoy run deploy --branch=master
 ```
 
-Anda dapat mengakses opsi dalam _tasks_ Anda menggunakan sintaks "echo" Blade. Anda juga dapat menentukan pernyataan Blade `if` dan perulangan dalam _tasks_ Anda. Misalnya, mari kita verifikasi keberadaan variabel `$branch` sebelum menjalankan perintah `git pull`:
+Anda dapat mengakses opsi tersebut dari dalam tugas milik Anda menggunakan sintaks "echo" milik Blade. Anda juga dapat mendefinisikan pernyataan Blade `if` dan perulangan di dalam tugas Anda. Misalnya, mari kita verifikasi keberadaan variabel `$branch` sebelum menjalankan perintah `git pull`:
 
 ```blade
 @servers(['web' => ['user@192.168.1.1']])
@@ -164,49 +153,46 @@ Anda dapat mengakses opsi dalam _tasks_ Anda menggunakan sintaks "echo" Blade. A
 ```
 
 <a name="stories"></a>
+### Cerita
 
-### Stories
-
-Grup _stories_ serangkaian _tasks_ dengan satu nama yang nyaman. Misalnya, _story_ _deploy_ dapat menjalankan _task_ `update-code` dan `install-dependencies` dengan mencantumkan nama _task_ dalam definisinya:
+Cerita (_story_) mengelompokkan serangkaian tugas dengan satu nama untuk kenyamanan. Misalnya, cerita _deploy_ dapat menjalankan tugas `pengkinian-kode` dan `instal-paket-paket-dependensi` dengan mencantumkan nama tugas dalam definisinya:
 
 ```blade
 @servers(['web' => ['user@192.168.1.1']])
 
 @story('deploy')
-    update-code
-    install-dependencies
+    pengkinian-kode
+    instal-paket-paket-dependensi
 @endstory
 
-@task('update-code')
+@task('pengkinian-kode')
     cd /home/user/example.com
     git pull origin master
 @endtask
 
-@task('install-dependencies')
+@task('instal-paket-paket-dependensi')
     cd /home/user/example.com
     composer install
 @endtask
 ```
 
-Setelah _story_ ditulis, Anda dapat memanggilnya dengan cara yang sama seperti Anda memanggil _task_:
+Setelah cerita ditulis, Anda dapat memanggilnya dengan cara yang sama seperti Anda memanggil tugas:
 
 ```shell
 php vendor/bin/envoy run deploy
 ```
 
 <a name="completion-hooks"></a>
+### _Hook_
 
-### Hooks
+Ketika tugas dan cerita berjalan, sejumlah _hook_ telah dieksekusi. Jenis _hook_ yang didukung oleh Envoy adalah '@before', '@after', '@error', '@success', dan '@finished'. Semua kode dalam _hook_ ini ditafsirkan sebagai PHP dan dieksekusi secara lokal, bukan pada server jarak jauh yang berinteraksi dengan tugas Anda.
 
-Ketika _tasks_ dan _stories_ berjalan, sejumlah _hooks_ dieksekusi. Jenis _hook_ yang didukung oleh Envoy adalah '@before', '@after', '@error', '@success', dan '@finished'. Semua kode dalam _hooks_ ini ditafsirkan sebagai PHP dan dieksekusi secara lokal, bukan di server jarak jauh yang berinteraksi dengan _tasks_ Anda.
-
-Anda dapat menentukan sebanyak mungkin dari masing-masing _hooks_ ini sesuka Anda. Mereka akan dieksekusi sesuai urutan yang muncul di _script_ Envoy Anda.
+Anda dapat mendefinisikan sebanyak mungkin untuk masing-masing _hook_ ini sesuka Anda. Mereka akan dieksekusi sesuai urutan yang muncul pada skrip Envoy milik Anda.
 
 <a name="hook-before"></a>
-
 #### `@before`
 
-Sebelum setelah eksekusi _task_, semua _hooks_ '@before' yang terdaftar dalam _script_ Envoy Anda akan dieksekusi. _Hooks_ '@before' menerima nama _task_ yang akan dieksekusi:
+Sebelum eksekusi tugas, semua _hook_ '@before' yang terdaftar dalam skrip Envoy Anda akan dieksekusi. _Hook_ '@before' menerima nama tugas yang akan dieksekusi:
 
 ```blade
 @before
@@ -217,10 +203,9 @@ Sebelum setelah eksekusi _task_, semua _hooks_ '@before' yang terdaftar dalam _s
 ```
 
 <a name="completion-after"></a>
-
 #### `@after`
 
-Setelah setiap eksekusi _task_, semua _hooks_ `@after` yang terdaftar dalam _script_ Envoy Anda akan dieksekusi. _Hooks_ `@after` menerima nama _task_ yang dieksekusi:
+Setelah eksekusi tugas, semua _hook_ `@after` yang terdaftar dalam skrip Envoy Anda akan dieksekusi. _Hook_ `@after` menerima nama tugas yang dieksekusi:
 
 ```blade
 @after
@@ -231,10 +216,9 @@ Setelah setiap eksekusi _task_, semua _hooks_ `@after` yang terdaftar dalam _scr
 ```
 
 <a name="completion-error"></a>
-
 #### `@error`
 
-Setelah setiap kegagalan _task_ (keluar dengan kode status lebih besar dari '0'), semua _hooks_ `@error` yang terdaftar dalam _script_ Envoy Anda akan dieksekusi. _Hooks_ '@error' menerima nama _task_ yang dieksekusi:
+Setiap kegagalan tugas (keluar dengan kode status lebih besar dari `0`), semua _hook_ `@error` yang terdaftar dalam skrip Envoy Anda akan dieksekusi. _Hook_ '@error' menerima nama tugas yang dieksekusi:
 
 ```blade
 @error
@@ -245,10 +229,9 @@ Setelah setiap kegagalan _task_ (keluar dengan kode status lebih besar dari '0')
 ```
 
 <a name="completion-success"></a>
-
 #### `@success`
 
-Jika semua _task_ telah dijalankan tanpa kesalahan, semua _hooks_ `@success` yang terdaftar di _script_ Envoy Anda akan dijalankan:
+Jika semua tugas telah dijalankan tanpa kesalahan, semua _hook_ `@success` yang terdaftar dalam skrip Envoy Anda akan dijalankan:
 
 ```blade
 @success
@@ -257,10 +240,9 @@ Jika semua _task_ telah dijalankan tanpa kesalahan, semua _hooks_ `@success` yan
 ```
 
 <a name="completion-finished"></a>
-
 #### `@finished`
 
-Setelah semua _tasks_ dieksekusi (terlepas dari status keluar), semua _hooks_ `@finished` akan dieksekusi. _Hooks_ '@finished' menerima kode status _tasks_ yang telah selesai, yang mungkin `null` atau `integer` lebih besar dari atau sama dengan `0`:
+Setelah semua tugas dieksekusi (terlepas dari status keluar), semua _hook_ `@finished` akan dieksekusi. _Hook_ '@finished' menerima kode status tugas yang telah selesai, yang mungkin `null` atau `integer` yang lebih besar dari atau sama dengan `0`:
 
 ```blade
 @finished
@@ -271,20 +253,18 @@ Setelah semua _tasks_ dieksekusi (terlepas dari status keluar), semua _hooks_ `@
 ```
 
 <a name="running-tasks"></a>
+## Menjalankan Tugas
 
-## Menjalankan Tasks
-
-Untuk menjalankan _task_ atau _story_ yang ditentukan dalam file `Envoy.blade.php` aplikasi Anda, jalankan perintah `run` Envoy, teruskan nama _task_ atau _story_ yang ingin Anda jalankan. Envoy akan menjalankan _task_ dan menampilkan _output_ dari server jarak jauh Anda saat _task_ sedang berjalan:
+Untuk menjalankan tugas atau cerita yang didefinisikan dalam _file_ `Envoy.blade.php` milik aplikasi Anda, jalankan perintah `run` Envoy, diiringi dengan nama tugas atau cerita yang ingin dijalankan. Envoy akan menjalankan tugas dan menampilkan _output_ dari server jarak jauh Anda saat tugas sedang berjalan:
 
 ```shell
 php vendor/bin/envoy run deploy
 ```
 
 <a name="confirming-task-execution"></a>
+### Mengonfirmasi Eksekusi Tugas
 
-### Mengonfirmasi Eksekusi _Task_
-
-Jika Anda ingin diminta untuk konfirmasi sebelum menjalankan _task_ yang diberikan di _servers_ Anda, Anda harus menambahkan direktif `confirm` ke deklarasi _task_ Anda. Opsi ini sangat berguna untuk operasi destruktif:
+Jika Anda ingin menampilkan permintaan konfirmasi sebelum menjalankan tugas yang diberikan pada server, Anda harus menambahkan direktif `confirm` ke deklarasi tugas Anda. Opsi ini sangat berguna untuk operasi yang bersifat destruktif:
 
 ```blade
 @task('deploy', ['on' => 'web', 'confirm' => true])
@@ -295,16 +275,14 @@ Jika Anda ingin diminta untuk konfirmasi sebelum menjalankan _task_ yang diberik
 ```
 
 <a name="notifications"></a>
-
-## Pemberitahuan
+## Notifikasi
 
 <a name="slack"></a>
-
 ### Slack
 
-Envoy mendukung pengiriman pemberitahuan ke [Slack](https://slack.com) setelah setiap _task_ dijalankan. Direktif `@slack` menerima URL _hook_ Slack dan nama saluran/pengguna. Anda dapat mengambil URL webhook Anda dengan membuat integrasi "incoming Webhooks" di panel kontrol Slack Anda.
+Envoy mendukung pengiriman notifikasi ke [Slack](https://slack.com) setelah masing-masing tugas selesai dijalankan. Direktif `@slack` menerima URL _hook_ Slack dan nama saluran/pengguna. Anda dapat mengambil URL _webhook_ Anda dengan membuat integrasi "incoming Webhooks" pada panel kontrol Slack Anda.
 
-Anda harus meneruskan seluruh URL webhook sebagai argumen pertama yang diberikan ke direktif `@slack`. Argumen kedua yang diberikan untuk direktif `@slack` harus berupa nama saluran (`#channel`) atau nama pengguna (`@user`):
+Anda perlu menyertakan seluruh URL _webhook_ sebagai argumen pertama yang diberikan ke direktif `@slack`. Argumen kedua yang diberikan untuk direktif `@slack` harus berupa nama saluran (`#channel`) atau nama pengguna (`@user`):
 
 ```blade
 @finished
@@ -312,7 +290,7 @@ Anda harus meneruskan seluruh URL webhook sebagai argumen pertama yang diberikan
 @endfinished
 ```
 
-Secara bawaan, pemberitahuan Envoy akan mengirim pesan ke saluran pemberitahuan yang menjelaskan _task_ yang dijalankan. Namun, Anda dapat menimpa pesan ini dengan pesan kustom Anda sendiri dengan meneruskan argumen ketiga ke direktif `@slack`:
+Secara _default_, notifikasi Envoy akan mengirim pesan ke saluran notifikasi yang menjelaskan tugas yang dijalankan. Namun, Anda dapat menimpa pesan ini dengan pesan kustom Anda sendiri dengan menyertakan argumen ketiga pada direktif `@slack`:
 
 ```blade
 @finished
@@ -321,10 +299,9 @@ Secara bawaan, pemberitahuan Envoy akan mengirim pesan ke saluran pemberitahuan 
 ```
 
 <a name="discord"></a>
-
 ### Discord
 
-Envoy juga mendukung pengiriman pemberitahuan ke [Discord](https://discord.com) setelah setiap _task_ dijalankan. Direktif `@discord` menerima URL _hook_ Discord dan pesan. Anda dapat mengambil URL webhook Anda dengan membuat "Webhook" di Pengaturan Server Anda dan memilih saluran mana webhook harus diposting. Anda harus meneruskan seluruh URL Webhook ke dalam perintah `@discord`:
+Envoy juga mendukung pengiriman notifikasi ke [Discord](https://discord.com) setelah masing-masing tugas selesai dijalankan. Direktif `@discord` menerima sebuah URL _hook_ Discord dan sebuah pesan. Anda dapat mengambil URL _webhook_ Anda dengan membuat "Webhook" pada Pengaturan server Anda dan memilih ke saluran mana yang _webhook_ perlu kirim. Anda harus menyertakan seluruh URL _Webhook_ ke dalam perintah `@discord`:
 
 ```blade
 @finished
@@ -333,10 +310,9 @@ Envoy juga mendukung pengiriman pemberitahuan ke [Discord](https://discord.com) 
 ```
 
 <a name="telegram"></a>
-
 ### Telegram
 
-Envoy juga mendukung pengiriman pemberitahuan ke [Telegram](https://telegram.org) setelah setiap _task_ dijalankan. Direktif `@telegram` menerima ID Bot Telegram dan ID Obrolan. Anda dapat mengambil ID Bot Anda dengan membuat bot baru menggunakan [BotFather](https://t.me/botfather). Anda dapat mengambil ID Chat yang valid menggunakan [@username_to_id_bot](https://t.me/username_to_id_bot). Anda harus meneruskan seluruh ID Bot dan ID Obrolan ke dalam perintah `@telegram`:
+Envoy juga mendukung pengiriman notifikasi ke [Telegram](https://telegram.org) setelah masing-masing tugas selesai dijalankan. Direktif `@telegram` menerima ID Bot Telegram dan ID Obrolan. Anda bisa mendapatkan ID Bot Anda dengan membuat bot baru menggunakan [BotFather](https://t.me/botfather). Anda bisa mendapatkan ID Chat yang valid menggunakan [@username_to_id_bot](https://t.me/username_to_id_bot). Anda harus menyertakan seluruh ID Bot dan ID Obrolan ke dalam direktif `@telegram`:
 
 ```blade
 @finished
@@ -345,10 +321,9 @@ Envoy juga mendukung pengiriman pemberitahuan ke [Telegram](https://telegram.org
 ```
 
 <a name="microsoft-teams"></a>
-
 ### Microsoft Teams
 
-Envoy juga mendukung pengiriman pemberitahuan ke [Microsoft Teams](https://www.microsoft.com/en-us/microsoft-teams) setelah setiap _task_ dijalankan. Direktif `@microsoftTeams` menerima _Teams Webhook_ (wajib), pesan, warna tema (_success_, _info_, _warning, \_error_), dan _array_ opsi. Anda dapat mengambil _Webhook Teams_ Anda dengan membuat [webhook masuk](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) baru. _Teams API_ memiliki banyak atribut lain untuk menyesuaikan kotak pesan Anda seperti judul, ringkasan, dan bagian. Anda dapat menemukan informasi selengkapnya tentang [dokumentasi Microsoft Teams](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using?tabs=cURL#example-of-connector-message). Anda harus meneruskan seluruh URL Webhook ke dalam perintah `@microsoftTeams`:
+Envoy juga mendukung pengiriman pemberitahuan ke [Microsoft Teams](https://www.microsoft.com/en-us/microsoft-teams) setelah masing-masing tugas selesai dijalankan. Direktif `@microsoftTeams` menerima _Webhook_ Teams (wajib), sebuah pesan, warna tema (_success_, _info_, _warning, _error_), dan sebuah larik untuk opsi. Anda bisa menemukan _Webhook_ Teams Anda dengan membuat sebuah [_webhook incoming_](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) yang baru. API milik Teams memiliki banyak atribut lain untuk menyesuaikan kotak pesan Anda seperti judul, ringkasan, dan bagian-bagian. Anda dapat menemukan informasi selengkapnya pada [dokumentasi Microsoft Teams](https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using?tabs=cURL#example-of-connector-message). Anda perlu menyertakan seluruh URL _Webhook_ ke dalam direktif `@microsoftTeams`:
 
 ```blade
 @finished
