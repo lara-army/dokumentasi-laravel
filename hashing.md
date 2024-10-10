@@ -1,31 +1,31 @@
-# Hashing
+# Melakukan _Hash_ (_Hashing_)
 
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-- [Basic Usage](#basic-usage)
-    - [Hashing Passwords](#hashing-passwords)
-    - [Verifying That A Password Matches A Hash](#verifying-that-a-password-matches-a-hash)
-    - [Determining If A Password Needs To Be Rehashed](#determining-if-a-password-needs-to-be-rehashed)
+- [Pengantar](#introduction)
+- [Konfigurasi](#configuration)
+- [Penggunaan Dasar](#basic-usage)
+  - [_Hash_ Kata Sandi](#hashing-passwords)
+  - [Memverifikasi Bahwa Kata Sandi Cocok Dengan _Hash_](#verifying-that-a-password-matches-a-hash)
+  - [Menentukan Apakah Kata Sandi Perlu Di-_hash_ Ulang](#determining-if-a-password-needs-to-be-rehashed)
 
 <a name="introduction"></a>
-## Introduction
+## Pengantar
 
-The Laravel `Hash` [facade](/docs/{{version}}/facades) provides secure Bcrypt and Argon2 hashing for storing user passwords. If you are using one of the [Laravel application starter kits](/docs/{{version}}/starter-kits), Bcrypt will be used for registration and authentication by default.
+[Facade](/docs/{{version}}/facades) `Hash` milik Laravel menyediakan fungsi _hash_ Bcrypt dan Argon2 yang aman untuk menyimpan kata sandi pengguna. Jika Anda menggunakan salah satu dari [_starter kit_ aplikasi Laravel](/docs/{{version}}/starter-kits), Bcrypt akan digunakan untuk registrasi dan autentikasi secara _default_.
 
-Bcrypt is a great choice for hashing passwords because its "work factor" is adjustable, which means that the time it takes to generate a hash can be increased as hardware power increases. When hashing passwords, slow is good. The longer an algorithm takes to hash a password, the longer it takes malicious users to generate "rainbow tables" of all possible string hash values that may be used in brute force attacks against applications.
+Bcrypt merupakan pilihan yang baik untuk melakukan _hash_ kata sandi karena memiliki "_work factor_" yang dapat disesuaikan, yang berarti bahwa waktu yang dibutuhkan untuk menghasilkan _hash_ dapat ditingkatkan seiring dengan meningkatnya daya milik perangkat keras. Ketika melakukan _hash_ kata sandi, lambat itu bagus. Semakin lama sebuah algoritma melakukan _hash_ pada kata sandi, semakin lama pula waktu yang dibutuhkan oleh pengguna jahat untuk menghasilkan "_rainbow tables_" dari semua kemungkinan nilai _string_ untuk _hash_ yang dapat digunakan dalam serangan _brute force_ ke aplikasi.
 
 <a name="configuration"></a>
-## Configuration
+## Konfigurasi
 
-The default hashing driver for your application is configured in your application's `config/hashing.php` configuration file. There are currently several supported drivers: [Bcrypt](https://en.wikipedia.org/wiki/Bcrypt) and [Argon2](https://en.wikipedia.org/wiki/Argon2) (Argon2i and Argon2id variants).
+_Driver_ _default_ yang melakukan _hash_ pada aplikasi Anda dikonfigurasikan pada _file_ konfigurasi `config/hashing.php` milik aplikasi Anda. Adapun _driver_-_driver_ yang mendukung saat ini: [Bcrypt](https://en.wikipedia.org/wiki/Bcrypt) dan [Argon2](https://en.wikipedia.org/wiki/Argon2) (varian Argon2i dan Argon2id).
 
 <a name="basic-usage"></a>
-## Basic Usage
+## Penggunaan Dasar
 
 <a name="hashing-passwords"></a>
-### Hashing Passwords
+### _Hash_ Kata Sandi
 
-You may hash a password by calling the `make` method on the `Hash` facade:
+Anda dapat melakukan _hash_ kata sandi dengan menggunakan metode `make` pada _facade_ `Hash`
 
     <?php
 
@@ -38,58 +38,58 @@ You may hash a password by calling the `make` method on the `Hash` facade:
     class PasswordController extends Controller
     {
         /**
-         * Update the password for the user.
+         * Memperbarui kata sandi untuk pengguna.
          *
          * @param  \Illuminate\Http\Request  $request
          * @return \Illuminate\Http\Response
          */
         public function update(Request $request)
         {
-            // Validate the new password length...
+            // Memvalidasi panjang kata sandi yang baru...
 
             $request->user()->fill([
-                'password' => Hash::make($request->newPassword)
+                'password' => Hash::make($request->kataSandiBaru)
             ])->save();
         }
     }
 
 <a name="adjusting-the-bcrypt-work-factor"></a>
-#### Adjusting The Bcrypt Work Factor
+#### Menyesuaikan Faktor Kerja Bcrypt
 
-If you are using the Bcrypt algorithm, the `make` method allows you to manage the work factor of the algorithm using the `rounds` option; however, the default work factor managed by Laravel is acceptable for most applications:
+Jika Anda menggunakan algoritma Bcrypt, metode `make` memungkinkan Anda untuk mengelola faktor kerja (_work factor_) algoritma menggunakan opsi `rounds`; bagaimanapun, faktor kerja _default_ yang dikelola/dipilih oleh Laravel juga pantas/akseptabel untuk kebanyakan aplikasi:
 
-    $hashed = Hash::make('password', [
+    $hashed = Hash::make('kata sandi', [
         'rounds' => 12,
     ]);
 
 <a name="adjusting-the-argon2-work-factor"></a>
-#### Adjusting The Argon2 Work Factor
+#### Menyesuaikan Faktor Kerja Argon2
 
-If you are using the Argon2 algorithm, the `make` method allows you to manage the work factor of the algorithm using the `memory`, `time`, and `threads` options; however, the default values managed by Laravel are acceptable for most applications:
+Jika Anda menggunakan algoritme Argon2, metode `make` memungkinkan Anda untuk mengelola faktor kerja algoritma menggunakan opsi `memory`, `time`, dan `threads`; bagaimanapun, nilai _default_ yang dikelola/dipilih oleh Laravel juga pantas/akseptabel untuk kebanyakan aplikasi:
 
-    $hashed = Hash::make('password', [
+    $hashed = Hash::make('kata sandi', [
         'memory' => 1024,
         'time' => 2,
         'threads' => 2,
     ]);
 
 > **Note**  
-> For more information on these options, please refer to the [official PHP documentation regarding Argon hashing](https://secure.php.net/manual/en/function.password-hash.php).
+> Untuk informasi lebih lanjut tentang opsi-opsi ini, silakan lihat [dokumentasi PHP resmi mengenai peng-_hash_-an Argon](https://secure.php.net/manual/en/function.password-hash.php).
 
 <a name="verifying-that-a-password-matches-a-hash"></a>
-### Verifying That A Password Matches A Hash
+### Memverifikasi Bahwa Kata Sandi Cocok dengan _Hash_
 
-The `check` method provided by the `Hash` facade allows you to verify that a given plain-text string corresponds to a given hash:
+Metode `check` yang disediakan oleh _facade_ `Hash` memungkinkan Anda untuk memverifikasi bahwa _string_ teks polos yang diberikan telah sesuai dengan _hash_ yang diberikan:
 
-    if (Hash::check('plain-text', $hashedPassword)) {
-        // The passwords match...
+    if (Hash::check('teks-polos', $HashKataSandi)) {
+        // Kata sandi cocok...
     }
 
 <a name="determining-if-a-password-needs-to-be-rehashed"></a>
-### Determining If A Password Needs To Be Rehashed
+### Menentukan Apakah Kata Sandi Perlu Di-_hash_ Ulang
 
-The `needsRehash` method provided by the `Hash` facade allows you to determine if the work factor used by the hasher has changed since the password was hashed. Some applications choose to perform this check during the application's authentication process:
+Metode `needsRehash` yang disediakan oleh _facade_ `Hash` memungkinkan Anda untuk menentukan apakah faktor kerja yang digunakan oleh _driver_ _hash_ telah berubah sejak kata sandi terakhir kali di-_hash_. Beberapa aplikasi memilih untuk melakukan pemeriksaan ini selama proses autentikasi pada aplikasi:
 
-    if (Hash::needsRehash($hashed)) {
-        $hashed = Hash::make('plain-text');
+    if (Hash::needsRehash($hash)) {
+        $hash = Hash::make('teks-polos');
     }
