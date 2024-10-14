@@ -1,74 +1,82 @@
-# Request Lifecycle
+# Siklus Hidup _Request_
 
-- [Introduction](#introduction)
-- [Lifecycle Overview](#lifecycle-overview)
-    - [First Steps](#first-steps)
-    - [HTTP / Console Kernels](#http-console-kernels)
-    - [Service Providers](#service-providers)
-    - [Routing](#routing)
-    - [Finishing Up](#finishing-up)
-- [Focus On Service Providers](#focus-on-service-providers)
+- [Pendahuluan](#introduction)
+- [Siklus Hidup Gambaran Umum](#lifecycle-overview)
+  - [Langkah Pertama](#first-steps)
+  - [HTTP / Kernel Konsol](#http-console-kernels)
+  - [Penyedia Layanan](#service-providers)
+  - [Perutean](#routing)
+  - [Penyelesaian](#finishing-up)
+- [Fokus Pada Penyedia Pelayanan](#focus-on-service-providers)
 
 <a name="introduction"></a>
-## Introduction
 
-When using any tool in the "real world", you feel more confident if you understand how that tool works. Application development is no different. When you understand how your development tools function, you feel more comfortable and confident using them.
+## Pendahuluan
 
-The goal of this document is to give you a good, high-level overview of how the Laravel framework works. By getting to know the overall framework better, everything feels less "magical" and you will be more confident building your applications. If you don't understand all of the terms right away, don't lose heart! Just try to get a basic grasp of what is going on, and your knowledge will grow as you explore other sections of the documentation.
+Ketika menggunakan alat apa pun di "_real world_”, Anda akan merasa lebih percaya diri jika Anda memahami cara kerja alat tersebut. Pengembangan aplikasi juga demikian. Ketika Anda memahami cara kerja alat pengembangan Anda, Anda akan merasa lebih nyaman dan percaya diri dalam menggunakannya.
+
+Tujuan dari dokumen ini adalah untuk memberi Anda gambaran umum yang baik dan menyeluruh tentang cara kerja kerangka kerja (_framework_) Laravel. Dengan mengenal kerangka kerja Laravel secara keseluruhan dengan lebih baik, semuanya akan terasa tidak terlalu “_magical_” dan Anda akan lebih percaya diri dalam membangun aplikasi Anda. Jika Anda tidak langsung memahami semua istilahnya, jangan berkecil hati! Cobalah untuk mendapatkan pemahaman dasar tentang apa yang sedang terjadi, dan pengetahuan Anda akan bertambah saat Anda menjelajahi bagian lain dari dokumentasi.
 
 <a name="lifecycle-overview"></a>
-## Lifecycle Overview
+
+## Siklus Hidup Gambaran Umum
 
 <a name="first-steps"></a>
-### First Steps
 
-The entry point for all requests to a Laravel application is the `public/index.php` file. All requests are directed to this file by your web server (Apache / Nginx) configuration. The `index.php` file doesn't contain much code. Rather, it is a starting point for loading the rest of the framework.
+### Langkah Pertama
 
-The `index.php` file loads the Composer generated autoloader definition, and then retrieves an instance of the Laravel application from `bootstrap/app.php`. The first action taken by Laravel itself is to create an instance of the application / [service container](/docs/{{version}}/container).
+Titik masuk untuk semua permintaan(_request_) ke aplikasi Laravel adalah _file_ `public/index.php`. Semua permintaan diarahkan ke _file_ ini oleh konfigurasi server web Anda (Apache / Nginx). File `index.php` tidak mengandung banyak kode. Sebaliknya, _file_ ini merupakan titik awal untuk memuat kerangka kerja lainnya.
+
+_File_ `index.php` memuat definisi _autoloader_ yang dibuat oleh Composer, dan kemudian mengambil _instance_ aplikasi Laravel dari `bootstrap/app.php`. Tindakan pertama yang dilakukan oleh Laravel sendiri adalah membuat _instance_ dari aplikasi / [service container](/docs/{{version}}/container).
 
 <a name="http-console-kernels"></a>
-### HTTP / Console Kernels
 
-Next, the incoming request is sent to either the HTTP kernel or the console kernel, depending on the type of request that is entering the application. These two kernels serve as the central location that all requests flow through. For now, let's just focus on the HTTP kernel, which is located in `app/Http/Kernel.php`.
+### HTTP / Kernel Konsol
 
-The HTTP kernel extends the `Illuminate\Foundation\Http\Kernel` class, which defines an array of `bootstrappers` that will be run before the request is executed. These bootstrappers configure error handling, configure logging, [detect the application environment](/docs/{{version}}/configuration#environment-configuration), and perform other tasks that need to be done before the request is actually handled. Typically, these classes handle internal Laravel configuration that you do not need to worry about.
+Selanjutnya, permintaan yang masuk dikirim ke kernel HTTP atau kernel konsol, tergantung pada jenis permintaan yang masuk ke dalam aplikasi. Kedua kernel ini berfungsi sebagai lokasi pusat di mana semua permintaan mengalir. Untuk saat ini, mari kita fokus pada kernel HTTP, yang terletak di `app/Http/Kernel.php`.
 
-The HTTP kernel also defines a list of HTTP [middleware](/docs/{{version}}/middleware) that all requests must pass through before being handled by the application. These middleware handle reading and writing the [HTTP session](/docs/{{version}}/session), determining if the application is in maintenance mode, [verifying the CSRF token](/docs/{{version}}/csrf), and more. We'll talk more about these soon.
+Kernel HTTP memperluas kelas `Illuminate\Foundation\Http\Kernel`, yang mendefinisikan sebuah larik(_array_) `bootstrappers` yang akan dijalankan sebelum permintaan dijalankan. _Bootstrappers_ ini mengonfigurasi penanganan _error_, mengonfigurasi pencatatan _log_, [mendeteksi lingkungan aplikasi](/docs/{{version}}/konfigurasi#konfigurasi-lingkungan), dan melakukan tugas-tugas lain yang perlu dilakukan sebelum sebenarnya ditangani. Biasanya, kelas-kelas ini menangani konfigurasi internal Laravel yang tidak perlu Anda khawatirkan.
 
-The method signature for the HTTP kernel's `handle` method is quite simple: it receives a `Request` and returns a `Response`. Think of the kernel as being a big black box that represents your entire application. Feed it HTTP requests and it will return HTTP responses.
+Kernel HTTP juga mendefinisikan sebuah daftar HTTP [middleware](/docs/{{version}}/middleware) yang harus dilalui oleh semua permintaan sebelum ditangani oleh aplikasi. Middleware ini menangani pembacaan dan penulisan [_session_ HTTP](/docs/{{version}}/session), menentukan apakah aplikasi dalam mode pemeliharaan, [memverifikasi token CSRF](/docs/{{version}}/csrf), dan banyak lagi. Kita akan membahas lebih lanjut tentang ini segera.
+
+Tanda tangan metode untuk metode `handle` kernel HTTP cukup sederhana: menerima sebuah `Request` dan mengembalikan `Response`. Bayangkan kernel sebagai sebuah kotak hitam besar yang mewakili seluruh aplikasi Anda. Berikan permintaan HTTP kepadanya dan ia akan mengembalikan respons(_response_) HTTP.
 
 <a name="service-providers"></a>
-### Service Providers
 
-One of the most important kernel bootstrapping actions is loading the [service providers](/docs/{{version}}/providers) for your application. Service providers are responsible for bootstrapping all of the framework's various components, such as the database, queue, validation, and routing components. All of the service providers for the application are configured in the `config/app.php` configuration file's `providers` array.
+### Penyedia Layanan
 
-Laravel will iterate through this list of providers and instantiate each of them. After instantiating the providers, the `register` method will be called on all of the providers. Then, once all of the providers have been registered, the `boot` method will be called on each provider. This is so service providers may depend on every container binding being registered and available by the time their `boot` method is executed.
+Salah satu tindakan _bootstrapping_ kernel yang paling penting adalah memuat [penyedia layanan](/docs/{{version}}/providers) untuk aplikasi Anda. Penyedia layanan bertanggung jawab untuk melakukan _bootstrapping_ terhadap semua komponen kerangka kerja, seperti database, antrean, validasi, dan komponen perutean(_routing_). Semua penyedia layanan untuk aplikasi dikonfigurasikan dalam larik `providers` pada berkas konfigurasi `config/app.php`.
 
-Essentially every major feature offered by Laravel is bootstrapped and configured by a service provider. Since they bootstrap and configure so many features offered by the framework, service providers are the most important aspect of the entire Laravel bootstrap process.
+Laravel akan mengulangi daftar dan _instance_ setiap penyedia. Setelah membuat _instance_ penyedia, metode `register` akan dipanggil pada semua penyedia. Kemudian, setelah semua penyedia layanan terdaftar, metode `boot` akan dipanggil pada setiap penyedia layanan. Hal ini dilakukan agar penyedia layanan dapat bergantung pada setiap pengikatan kontainer yang telah terdaftar dan tersedia pada saat metode `boot` dijalankan.
+
+Pada dasarnya setiap fitur utama yang ditawarkan oleh Laravel di-_bootstrap_ dan dikonfigurasi oleh penyedia layanan. Karena mereka melakukan _bootstrap_ dan mengonfigurasi begitu banyak fitur yang ditawarkan oleh framework, penyedia layanan adalah aspek terpenting dari keseluruhan proses _bootstrap_ Laravel.
 
 <a name="routing"></a>
-### Routing
 
-One of the most important service providers in your application is the `App\Providers\RouteServiceProvider`. This service provider loads the route files contained within your application's `routes` directory. Go ahead, crack open the `RouteServiceProvider` code and take a look at how it works!
+### Perutean
 
-Once the application has been bootstrapped and all service providers have been registered, the `Request` will be handed off to the router for dispatching. The router will dispatch the request to a route or controller, as well as run any route specific middleware.
+Salah satu penyedia layanan yang paling penting dalam aplikasi Anda adalah `App\Providers\RouteServiceProvider`. Penyedia layanan ini memuat _file_ _rute_ yang terdapat di dalam direktori `routes` aplikasi Anda. Silakan buka kode `RouteServiceProvider` dan lihat cara kerjanya!
 
-Middleware provide a convenient mechanism for filtering or examining HTTP requests entering your application. For example, Laravel includes a middleware that verifies if the user of your application is authenticated. If the user is not authenticated, the middleware will redirect the user to the login screen. However, if the user is authenticated, the middleware will allow the request to proceed further into the application. Some middleware are assigned to all routes within the application, like those defined in the `$middleware` property of your HTTP kernel, while some are only assigned to specific routes or route groups. You can learn more about middleware by reading the complete [middleware documentation](/docs/{{version}}/middleware).
+Setelah aplikasi di-_bootstrap_ dan semua penyedia layanan telah terdaftar, `Request` akan diserahkan ke _router_ untuk dikirim. _Router_ akan mengirimkan permintaan ke rute atau pengontrol, serta menjalankan middleware khusus rute.
 
-If the request passes through all of the matched route's assigned middleware, the route or controller method will be executed and the response returned by the route or controller method will be sent back through the route's chain of middleware.
+_Middleware_ menyediakan mekanisme yang nyaman untuk menyaring atau memeriksa permintaan HTTP yang masuk ke aplikasi Anda. Sebagai contoh, Laravel menyertakan _middleware_ yang memverifikasi apakah pengguna aplikasi Anda sudah terautentikasi. Jika pengguna tidak diautentikasi, _middleware_ akan mengarahkan pengguna ke layar _login_. Namun, jika pengguna diautentikasi, _middleware_ akan mengizinkan permintaan untuk melanjutkan lebih jauh ke dalam aplikasi. Beberapa _middleware_ ditugaskan ke semua rute di dalam aplikasi, seperti yang didefinisikan dalam properti `$middleware` pada kernel HTTP Anda, sementara beberapa lainnya hanya ditugaskan ke rute atau grup rute tertentu. Anda dapat mempelajari lebih lanjut tentang middleware dengan membaca [dokumentasi _middleware_](/docs/{{versi}}/middleware) yang lengkap.
+
+Jika permintaan melewati semua _middleware_ yang ditugaskan untuk rute yang cocok, metode rute atau kontroler(_controller_) akan dieksekusi dan respons yang dikembalikan oleh metode rute atau kontroller akan dikirim kembali melalui rantai _middleware_ rute.
 
 <a name="finishing-up"></a>
-### Finishing Up
 
-Once the route or controller method returns a response, the response will travel back outward through the route's middleware, giving the application a chance to modify or examine the outgoing response.
+### Penyelesaian
 
-Finally, once the response travels back through the middleware, the HTTP kernel's `handle` method returns the response object and the `index.php` file calls the `send` method on the returned response. The `send` method sends the response content to the user's web browser. We've finished our journey through the entire Laravel request lifecycle!
+Setelah metode rute atau kontroller mengembalikan sebuah respons, respons akan berjalan kembali ke luar melalui _middleware_ rute, sehingga aplikasi memiliki kesempatan untuk memodifikasi atau memeriksa respons yang keluar.
+
+Akhirnya, setelah respons berjalan kembali melalui _middleware_, metode `handle` dari kernel HTTP mengembalikan objek respons dan _file_ `index.php` memanggil metode `send` pada respons yang dikembalikan. Metode `send` mengirimkan konten respons ke peramban(_browser_) web pengguna. Kita telah menyelesaikan perjalanan kita melalui seluruh siklus hidup permintaan Laravel!
 
 <a name="focus-on-service-providers"></a>
-## Focus On Service Providers
 
-Service providers are truly the key to bootstrapping a Laravel application. The application instance is created, the service providers are registered, and the request is handed to the bootstrapped application. It's really that simple!
+## Fokus Pada Penyedia Pelayanan
 
-Having a firm grasp of how a Laravel application is built and bootstrapped via service providers is very valuable. Your application's default service providers are stored in the `app/Providers` directory.
+Penyedia layanan adalah kunci utama untuk melakukan _bootstrap_ pada aplikasi Laravel. _Instance_ aplikasi dibuat, penyedia layanan didaftarkan, dan permintaan diserahkan ke aplikasi _bootstrap_. Sesederhana itu!
 
-By default, the `AppServiceProvider` is fairly empty. This provider is a great place to add your application's own bootstrapping and service container bindings. For large applications, you may wish to create several service providers, each with more granular bootstrapping for specific services used by your application.
+Memiliki pemahaman yang kuat tentang bagaimana aplikasi Laravel dibangun dan di-_bootstrap_ melalui penyedia layanan sangat berharga. Penyedia layanan _default_ aplikasi Anda disimpan dalam direktori `app/Providers`.
+
+Secara default, `AppServiceProvider` cukup kosong. Penyedia ini merupakan tempat yang tepat untuk menambahkan _bootstrapping_ dan _binding_ kontainer layanan aplikasi Anda. Untuk aplikasi yang besar, Anda mungkin ingin membuat beberapa penyedia layanan, masing-masing dengan _bootstrapping_ yang lebih terperinci untuk layanan tertentu yang digunakan oleh aplikasi Anda.
